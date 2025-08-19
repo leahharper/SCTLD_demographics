@@ -263,7 +263,7 @@ Labels <- levels(as.factor(pairwise$Label_General))
 for(current_Label in Labels) {
   
   Lab_df <- pairwise %>% subset(Label_General == current_Label) 
-
+  
   pairwise$sig <- isSig(pairwise$p.value)
   
   letters <- as.data.frame(cldList(p.value ~ contrast,
@@ -525,9 +525,9 @@ Cats <- levels(as.factor(category$Category))
 
 #Single Model
 mod2 <- glmer(cov_prop ~ Survey*Category +
-               (1|SiteName),
-             weights=npoints,
-             data=category,family="binomial")
+                (1|SiteName),
+              weights=npoints,
+              data=category,family="binomial")
 
 hist(resid(mod2))
 Anova(mod2)
@@ -557,10 +557,10 @@ for(current_Cat in Cats) {
 }
 
 
-  
 
-  
-  
+
+
+
 sto2 <- sto %>% rename("Species" = Label) %>%
   mutate(cov_prop = cover/100) %>%
   subset(Species != "ACER" & Species != "CNAT" &
@@ -581,10 +581,10 @@ SpecList <- levels(as.factor(sto2$Species))
 
 #models
 mod3 <- glmer(cov_prop ~ Survey*Species +
-               (1|SiteName),
-             weights=npoints,
-             data=sto2,family="binomial",
-             control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
+                (1|SiteName),
+              weights=npoints,
+              data=sto2,family="binomial",
+              control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)))
 hist(resid(mod3))
 Anova(mod3)
 
@@ -698,24 +698,24 @@ dead2 <- cond %>% subset(percent_mortality == 100)
 #this code was to remove the dead colonies from demo but
 #they are not in the GitHub file
 #demo <- demo %>%
- # mutate(X5_to_10_cm = ifelse(data_collector == "Leah Harper" &
-  #                              sample_collection_month == 5 &
-   #                             sample_collection_year == 2022 & 
-    #                            location_name == "South Reef Central" &
-     #                           scientific_name == "EFAS", 
-      #                        X5_to_10_cm - 2, X5_to_10_cm)) %>%
-  #mutate(X11_to_20_cm = ifelse(data_collector == "Leah Harper" &
-   #                              sample_collection_month == 5 &
-    #                             sample_collection_year == 2022 & 
-     #                            location_name == "South Reef Central" &
-      #                           scientific_name == "EFAS", 
-       #                        X11_to_20_cm - 1, X11_to_20_cm)) %>%
-  #mutate(X5_to_10_cm = ifelse(data_collector == "Leah Harper" &
-   #                             sample_collection_month == 5 &
-    #                            sample_collection_year == 2022 & 
-     #                           location_name == "South Reef Central" &
-      #                          scientific_name == "PSTR", 
-       #                       X5_to_10_cm - 1, X5_to_10_cm))
+# mutate(X5_to_10_cm = ifelse(data_collector == "Leah Harper" &
+#                              sample_collection_month == 5 &
+#                             sample_collection_year == 2022 & 
+#                            location_name == "South Reef Central" &
+#                           scientific_name == "EFAS", 
+#                        X5_to_10_cm - 2, X5_to_10_cm)) %>%
+#mutate(X11_to_20_cm = ifelse(data_collector == "Leah Harper" &
+#                              sample_collection_month == 5 &
+#                             sample_collection_year == 2022 & 
+#                            location_name == "South Reef Central" &
+#                           scientific_name == "EFAS", 
+#                        X11_to_20_cm - 1, X11_to_20_cm)) %>%
+#mutate(X5_to_10_cm = ifelse(data_collector == "Leah Harper" &
+#                             sample_collection_month == 5 &
+#                            sample_collection_year == 2022 & 
+#                           location_name == "South Reef Central" &
+#                          scientific_name == "PSTR", 
+#                       X5_to_10_cm - 1, X5_to_10_cm))
 
 #demo <- demo %>% dplyr::select(-c(transect:coral_demographics_notes))
 
@@ -785,7 +785,7 @@ demo$scientific_name <- as.character(demo$scientific_name)
 
 
 demo <- demo %>% mutate(scientific_name = ifelse(code == "agar",
-                                        "Agaricia spp.", scientific_name))
+                                                 "Agaricia spp.", scientific_name))
 demo$scientific_name <- as.factor(demo$scientific_name)
 
 levels(demo$scientific_name)
@@ -1130,7 +1130,7 @@ denssum <- dens %>% group_by(Species) %>% summarize(total = sum(count_adult)) %>
   arrange(total)
 
 dens <- dens %>% right_join(denssum, by = "Species")
-  
+
 dens <- dens %>% subset(total > 22)
 
 
@@ -1535,7 +1535,7 @@ tldf <- sum_demo %>% left_join(sum_tl, by = "Event") %>%
 
 #tldf <- na.omit(tldf)
 
-colnames(tldf) <- gsub("\\.x","",colnames(tldf))
+colnames(tldf) <- k gsub("\\.x","",colnames(tldf))
 
 
 tldf$survey <- recode(tldf$survey, 
