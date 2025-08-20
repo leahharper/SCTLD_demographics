@@ -14,7 +14,7 @@ library(reshape2)
 
 
 # Change working directory
-setwd("C:/Users/harperl/OneDrive - Smithsonian Institution/Documents/Coral Disease")
+setwd("C:/Users/harperl/OneDrive - Smithsonian Institution/Documents/GitHub/SCTLD_demographics/")
 
 
 # Import the survey data
@@ -284,8 +284,6 @@ library(gt)
 library(kableExtra)
 
 
-mod_df$`Pr(>Chisq)` <- as.numeric(mod_df$'Pr(>Chisq)')
-
 
 
 MainLetters <- df %>% unite("GroupEvent", c(Label_General,Group))
@@ -325,6 +323,7 @@ rsquared(modsus)
 susresult <- as.data.frame(Anova(modsus)) %>%
   mutate(Label_General = "SCTLD Susceptible Coral")
 susresult$sig <- isSig(susresult$"Pr(>Chisq)")
+mod_df <- data.frame()
 mod_df <- mod_df %>% rbind(susresult)
 
 covtable <- mod_df %>%
@@ -386,7 +385,7 @@ labyearp1 <- ggplot() +
   geom_text(data = covgen1, 
             aes(x = Survey, y = maxCov, label = Letter), nudge_y = 3) +
   geom_violin(data = covgen1, aes(x = Survey, y = cov_gen), fill = "gray80", outlier.shape = NA) +
-  geom_jitter(data = covgen1, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 2, pch = 21,  
+  geom_jitter(data = covgen1, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 4, alpha = 0.5, pch = 21,  
               width = 0.25, 
               height = 0) +
   geom_vline(xintercept = "July21", 
@@ -395,7 +394,8 @@ labyearp1 <- ggplot() +
   scale_y_continuous("Percent Cover") +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
   scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
-                                                'May22','December22')) +
+                                                'May22','December22'),
+                   expand = expansion(add = c(2, 2))) +   
   scale_fill_manual("Site",values=c(sitecolors)) +
   theme(plot.title = element_text(size = 16,hjust = 0.5),
         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -407,13 +407,13 @@ labyearp1 <- ggplot() +
 labyearp1
 
 labyearp2 <- ggplot() +
-  geom_jitter(data = covgen2, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 2, pch = 21,  
+  geom_jitter(data = covgen2, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 4, alpha = 0, pch = 21,  
               width = 0.25, 
               height = 0, alpha = 0) +
   geom_text(data = covgen2, 
             aes(x = Survey, y = maxCov, label = Letter), nudge_y = 3) +
   geom_violin(data = covgen2, aes(x = Survey, y = cov_gen), fill = "gray80", outlier.shape = NA) +
-  geom_jitter(data = covgen2, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 2, pch = 21,  
+  geom_jitter(data = covgen2, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 4, alpha = 0.5, pch = 21,  
               width = 0.25, 
               height = 0) +
   geom_vline(xintercept = "July21", 
@@ -422,7 +422,8 @@ labyearp2 <- ggplot() +
   scale_y_continuous("Percent Cover") +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
   scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
-                                                'May22','December22')) +  
+                                                'May22','December22'),
+                   expand = expansion(add = c(2, 2))) +   
   scale_fill_manual("Site",values=c(sitecolors)) +
   theme(plot.title = element_text(size = 16,hjust = 0.5),
         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -434,13 +435,13 @@ labyearp2 <- ggplot() +
 labyearp2
 
 suscepyearp <- ggplot() +
-  geom_jitter(data = suscep, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 2, pch = 21,  
+  geom_jitter(data = suscep, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 4, alpha = 0, pch = 21,  
               width = 0.25, 
               height = 0, alpha = 0) +
   geom_text(data = suscep, 
             aes(x = Survey, y = maxCov, label = Letter), nudge_y = 1) +
   geom_violin(data = suscep, aes(x = Survey, y = cov_gen), fill = "gray80", outlier.shape = NA) +
-  geom_jitter(data = suscep, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 2, pch = 21,  
+  geom_jitter(data = suscep, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 4, alpha = 0.5, pch = 21,  
               width = 0.25, 
               height = 0) +
   geom_vline(xintercept = "July21", 
@@ -449,7 +450,8 @@ suscepyearp <- ggplot() +
   scale_y_continuous("") +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
   scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
-                                                'May22','December22')) +  
+                                                'May22','December22'),
+                   expand = expansion(add = c(2, 2))) +   
   scale_fill_manual("Site",values=c(sitecolors)) +
   theme(plot.title = element_text(size = 16,hjust = 0.5),
         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -485,14 +487,13 @@ plot1 <- grid.arrange(labyearp1, labyearp2, ncol=1, nrow =2)
 plot2 <- cowplot::plot_grid(plot1, legend, rel_widths = c(4/5, 1/5), axis = 't', align = "v")
 
 
-tiff("CBCCoverViolin.tif",width = 7, height = 7, units = "in", res = 300)
+tiff("Figures/CBCCoverViolin.tif",width = 7, height = 7, units = "in", res = 300)
 plot2
 dev.off()
 
-png("CBCCoverViolin.png", width = 7, height = 7, units = "in", res = 300)
+png("Figures/CBCCoverViolin.png", width = 7, height = 7, units = "in", res = 300)
 plot2
 dev.off()
-
 
 
 
@@ -650,33 +651,35 @@ sto3 <- sto2 %>%
 library(ggh4x)
 
 targetp1 <- ggplot() +
-  geom_jitter(data = sto3, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21,  
+  geom_jitter(data = sto3, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0,  
               width = 0.25, 
-              height = 0, alpha = 0) +
+              height = 0) +
   geom_text(data = sto3, 
             aes(x = Survey, y = maxCov, label = Letter), nudge_y = 1.5) +
   geom_violin(data = sto3, aes(x = Survey, y = cover), fill = "gray80", outlier.shape = NA) +
-  geom_jitter(data = sto3, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21,  
+  geom_jitter(data = sto3, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
               width = 0.25, 
-              height = 0) +
+              height = 0)+
   geom_vline(xintercept = "July21", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_nested_wrap(~Category + Species, scales = "free",
                     ncol = 4, labeller = labeller(Category = label_wrap_gen(width = 16))) +
   scale_y_continuous("Percent Cover") +
   scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
-                                                'May22','December22')) +    scale_fill_manual("Site",values=c(sitecolors)) +
+                                                'May22','December22'),
+                   expand = expansion(add = c(4, 4))) +   
+  scale_fill_manual("Site",values=c(sitecolors)) +
   theme(plot.title = element_text(size = 16,hjust = 0.5),
         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"),
         axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
         axis.title = element_text(size = 10))
 
-tiff("CBCTargetsBoxplot.tif",width = 10, height = 8, units = "in", res = 300)
+tiff("Figures/CBCTargetsBoxplot.tif",width = 10, height = 8, units = "in", res = 300)
 targetp1
 dev.off()
 
-png("CBCTargetsBoxplot.png", width = 10, height = 8, units = "in", res = 300)
+png("Figures/CBCTargetsBoxplot.png", width = 10, height = 8, units = "in", res = 300)
 targetp1
 dev.off()
 
@@ -865,7 +868,7 @@ hull.data1
 library(ggrepel)
 library(viridis)
 
-tiff("adultNMDS_jaccard.tif",width = 7, height = 7, units = "in", res = 400)
+tiff("Figures/adultNMDS_jaccard.tif",width = 7, height = 7, units = "in", res = 400)
 ggplot() + 
   #geom_polygon(data=hull.data1,aes(x=NMDS1,y=NMDS2,fill=survey,group=survey),alpha=0.30, color = "black") + 
   geom_point(data=data.scores1,aes(x=NMDS1,y=NMDS2,colour = survey, fill = survey, shape = location_name),size=4, alpha = 0.8) +
@@ -958,7 +961,7 @@ hull.data1
 library(ggrepel)
 library(viridis)
 
-tiff("adultNMDS_bray.tif",width = 7, height = 7, units = "in", res = 400)
+tiff("Figures/adultNMDS_bray.tif",width = 7, height = 7, units = "in", res = 400)
 ggplot() + 
   #geom_polygon(data=hull.data1,aes(x=NMDS1,y=NMDS2,fill=survey,group=survey),alpha=0.30, color = "black") + 
   geom_point(data=data.scores1,aes(x=NMDS1,y=NMDS2,colour = survey, fill = survey, shape = location_name),size=4, alpha = 0.8) +
@@ -1026,7 +1029,7 @@ suscep1 <- njlong %>% subset(scientific_name == "Meandrina meandrites" |
                                scientific_name == "Dichocoenia stokesii" |
                                scientific_name == "Dendrogyra cylindrus") %>%
   group_by(location_name, time_point, survey, scientific_name) %>%
-  summarize(N_site = sum(count_all), density = (sum(count_all))/30)
+  summarize(N_site = sum(count_adult), density = (sum(count_adult))/30)
 
 susmeans1 <- suscep1 %>% group_by(survey, scientific_name) %>%
   summarize(MeanDens = mean(density), seDens = se(density), maxDens = max(density), N = sum(N_site)) %>%
@@ -1154,7 +1157,7 @@ Anova(densmod2)
 AIC(densmod)
 AIC(densmod2)
 
-emm <- emmeans(densmod, ~ survey*Species)
+emm <- emmeans(densmod2, ~ survey*Species)
 simple <- pairs(emm, simple = "survey")
 pairwise <- as.data.frame(pairs(emm, simple = "survey"))
 
