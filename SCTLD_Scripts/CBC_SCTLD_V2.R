@@ -1,8 +1,11 @@
+library(remotes)
 library(nlme)
 library(plyr)
 library(car)
 library(tidyverse)
 library(reshape2) 
+library(piecewiseSEM)
+
 
 #To do
 
@@ -472,7 +475,7 @@ legendp <- ggplot() +
   facet_wrap(~Label_Suscep, scales = "free") +
   scale_y_continuous("") +
   scale_x_discrete("") +
-  scale_fill_manual("Site",values=c(sitecolors)) +
+  scale_fill_manual("Site",values=c(sitecolors)) 
   theme(plot.title = element_text(size = 16,hjust = 0.5),
         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -746,6 +749,12 @@ demo$location_name <- recode(demo$location_name,
                              "Curlew Patch Reef" = "Curlew Patch",
                              "CBC Lagoon Reef" = "CBC Lagoon", 
                              "CBC Reef Central" = "CBC Central")
+
+demo$scientific_name <- recode(demo$scientific_name, "Montrastraea cavernosa" = "Montastraea cavernosa")
+#make all orbicellas one category
+demo$code <- gsub("ofav|oann|ofra", "orbi", demo$code)
+demo$scientific_name <- gsub("Orbicella faveolata|Orbicella annularis|Orbicella franksi", "Orbicella spp.", demo$scientific_name)
+
 
 demo <- demo %>% subset(location_name != "Tobacco Reef")
 
@@ -1132,9 +1141,10 @@ dens$count_adult[is.na(dens$count_adult)] <- 0
 denssum <- dens %>% group_by(Species) %>% summarize(total = sum(count_adult)) %>%
   arrange(total)
 
-dens <- dens %>% right_join(denssum, by = "Species")
+dens <- dens %>% right_join(denssum, by = "Species") %>% subset(Species != "Agaricia spp.") %>% droplevels()
 
-dens <- dens %>% subset(total > 22)
+dens <- dens %>% subset(total > 7) %>% mutate_at(.vars = vars("time_point"),
+                                                    .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
 
 
 hist(dens$count_adult)
@@ -1145,19 +1155,45 @@ densmod <- glmer(count_adult ~ survey*Species + (1|location_name), family = "poi
 
 hist(resid(densmod)) 
 Anova(densmod)
+summary(densmod)
+fixed_effects_coefficients <- summary(densmod)$coefficients
+fixed_effects_coefficients
+
+library(GLMMadaptive)
+#remotes::install_github("glmmTMB/glmmTMB/glmmTMB")
 
 
 
-densmod2 <- glmer.nb(count_adult ~ survey*Species + (1|location_name), 
-                     control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)),
-                     data = dens)
-hist(resid(densmod2))
-Anova(densmod2)
+zinbinom1 <- glmmTMB(count_adult ~ (1|location_name) + survey*Species,
+                 data = dens,
+                 ziformula = ~1,
+                 family = nbinom1)
 
-AIC(densmod)
-AIC(densmod2)
+hist(resid(zinbinom1))
 
-emm <- emmeans(densmod2, ~ survey*Species)
+
+hurdlemod <- mixed_model(fixed = count_adult ~ survey * Species, random = ~1 | location_name, 
+                         data = dens, family = zi.negative.binomial(), 
+                         zi_fixed = ~ Species, zi_random = NULL,
+                         max_coef_value = 30,
+                         control = list(iter_EM = 0))
+hist(resid(hurdlemod))
+
+AIC(hurdlemod)
+AIC(zinbinom1)
+
+#densmod2 <- glmer.nb(count_adult ~ survey*Species + (1|location_name), 
+                     #control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)),
+                     #data = dens)
+#hist(resid(densmod2))
+#Anova(densmod2)
+
+#AIC(densmod)
+#AIC(densmod2)
+
+
+
+emm <- emmeans(zinbinom1, ~ survey*Species)
 simple <- pairs(emm, simple = "survey")
 pairwise <- as.data.frame(pairs(emm, simple = "survey"))
 
@@ -1191,27 +1227,26 @@ denssum <- dens2 %>% group_by(Event) %>%
 
 dens3 <- dens2 %>% left_join(denssum, by = "Event")
 
-suscep1p <- ggplot() +
-  geom_jitter(data = dens3, aes(x = time_point, y = count_adult, fill = location_name), size = 2, pch = 21,  
-              width = 0.25, 
+high <- dens3 %>% subset(Species == "Agaricia agaricites" | Species == "Agaricia tenuifolia"|
+                           Species == "Porites astreoides" | Species == "Porites porites")
+
+highdensp <- ggplot() +
+  geom_jitter(data = high, aes(x = time_point, y = count_adult, fill = location_name), size = 2, pch = 21,  
+              width = 2, 
               height = 0, alpha = 0) +
-  #geom_text(data = suscep1, 
-  #aes(x = survey, y = maxDens + 0.05, label = Letter)) +
-  geom_text(data = dens3, 
-            aes(x = survey, y = max*1.4, label = Letter)) +
-  geom_text(data = dens3, 
-            aes(x = survey, y = max*1.7, label = paste0("N=", N)), size = 2, fontface = "italic") +
-  geom_violin(data = dens3, aes(x = survey, y = count_adult), fill = "gray80", outlier.shape = NA) +
-  geom_jitter(data = dens3, aes(x = time_point, y = count_adult, fill = location_name), size = 2, pch = 21,  
-              width = 0.7, height = 0) +
+  geom_text(data = high, aes(x = survey, y = max+10, label = Letter)) +
+  geom_boxplot(data = high, aes(x = survey, y = count_adult), fill = "gray80", width = 7) +
+  geom_jitter(data = high, aes(x = time_point, y = count_adult, fill = location_name), size = 4, alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
   geom_vline(xintercept = "July21", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
-  scale_y_continuous("Count in 30m2", expand = expansion(mult = c(0, 0.2))) +
+  facet_wrap(~Species, nrow = 1, scales = "free") +
+  scale_y_continuous("Colonies in 30m2 transect", limits = c(0,150), expand = expansion(mult = c(0, 0.1))) +
+  #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
   scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
-                                                'May22','December22')) +
-  coord_cartesian(xlim = c(-5, 45)) +
+                                                'May22','December22'),
+                   expand = expansion(add = c(5, 5))) + 
   scale_fill_manual("Site",values=c(sitecolors)) +
-  facet_wrap(~Species, scales = "free") +
   theme(plot.title = element_text(size = 16,hjust = 0.5),
         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -1220,48 +1255,30 @@ suscep1p <- ggplot() +
         legend.position = 'none',
         plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"))
 
-tiff("dens_fullmod_negbinom.tif",width = 9, height = 8, units = "in", res = 400)
-suscep1p
+tiff("Figures/hurd_highdens.tif",width = 9, height = 4, units = "in", res = 400)
+highdensp
 dev.off()
 
 
+med <- dens3 %>% subset(Species == "Orbicella spp." | Species == "Siderastrea radians"|
+                          Species == "Siderastrea siderea")
 
-suscep2 <- njlong %>% subset(scientific_name == "MCAV" |
-                               scientific_name == "PSTR" |
-                               scientific_name == "DLAB" |
-                               scientific_name == "SSID") %>%
-  group_by(location_name, survey, time_point, scientific_name) %>%
-  summarize(N_site = sum(count_all), density = (sum(count_all))/30) 
-
-susmeans2 <- suscep2 %>% group_by(survey, scientific_name) %>%
-  summarize(MeanDens = mean(density), seDens = se(density), maxDens = max(density), N = sum(N_site)) %>%
-  unite("GroupEvent", c(scientific_name,survey))
-
-suscep2 <- suscep2 %>% unite("GroupEvent", c(scientific_name, survey), remove = FALSE) %>%
-  left_join(susmeans2, by = "GroupEvent") %>%
-  left_join(Letters, by = "GroupEvent") %>%
-  mutate(Letter = ifelse(scientific_name == "DLAB",  
-                         "", Letter))
-
-
-suscep2p <- ggplot() +
-  geom_jitter(data = suscep2, aes(x = time_point, y = density, fill = location_name), size = 2, pch = 21,  
-              width = 0.25, 
+meddensp <- ggplot() +
+  geom_jitter(data = med, aes(x = time_point, y = count_adult, fill = location_name), size = 2, pch = 21,  
+              width = 2, 
               height = 0, alpha = 0) +
-  geom_text(data = suscep2, 
-            aes(x = survey, y = maxDens*1.4, label = Letter)) +
-  geom_text(data = suscep2, 
-            aes(x = survey, y = maxDens*1.6, label = paste0("N=", N)), size = 2, fontface = "italic") +
-  geom_violin(data = suscep2, aes(x = survey, y = density), fill = "gray80", outlier.shape = NA) +
-  geom_jitter(data = suscep2, aes(x = time_point, y = density, fill = location_name), size = 2, pch = 21,  
-              width = 0.7, height = 0) +
+  geom_text(data = med, aes(x = survey, y = max+10, label = Letter)) +
+  geom_boxplot(data = med, aes(x = survey, y = count_adult), fill = "gray80", width = 7) +
+  geom_jitter(data = med, aes(x = time_point, y = count_adult, fill = location_name), size = 4, alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
   geom_vline(xintercept = "July21", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
-  facet_wrap(~scientific_name, nrow = 1, scales = "free") +
-  scale_y_continuous("Mean Density/m2", expand = expansion(mult = c(0, 0.1))) +
+  facet_wrap(~Species, nrow = 1, scales = "free") +
+  scale_y_continuous("Colonies in 30m2 transect", limits = c(0,100), expand = expansion(mult = c(0, 0.1))) +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
   scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
-                                                'May22','December22')) +
+                                                'May22','December22'),
+                   expand = expansion(add = c(5, 5))) + 
   scale_fill_manual("Site",values=c(sitecolors)) +
   theme(plot.title = element_text(size = 16,hjust = 0.5),
         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1270,7 +1287,47 @@ suscep2p <- ggplot() +
         axis.title = element_text(size = 10),
         legend.position = 'none',
         plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"))
-suscep2p
+
+tiff("Figures/hurd_meddens.tif",width = 9, height = 4, units = "in", res = 400)
+meddensp
+dev.off()
+
+
+low <- dens3 %>% subset(Species == "Diploria labyinthiformis" | Species == "Montastraea cavernosa"|
+                          Species == "Pseudodiploria strigosa" | Species == "Stephanocoenia intersepta" |
+                          Species == "Meandrina meandrites" | Species == "Eusmilia fastigiata" |
+                          Species == "Dichocoenia stokesii")
+
+lowdensp <- ggplot() +
+  geom_jitter(data = low, aes(x = time_point, y = count_adult, fill = location_name), size = 2, pch = 21,  
+              width = 2, 
+              height = 0, alpha = 0) +
+  geom_text(data = low, aes(x = survey, y = max+2, label = Letter)) +
+  geom_boxplot(data = low, aes(x = survey, y = count_adult), fill = "gray80", width = 7) +
+  geom_jitter(data = low, aes(x = time_point, y = count_adult, fill = location_name), size = 4, alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
+  geom_vline(xintercept = "July21", 
+             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  facet_wrap(~Species, nrow = 1, scales = "free") +
+  scale_y_continuous("Colonies in 30m2 transect", limits = c(0,20), expand = expansion(mult = c(0, 0.1))) +
+  #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
+  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
+                                                'May22','December22'),
+                   expand = expansion(add = c(5, 5))) + 
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+        axis.title = element_text(size = 10),
+        legend.position = 'none',
+        plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"))
+
+tiff("Figures/hurd_lowdens.tif",width = 9, height = 4, units = "in", res = 400)
+lowdensp
+dev.off()
+
+
 
 
 plotsus1 <- grid.arrange(suscep1p, suscep2p, ncol=1, nrow =2)
