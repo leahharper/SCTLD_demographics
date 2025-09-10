@@ -150,7 +150,7 @@ cover <- within(cover, Label_General[Label == "TAPE"|Label == "Unk"|Label == "SH
 
 cover <- within(cover, Label_General[Label == "CYAN"|Label == "Cyan red"] <- "Cyanobacteria")
 
-
+levels(as.factor(cover$Label))
 
 pd <- position_dodge(width = 0.93)
 se<-function(x)sqrt(var(x)/length(x))
@@ -514,10 +514,10 @@ sto <- sto %>% mutate(Category = ifelse(Label == "ACER" | Label == "ATEN" |
   mutate(Category = ifelse(Label == "MCAV"|Label == "SSID"|Label == "OANN"|
                              Label == "OFAV"|Label == "SINT",
                            "Int. SCTLD Susceptible", Category)) %>%
-  subset(Category != "x") %>%
-  subset(Label != "ACER" & Label != "CNAT" & Label != "DLAB" & Label != "SRAD" & Label != "SINT")
+  subset(Category != "x") #%>%
+  #subset(Label != "ACER" & Label != "CNAT" & Label != "DLAB" & Label != "SRAD" & Label != "SINT")
 
-category <- sto %>% group_by(SiteName, Habitat, TimePoint, npoints, Survey, Category) %>% 
+category <- sto %>% group_by(SiteName, Habitat, TimePoint, npoints, Survey, Label) %>% 
   summarize(sum_cat = sum(n)) %>%
   mutate(cov_cat = (sum_cat/npoints)*100) %>%
   mutate(cov_prop = cov_cat/100)
@@ -1144,7 +1144,8 @@ denssum <- dens %>% group_by(Species) %>% summarize(total = sum(count_adult)) %>
 dens <- dens %>% right_join(denssum, by = "Species") %>% subset(Species != "Agaricia spp.") %>% droplevels()
 
 dens <- dens %>% subset(total > 7) %>% mutate_at(.vars = vars("time_point"),
-                                                    .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
+                                                    .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE))) %>%
+  mutate(count1 = count_adult + 1)
 
 
 hist(dens$count_adult)
@@ -1164,23 +1165,22 @@ library(GLMMadaptive)
 
 
 
-zinbinom1 <- glmmTMB(count_adult ~ (1|location_name) + survey*Species,
-                 data = dens,
-                 ziformula = ~1,
-                 family = nbinom1)
+nbinommod <- mixed_model(fixed = count_adult ~ survey * Species, random = ~1 | location_name, 
+                         data = dens, family = negative.binomial(), 
+                         max_coef_value = 30,
+                         control = list(iter_EM = 0))
+hist(resid(nbinommod))
 
-hist(resid(zinbinom1))
 
-
-hurdlemod <- mixed_model(fixed = count_adult ~ survey * Species, random = ~1 | location_name, 
+zibinom <- mixed_model(fixed = count_adult ~ survey * Species, random = ~1 | location_name, 
                          data = dens, family = zi.negative.binomial(), 
                          zi_fixed = ~ Species, zi_random = NULL,
                          max_coef_value = 30,
                          control = list(iter_EM = 0))
-hist(resid(hurdlemod))
+hist(resid(zibinom))
 
-AIC(hurdlemod)
-AIC(zinbinom1)
+AIC(zibinom)
+AIC(nbinommod)
 
 #densmod2 <- glmer.nb(count_adult ~ survey*Species + (1|location_name), 
                      #control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)),
@@ -1191,11 +1191,14 @@ AIC(zinbinom1)
 #AIC(densmod)
 #AIC(densmod2)
 
+sd(dens$count_adult)
 
-
-emm <- emmeans(zinbinom1, ~ survey*Species)
+emm <- emmeans(zibinom, ~ survey*Species)
 simple <- pairs(emm, simple = "survey")
 pairwise <- as.data.frame(pairs(emm, simple = "survey"))
+
+eff <- as.data.frame(eff_size(emm, sigma = 26, edf = Inf))
+
 
 df <- data.frame()
 
@@ -1255,7 +1258,7 @@ highdensp <- ggplot() +
         legend.position = 'none',
         plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"))
 
-tiff("Figures/hurd_highdens.tif",width = 9, height = 4, units = "in", res = 400)
+png("Figures/zibinom_highdens.png",width = 9, height = 4, units = "in", res = 400)
 highdensp
 dev.off()
 
@@ -1288,7 +1291,7 @@ meddensp <- ggplot() +
         legend.position = 'none',
         plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"))
 
-tiff("Figures/hurd_meddens.tif",width = 9, height = 4, units = "in", res = 400)
+png("Figures/zibinom_meddens.png",width = 9, height = 4, units = "in", res = 400)
 meddensp
 dev.off()
 
@@ -1323,7 +1326,7 @@ lowdensp <- ggplot() +
         legend.position = 'none',
         plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"))
 
-tiff("Figures/hurd_lowdens.tif",width = 9, height = 4, units = "in", res = 400)
+png("Figures/zibinom_lowdens.png",width = 9, height = 4, units = "in", res = 400)
 lowdensp
 dev.off()
 

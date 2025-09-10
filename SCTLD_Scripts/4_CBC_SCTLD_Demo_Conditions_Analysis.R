@@ -1,0 +1,620 @@
+library(nlme)
+library(plyr)
+library(car)
+library(tidyverse)
+library(reshape2) 
+library(piecewiseSEM)
+
+# Change working directory
+setwd("C:/Users/harperl/OneDrive - Smithsonian Institution/Documents/GitHub/SCTLD_demographics/")
+
+pd <- position_dodge(width = 0.93)
+se<-function(x)sqrt(var(x)/length(x))
+
+# Establish time levels
+TimeLevels <- c("October19","November19","December19",
+                "January20", "February20", "March20" ,"April20","May20", "June20","July20",
+                "August20" ,"September20", "October20","November20","December20",
+                "January21","February21","March21" ,"April21","May21", "June21",
+                "July21","August21" ,"September21", "October21","November21","December21",
+                "January22","February22","March22" ,"April22","May22", "June22","July22",
+                "August22" ,"September22", "October22","November22","December22")
+
+
+
+
+############################
+#DEMO
+############################
+demo <- read.csv("CBC_demo_curated.csv")
+cond <- read.csv("CBC_conditions_curated.csv")
+
+demolong <- demo %>% 
+  group_by(location_name, time_point, survey, event, scientific_name) %>%
+  summarize(total = sum(total), total_lg = sum(total_lg),
+            total_small = sum(total_small), adult = sum(adult)) %>%
+  ungroup() %>%
+  complete(scientific_name, nesting(location_name, time_point, survey, event), 
+           fill = list(total = 0, total_lg = 0,
+                       total_small = 0, adult = 0)) %>%
+  rename("species" = scientific_name) %>%
+  mutate_at(.vars = vars("time_point"),
+            .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
+
+
+demolong <- demolong %>% 
+  mutate(survey = case_when(
+    survey == "October19" | survey == "January20" ~ "November19",
+    TRUE ~ as.factor(survey))) %>%
+    unite("merge_event", c(survey,location_name,species))
+
+tldf_long <- cond %>%
+  complete(species, nesting(location_name, time_point, survey), 
+         fill = list(n_tl = 0, prev_tl = 0,
+                     total = 0, n_healthy = 0)) %>%
+  select(-(event)) %>%
+  unite("merge_event", c(survey,location_name,species), remove = FALSE)
+
+  
+
+demo_tl <- demolong %>% left_join(tldf_long, by = "merge_event") %>%
+  dplyr::select(-(total.y)) %>%
+  dplyr::select(-(time_point.y))
+
+colnames(demo_tl) <- gsub("\\.x","",colnames(demo_tl))
+
+
+
+library(lme4)
+library(detectseparation)
+
+############################
+#Species-specific count models----
+############################
+
+denssum <- demo_tl %>% group_by(species) %>% summarize(total_all = sum(total)) %>%
+  arrange(total_all)
+
+demo_tl <- demo_tl %>% left_join(denssum, by = "species") %>% subset(species != "Agaricia spp.") %>% droplevels()
+
+demo_df <- demo_tl %>% subset(total_all > 7) %>% mutate_at(.vars = vars("time_point"),
+                                                 .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE))) 
+
+#P-A Model
+
+# pa_df <- demo_df %>% mutate(total = ifelse(total > 0, 1, total))
+# 
+# binommod <- mixed_model(fixed = total ~ survey * species, random = ~1 | location_name, 
+#                          data = pa_df, family = zi.binomial(), 
+#                         zi_fixed = ~ species, zi_random = NULL,
+#                         max_coef_value = 30,
+#                         control = list(iter_EM = 0))
+# hist(resid(nbinommod))
+
+
+hist(demo_df$total)
+
+
+library(lme4)
+library(GLMMadaptive)
+#remotes::install_github("glmmTMB/glmmTMB/glmmTMB")
+
+densmod <- glmer(total ~ survey*species + (1|location_name), family = "poisson", 
+                 control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)),
+                 data = demo_df)
+
+hist(resid(densmod)) 
+Anova(densmod)
+summary(densmod)
+fixed_effects_coefficients <- summary(densmod)$coefficients
+fixed_effects_coefficients
+
+
+nbinommod <- mixed_model(fixed = total ~ survey * species, random = ~1 | location_name, 
+                         data = demo_df, family = negative.binomial(), 
+                         max_coef_value = 30,
+                         control = list(iter_EM = 0))
+hist(resid(nbinommod))
+
+
+zibinom <- mixed_model(fixed = total ~ survey * species, random = ~1 | location_name, 
+                       data = demo_df, family = zi.negative.binomial(), 
+                       zi_fixed = ~ species, zi_random = NULL,
+                       max_coef_value = 30,
+                       control = list(iter_EM = 0))
+hist(resid(zibinom))
+
+AIC(zibinom)
+AIC(nbinommod)
+
+
+sd(demo_df$total)
+
+library(emmeans)
+library(rcompanion)
+
+
+isSig <- function(p) {
+  
+  ifelse(p > 0.01 & p < 0.05, "*",
+         ifelse(p > 0.001 & p <= 0.01, "**",
+                ifelse(p <= 0.001, "***", "")))
+  
+}
+
+emm <- emmeans(zibinom, ~ survey*species)
+simple <- pairs(emm, simple = "survey")
+pairwise <- as.data.frame(pairs(emm, simple = "survey"))
+
+eff <- as.data.frame(eff_size(emm, sigma = 26, edf = Inf))
+
+
+df <- data.frame()
+
+Spec <- levels(as.factor(pairwise$species))
+
+for(current_Spec in Spec) {
+  
+  Spec_df <- pairwise %>% subset(species == current_Spec) 
+  
+  pairwise$sig <- isSig(pairwise$p.value)
+  
+  letters <- as.data.frame(cldList(p.value ~ contrast,
+                                   data = Spec_df,
+                                   threshold = 0.05)) %>%
+    mutate("Species" = current_Spec)
+  
+  df <- df %>%
+    bind_rows(letters)
+}
+
+denslet <- df %>% unite("event", c("Species", "Group"))
+
+dem <- demo_df %>% unite("event", c("species", "survey"), remove = FALSE)
+
+dem2 <- dem %>% left_join(denslet, by = "event")
+
+demsum <- dem2 %>% group_by(event) %>%
+  summarize(max = max(total), N = sum(total),
+            max_tl = max(prev_tl))
+
+dem3 <- dem2 %>% left_join(demsum, by = "event")
+
+#####################################
+#Species-specific condition models----
+#####################################
+zero_tl <- dem3 %>% group_by(species) %>% summarize(total_tl = sum(n_tl)) %>%
+  subset(total_tl < 5)
+
+tldf_sub <- dem3 %>% subset(!(species %in% zero_tl$species))
+
+##create binomial dataframe where each colony is 0 (healthy) or 1 (diseased)----
+sum_demo_long <- tldf_sub %>% dplyr::select(event, survey, location_name, species, 
+                                            prev_tl, n_healthy) %>%
+  uncount(n_healthy) %>% mutate("tl_val"  = 0)
+
+sum_tl_long <- tldf_sub %>% dplyr::select(event, survey, location_name,
+                                          species, prev_tl, n_tl) %>%
+  uncount(n_tl) %>% mutate("tl_val" = 1)
+
+tl_df_long <- rbind(sum_demo_long, sum_tl_long)
+
+tldf_sub <- tldf_sub %>% arrange(prev_tl)
+
+
+library(GLMMadaptive)
+
+
+zibinom <- mixed_model(fixed = tl_val ~ survey * species, random = ~1 | location_name, 
+                       data = tl_df_long, family = zi.binomial(), 
+                       zi_fixed = ~ species, zi_random = NULL,
+                       max_coef_value = 30,
+                       control = list(iter_EM = 0))
+
+AIC(zibinom)
+
+hist(resid(zibinom))
+
+
+betabinom <- mixed_model(
+  fixed = cbind(n_tl, n_healthy) ~ survey * species,
+  random = ~ 1 | location_name,
+  data = tldf_sub,
+  family = beta.binomial(),
+  max_coef_value = 30,
+  control = list(iter_EM = 0))
+
+AIC(betabinom)
+hist(resid(betabinom))
+summary(betabinom)
+
+
+library(emmeans)
+library(rcompanion)
+
+
+isSig <- function(p) {
+  
+  ifelse(p > 0.01 & p < 0.05, "*",
+         ifelse(p > 0.001 & p <= 0.01, "**",
+                ifelse(p <= 0.001, "***", "")))
+  
+}
+
+emm <- emmeans(betabinom, ~ survey*species)
+simple <- pairs(emm, simple = "survey")
+pairwise <- as.data.frame(pairs(emm, simple = "survey"))
+
+eff <- as.data.frame(eff_size(emm, sigma = 26, edf = Inf))
+
+
+df <- data.frame()
+
+Spec <- levels(as.factor(pairwise$species))
+
+for(current_Spec in Spec) {
+  
+  Spec_df <- pairwise %>% subset(species == current_Spec) 
+  
+  pairwise$sig <- isSig(pairwise$p.value)
+  
+  letters <- as.data.frame(cldList(p.value ~ contrast,
+                                   data = Spec_df,
+                                   threshold = 0.05)) %>%
+    mutate("Species" = current_Spec)
+  
+  df <- df %>%
+    bind_rows(letters)
+}
+
+prevlet <- df %>% unite("event", c("Species", "Group")) %>%
+  rename("prev_letter" = Letter)
+
+dem3 <- dem3 %>% left_join(prevlet, by = "event") %>% mutate(prev_letter = ifelse(species != "Agaricia tenuifolia" & species != "Siderastrea siderea" ,
+                                                                                  "", prev_letter))
+
+
+dem3 <- dem3 %>% mutate(Letter = ifelse(species == "Agaricia tenuifolia" | species == "Eusmilia fastigiata" |
+                                            species == "Porites astreoides" | species == "Meandrina meandrites" |
+                                            species == "Diploria labyrinthiformis"| species == "Pseudodiploria strigosa"|
+                                            species == "Stephanocoenia intersepta",
+                                          "", Letter))
+
+dem3$species <- recode(dem3$species,
+                       "Porites porities" = "Porites porites")
+############################################
+#plot count with bubble scaled to prevalence----
+############################################
+high <- dem3 %>% subset(species == "Agaricia agaricites" | species == "Agaricia tenuifolia"|
+                           species == "Porites astreoides")
+
+highdensp <- ggplot() +
+  geom_jitter(data = high, aes(x = time_point, y = total, fill = location_name), pch = 21,  
+              width = 2, 
+              height = 0, alpha = 0) +
+  geom_text(data = high, aes(x = survey, y = max+20, label = Letter)) +
+  geom_boxplot(data = high, aes(x = survey, y = total), fill = "gray80", width = 7) +
+  geom_jitter(data = high, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
+  geom_vline(xintercept = "July21", 
+             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  facet_wrap(~species, nrow = 1, scales = "free") +
+  scale_y_continuous("# Colonies", limits = c(0,205), expand = expansion(mult = c(0, 0.1))) +
+  #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
+  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
+                                                'May22','December22'),
+                   expand = expansion(add = c(5, 5))) + 
+  scale_size_continuous("TL Prevalence", range = c(2,7)) +
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        #axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+        axis.text.x = element_blank(),
+        axis.title = element_text(size = 10),
+        legend.position = 'none',
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
+
+png("Figures/zibinom_highdens.png",width = 9, height = 4, units = "in", res = 400)
+highdensp
+dev.off()
+
+
+med <- dem3 %>% subset(species == "Orbicella spp." | species == "Porites porites"|
+                          species == "Siderastrea siderea")
+
+meddensp <- ggplot() +
+  geom_jitter(data = med, aes(x = time_point, y = total, fill = location_name), pch = 21,  
+              width = 2, 
+              height = 0, alpha = 0) +
+  geom_text(data = med, aes(x = survey, y = max+15, label = Letter)) +
+  geom_boxplot(data = med, aes(x = survey, y = total), fill = "gray80", width = 7) +
+  geom_jitter(data = med, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
+  geom_vline(xintercept = "July21", 
+             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  facet_wrap(~species, nrow = 1, scales = "free") +
+  scale_y_continuous("# Colonies", limits = c(0,135), expand = expansion(mult = c(0, 0.1))) +
+  #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
+  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
+                                                'May22','December22'),
+                   expand = expansion(add = c(5, 5))) + 
+  scale_size_continuous("TL Prevalence", range = c(2,7)) +
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        #axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+        axis.text.x = element_blank(),
+        axis.title = element_text(size = 10),
+        legend.position = 'none',
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
+
+png("Figures/zibinom_meddens.png",width = 9, height = 4, units = "in", res = 400)
+meddensp
+dev.off()
+
+
+low <- dem3 %>% subset(species == "Montastraea cavernosa"|
+                          species == "Pseudodiploria strigosa" | species == "Stephanocoenia intersepta")
+
+
+lowdensp <- ggplot() +
+  geom_jitter(data = low, aes(x = time_point, y = total, fill = location_name), pch = 21,  
+              width = 2, 
+              height = 0, alpha = 0) +
+  geom_text(data = low, aes(x = survey, y = max+2, label = Letter)) +
+  geom_boxplot(data = low, aes(x = survey, y = total), fill = "gray80", width = 7) +
+  geom_jitter(data = low, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
+  geom_vline(xintercept = "July21", 
+             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  facet_wrap(~species, nrow = 1, scales = "free") +
+  scale_y_continuous("# Colonies", limits = c(0,14), expand = expansion(mult = c(0, 0.1))) +
+  #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
+  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
+                                                'May22','December22'),
+                   expand = expansion(add = c(5, 5))) + 
+  scale_size_continuous("TL Prevalence", range = c(2,7)) +
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        #axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+        axis.text.x = element_blank(),
+        axis.title = element_text(size = 10),
+        legend.position = 'none',
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
+
+png("Figures/zibinom_lowdens.png",width = 9, height = 4, units = "in", res = 400)
+lowdensp
+dev.off()
+
+
+vlow <- dem3 %>% subset(species == "Diploria labyrinthiformis" | 
+                         species == "Meandrina meandrites" | species == "Eusmilia fastigiata" |
+                         species == "Dichocoenia stokesii")
+
+vlowdensp <- ggplot() +
+  geom_jitter(data = vlow, aes(x = time_point, y = total, fill = location_name), pch = 21,  
+              width = 2, 
+              height = 0, alpha = 0) +
+  geom_text(data = vlow, aes(x = survey, y = max+0.9, label = Letter)) +
+  geom_boxplot(data = vlow, aes(x = survey, y = total), fill = "gray80", width = 7) +
+  geom_jitter(data = vlow, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
+  geom_vline(xintercept = "July21", 
+             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  facet_wrap(~species, nrow = 1, scales = "free") +
+  scale_y_continuous("# Colonies", limits = c(0,6), expand = expansion(mult = c(0, 0.1))) +
+  #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
+  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
+                                                'May22','December22'),
+                   expand = expansion(add = c(5, 5.5))) + 
+  scale_size_continuous("TL Prevalence", range = c(2,7)) +
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+        axis.title = element_text(size = 10),
+        legend.position = 'none',
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
+
+png("Figures/zibinom_vlowdens.png",width = 9, height = 4, units = "in", res = 400)
+vlowdensp
+dev.off()
+
+legendp <- ggplot() +
+  geom_jitter(data = vlow, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
+  scale_size_continuous("TL Prevalence", range = c(2,7)) +
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"))
+
+library(gridExtra)
+library(cowplot)
+
+legend <- cowplot::get_legend(legendp)
+
+demplot <- grid.arrange(highdensp, meddensp, lowdensp, ncol=1, nrow =3)
+
+demplot2 <- cowplot::plot_grid(demplot, legend, rel_widths = c(3/4, 1/4), axis = 't', align = "v")
+
+demplot2
+
+demplot3 <- cowplot::plot_grid(demplot2, vlowdensp, rel_heights = c(7/10,3/10),
+                               ncol = 1, axis = 't', align = "v")
+
+demplot3
+
+tiff("Figures/demo_tl_plot.tif",width = 9, height = 8, units = "in", res = 400)
+demplot3
+dev.off()
+
+png("Figures/demo_tl_plot.png", width = 9, height = 8, units = "in", res = 400)
+demplot3
+dev.off()
+
+############################################
+#plot prevalence with bubble scaled to count----
+############################################
+prev_highdensp <- ggplot() +
+  geom_jitter(data = high, aes(x = time_point, y = prev_tl, fill = location_name), pch = 21,  
+              width = 2, 
+              height = 0, alpha = 0) +
+  geom_text(data = high, aes(x = survey, y = max_tl + 0.02, label = prev_letter)) +
+  geom_boxplot(data = high, aes(x = survey, y = prev_tl), fill = "gray80", width = 7) +
+  geom_jitter(data = high, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
+  geom_vline(xintercept = "July21", 
+             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  facet_wrap(~species, nrow = 1, scales = "free") +
+  scale_y_continuous("TL Prevalence", limits = c(0,0.23), expand = expansion(mult = c(0, 0.1))) +
+  #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
+  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
+                                                'May22','December22'),
+                   expand = expansion(add = c(5, 5))) + 
+  scale_size_continuous("Total Colonies", range = c(2,7), limits = c(0,185)) +
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        #axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+        axis.text.x = element_blank(),
+        axis.title = element_text(size = 10),
+        legend.position = 'none',
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
+
+png("Figures/prev_highdens.png",width = 9, height = 4, units = "in", res = 400)
+prev_highdensp
+dev.off()
+
+prev_meddensp <- ggplot() +
+  geom_jitter(data = med, aes(x = time_point, y = prev_tl, fill = location_name), pch = 21,  
+              width = 2, 
+              height = 0, alpha = 0) +
+  geom_text(data = med, aes(x = survey, y = max_tl + 0.04, label = prev_letter)) +
+  geom_boxplot(data = med, aes(x = survey, y = prev_tl), fill = "gray80", width = 7) +
+  geom_jitter(data = med, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
+  geom_vline(xintercept = "July21", 
+             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  facet_wrap(~species, nrow = 1, scales = "free") +
+  scale_y_continuous("TL Prevalence", limits = c(0,0.55), expand = expansion(mult = c(0, 0.1))) +
+  #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
+  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
+                                                'May22','December22'),
+                   expand = expansion(add = c(5, 5))) + 
+  scale_size_continuous("Total Colonies", range = c(2,7), limits = c(0,185)) +
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        #axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+        axis.text.x = element_blank(),
+        axis.title = element_text(size = 10),
+        legend.position = 'none',
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
+
+png("Figures/prev_meddens.png",width = 9, height = 4, units = "in", res = 400)
+prev_meddensp
+dev.off()
+
+
+prev_lowdensp <- ggplot() +
+  geom_jitter(data = low, aes(x = time_point, y = prev_tl, fill = location_name), pch = 21,  
+              width = 2, 
+              height = 0, alpha = 0) +
+  geom_text(data = low, aes(x = survey, y = max_tl + 0.01, label = prev_letter)) +
+  geom_boxplot(data = low, aes(x = survey, y = prev_tl), fill = "gray80", width = 7) +
+  geom_jitter(data = low, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
+  geom_vline(xintercept = "July21", 
+             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  facet_wrap(~species, nrow = 1, scales = "free") +
+  scale_y_continuous("TL Prevalence", limits = c(0,1), expand = expansion(mult = c(0, 0.1))) +
+  #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
+  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
+                                                'May22','December22'),
+                   expand = expansion(add = c(5, 5))) + 
+  scale_size_continuous("Total Colonies", range = c(2,7), limits = c(0,185)) +
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        #axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+        axis.text.x = element_blank(),
+        axis.title = element_text(size = 10),
+        legend.position = 'none',
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
+
+png("Figures/prev_lowdens.png",width = 9, height = 4, units = "in", res = 400)
+prev_lowdensp
+dev.off()
+
+
+prev_vlowdensp <- ggplot() +
+  geom_jitter(data = vlow, aes(x = time_point, y = prev_tl, fill = location_name), pch = 21,  
+              width = 2, 
+              height = 0, alpha = 0) +
+  geom_text(data = vlow, aes(x = survey, y = max_tl + 0.01, label = prev_letter)) +
+  geom_boxplot(data = vlow, aes(x = survey, y = prev_tl), fill = "gray80", width = 7) +
+  geom_jitter(data = vlow, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
+  geom_vline(xintercept = "July21", 
+             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  facet_wrap(~species, nrow = 1, scales = "free") +
+  scale_y_continuous("TL Prevalence", limits = c(0,1), expand = expansion(mult = c(0, 0.1))) +
+  #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
+  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
+                                                'May22','December22'),
+                   expand = expansion(add = c(5, 5.5))) + 
+  scale_size_continuous("Total Colonies", range = c(2,7), limits = c(0,185)) +
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+        axis.title = element_text(size = 10),
+        legend.position = 'none',
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
+
+png("Figures/prev_vlowdens.png",width = 9, height = 4, units = "in", res = 400)
+prev_vlowdensp
+dev.off()
+
+prev_legendp <- ggplot() +
+  geom_jitter(data = vlow, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
+  scale_size_continuous("Total Colonies", range = c(2,7), limits = c(0,185)) +
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"))
+
+library(gridExtra)
+library(cowplot)
+
+prev_legend <- cowplot::get_legend(prev_legendp)
+
+prev_plot <- grid.arrange(prev_highdensp, prev_meddensp, prev_lowdensp, ncol=1, nrow =3)
+
+prevplot2 <- cowplot::plot_grid(prev_plot, prev_legend, rel_widths = c(3/4, 1/4), axis = 't', align = "v")
+
+prevplot2
+
+prevplot3 <- cowplot::plot_grid(prevplot2, prev_vlowdensp, rel_heights = c(7/10,3/10),
+                               ncol = 1, axis = 't', align = "v")
+
+prevplot3
+
+tiff("Figures/prev_tl_plot.tif",width = 9, height = 8, units = "in", res = 400)
+prevplot3
+dev.off()
+
+png("Figures/prev_tl_plot.png", width = 9, height = 8, units = "in", res = 400)
+prevplot3
+dev.off()
+
+
