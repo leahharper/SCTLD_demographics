@@ -315,10 +315,7 @@ highdensp <- ggplot() +
         legend.position = 'none',
         plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
 
-png("Figures/zibinom_highdens.png",width = 9, height = 4, units = "in", res = 400)
 highdensp
-dev.off()
-
 
 med <- dem3 %>% subset(species == "Orbicella spp." | species == "Porites porites"|
                           species == "Siderastrea siderea")
@@ -350,9 +347,7 @@ meddensp <- ggplot() +
         legend.position = 'none',
         plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
 
-png("Figures/zibinom_meddens.png",width = 9, height = 4, units = "in", res = 400)
 meddensp
-dev.off()
 
 
 low <- dem3 %>% subset(species == "Montastraea cavernosa"|
@@ -386,10 +381,7 @@ lowdensp <- ggplot() +
         legend.position = 'none',
         plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
 
-png("Figures/zibinom_lowdens.png",width = 9, height = 4, units = "in", res = 400)
 lowdensp
-dev.off()
-
 
 vlow <- dem3 %>% subset(species == "Diploria labyrinthiformis" | 
                          species == "Meandrina meandrites" | species == "Eusmilia fastigiata" |
@@ -421,9 +413,7 @@ vlowdensp <- ggplot() +
         legend.position = 'none',
         plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
 
-png("Figures/zibinom_vlowdens.png",width = 9, height = 4, units = "in", res = 400)
 vlowdensp
-dev.off()
 
 legendp <- ggplot() +
   geom_jitter(data = vlow, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
@@ -449,11 +439,11 @@ demplot3 <- cowplot::plot_grid(demplot2, vlowdensp, rel_heights = c(7/10,3/10),
 
 demplot3
 
-tiff("Figures/demo_tl_plot.tif",width = 9, height = 8, units = "in", res = 400)
+#tiff("Figures/demo_tl_plot.tif",width = 9, height = 8, units = "in", res = 400)
 demplot3
-dev.off()
+#dev.off()
 
-png("Figures/demo_tl_plot.png", width = 9, height = 8, units = "in", res = 400)
+png("Figures/current/demo_tl_plot.png", width = 9, height = 8, units = "in", res = 400)
 demplot3
 dev.off()
 
@@ -487,9 +477,7 @@ prev_highdensp <- ggplot() +
         legend.position = 'none',
         plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
 
-png("Figures/prev_highdens.png",width = 9, height = 4, units = "in", res = 400)
 prev_highdensp
-dev.off()
 
 prev_meddensp <- ggplot() +
   geom_jitter(data = med, aes(x = time_point, y = prev_tl, fill = location_name), pch = 21,  
@@ -518,10 +506,7 @@ prev_meddensp <- ggplot() +
         legend.position = 'none',
         plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
 
-png("Figures/prev_meddens.png",width = 9, height = 4, units = "in", res = 400)
 prev_meddensp
-dev.off()
-
 
 prev_lowdensp <- ggplot() +
   geom_jitter(data = low, aes(x = time_point, y = prev_tl, fill = location_name), pch = 21,  
@@ -550,9 +535,7 @@ prev_lowdensp <- ggplot() +
         legend.position = 'none',
         plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
 
-png("Figures/prev_lowdens.png",width = 9, height = 4, units = "in", res = 400)
 prev_lowdensp
-dev.off()
 
 
 prev_vlowdensp <- ggplot() +
@@ -581,9 +564,7 @@ prev_vlowdensp <- ggplot() +
         legend.position = 'none',
         plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
 
-png("Figures/prev_vlowdens.png",width = 9, height = 4, units = "in", res = 400)
 prev_vlowdensp
-dev.off()
 
 prev_legendp <- ggplot() +
   geom_jitter(data = vlow, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
@@ -609,11 +590,11 @@ prevplot3 <- cowplot::plot_grid(prevplot2, prev_vlowdensp, rel_heights = c(7/10,
 
 prevplot3
 
-tiff("Figures/prev_tl_plot.tif",width = 9, height = 8, units = "in", res = 400)
+#tiff("Figures/prev_tl_plot.tif",width = 9, height = 8, units = "in", res = 400)
 prevplot3
-dev.off()
+#dev.off()
 
-png("Figures/prev_tl_plot.png", width = 9, height = 8, units = "in", res = 400)
+png("Figures/current/prev_tl_plot.png", width = 9, height = 8, units = "in", res = 400)
 prevplot3
 dev.off()
 

@@ -478,11 +478,11 @@ plot1 <- grid.arrange(labyearp1, labyearp2, ncol=1, nrow =2)
 plot2 <- cowplot::plot_grid(plot1, legend, rel_widths = c(4/5, 1/5), axis = 't', align = "v")
 
 
-tiff("Figures/CBCCover_General.tif",width = 7, height = 7, units = "in", res = 300)
+#tiff("Figures/current/CBCCover_General.tif",width = 7, height = 7, units = "in", res = 300)
 plot2
-dev.off()
+#dev.off()
 
-png("Figures/CBCCover_General.png", width = 7, height = 7, units = "in", res = 300)
+png("Figures/current/CBCCover_General.png", width = 7, height = 7, units = "in", res = 300)
 plot2
 dev.off()
 
@@ -562,8 +562,6 @@ for(current_Spec in Spec) {
 }
 
 
-
-
 speclet <- df %>% unite("Event", c("Species", "Group"))
 
 stomeans <- sto2 %>% group_by(Species, Survey) %>%
@@ -584,32 +582,158 @@ sto3 <- sto2 %>%
     SiteName == "Curlew Patch" & Survey == "November19" ~ "October19",
     SiteName == "CBC Lagoon" & Survey == "November19" ~ "October19",
     TRUE ~ as.factor(Survey))) %>%
-  mutate_at(.vars = vars("TimePoint"),
-            .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE))) %>%
   mutate(Letter = ifelse(Species == "AAGA" |
                            Species == "PPOR", 
                          "", Letter))
 
-sto3 <- read.csv("add_zero_cover.csv")
+zeros <- read.csv("add_zero_cover.csv")
+
+zeros$TimePoint <- recode(zeros$TimePoint,
+                          "Dec-22" = "December22",
+                          "May-22" = "May22",
+                          "Oct-19" = "October19",
+                          "Jan-20" = "January20")
+
+zeros$Survey <- recode(zeros$Survey,
+                          "Dec-22" = "December22",
+                          "May-22" = "May22",
+                          "Nov-19" = "November19")
 
 
+sto3 <- rbind(sto3, zeros) %>% mutate_at(.vars = vars("TimePoint"),
+                                       .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
+
+sto3$Species <- recode(sto3$Species,
+                       "AAGA" = "Agaricia agaricites",
+                       "ATEN" = "Agaricia tenuifolia",
+                       "MCAV" = "Montastraea cavernosa",
+                       "PAST" = "Porites astreoides",
+                       "PPOR" = "Porites porites",
+                       "PSTR" = "Pseudodiploria strigosa",
+                       "SINT" = "Stephanocoenia intersepta",
+                       "SSID" = "Siderastrea siderea",
+                       "ORBI" = "Orbicella spp.",
+                       "DSTO" = "Dichocoenia stokesii",
+                       "EFAS" = "Eusmilia fastigiata",
+                       "MMEA" = "Meandrina meandrites",
+                       "DLAB" = "Diploria labyrinthiformis")
 
 library(ggh4x)
 
-targetp1 <- ggplot() +
-  geom_jitter(data = sto3, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0,  
+highcov <- sto3 %>% subset(Species == "Agaricia tenuifolia" | Species == "Orbicella spp."|
+                          Species == "Siderastrea siderea")
+
+highcovp <- ggplot() +
+  geom_jitter(data = highcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0,  
               width = 0.25, 
               height = 0) +
-  geom_text(data = sto3, 
-            aes(x = Survey, y = maxCov, label = Letter), nudge_y = 0.1) +
-  geom_boxplot(data = sto3, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
-  geom_jitter(data = sto3, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
+  geom_text(data = highcov, 
+            aes(x = Survey, y = maxCov*1.1, label = Letter)) +
+  geom_boxplot(data = highcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
+  geom_jitter(data = highcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
               width = 0.25, 
               height = 0)+
   geom_vline(xintercept = "July21", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
-  facet_wrap(~ Species, scales = "free") +
-  scale_y_continuous("Percent Cover") +
+  facet_wrap(~ Species, nrow = 1, scales = "free") +
+  scale_y_continuous("Percent Cover", limits = c(0,22)) +
+  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
+                                                'May22','December22'),
+                   expand = expansion(add = c(4, 4))) +   
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        #axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+        axis.text.x = element_blank(),
+        axis.title = element_text(size = 10),
+        legend.position = 'none',
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
+
+highcovp
+
+medcov <- sto3 %>% subset(Species == "Porites astreoides" | Species == "Porites porites"|
+                         Species == "Agaricia agaricites")
+
+medcovp <- ggplot() +
+  geom_jitter(data = medcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0,  
+              width = 0.25, 
+              height = 0) +
+  geom_text(data = medcov, 
+            aes(x = Survey, y = maxCov*1.1, label = Letter), nudge_y = 0.1) +
+  geom_boxplot(data = medcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
+  geom_jitter(data = medcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
+              width = 0.25, 
+              height = 0)+
+  geom_vline(xintercept = "July21", 
+             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  facet_wrap(~ Species, nrow = 1, scales = "free") +
+  scale_y_continuous("Percent Cover", limits = c(0,4)) +
+  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
+                                                'May22','December22'),
+                   expand = expansion(add = c(4, 4))) +   
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        #axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+        axis.text.x = element_blank(),
+        axis.title = element_text(size = 10),
+        legend.position = 'none',
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
+medcovp
+
+
+lowcov <- sto3 %>% subset(Species == "Montastraea cavernosa" | Species == "Pseudodiploria strigosa"|
+                            Species == "Stephanocoenia intersepta")
+
+lowcovp <- ggplot() +
+  geom_jitter(data = lowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0,  
+              width = 0.25, 
+              height = 0) +
+  geom_text(data = lowcov, 
+            aes(x = Survey, y = maxCov*1.1, label = Letter), nudge_y = 0.1) +
+  geom_boxplot(data = lowcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
+  geom_jitter(data = lowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
+              width = 0.25, 
+              height = 0)+
+  geom_vline(xintercept = "July21", 
+             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  facet_wrap(~ Species, nrow = 1, scales = "free") +
+  scale_y_continuous("Percent Cover", limits = c(0,2.1)) +
+  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
+                                                'May22','December22'),
+                   expand = expansion(add = c(4, 4))) +   
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        #axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+        axis.text.x = element_blank(),
+        axis.title = element_text(size = 10),
+        legend.position = 'none',
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
+
+lowcovp
+
+
+vlowcov <- sto3 %>% subset(Species == "Diploria labyrinthiformis" | Species == "Meandrina meandrites"|
+                            Species == "Eusmilia fastigiata" | Species == "Dichocoenia stokesii")
+
+vlowcovp <- ggplot() +
+  geom_jitter(data = vlowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0,  
+              width = 0.25, 
+              height = 0) +
+  geom_text(data = vlowcov, 
+            aes(x = Survey, y = maxCov*1.1, label = Letter), nudge_y = 0.1) +
+  geom_boxplot(data = vlowcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
+  geom_jitter(data = vlowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
+              width = 0.25, 
+              height = 0)+
+  geom_vline(xintercept = "July21", 
+             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  facet_wrap(~ Species, nrow = 1, scales = "free") +
+  scale_y_continuous("Percent Cover", limits = c(0,2)) +
   scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
                                                 'May22','December22'),
                    expand = expansion(add = c(4, 4))) +   
@@ -618,12 +742,41 @@ targetp1 <- ggplot() +
         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"),
         axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
-        axis.title = element_text(size = 10))
+        axis.title = element_text(size = 10),
+        legend.position = 'none',
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
 
-tiff("Figures/CBCTargetCover.tif",width = 10, height = 10, units = "in", res = 300)
-targetp1
-dev.off()
+vlowcovp
 
-png("Figures/CBCTargetCover.png", width = 10, height = 10, units = "in", res = 300)
-targetp1
+legendp <- ggplot() +
+  geom_jitter(data = medcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
+              width = 0.25, 
+              height = 0) +
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"))
+legendp
+
+library(gridExtra)
+library(cowplot)
+
+legend <- cowplot::get_legend(legendp)
+
+covplot <- grid.arrange(highcovp, medcovp, lowcovp, ncol=1, nrow =3)
+
+covplot2 <- cowplot::plot_grid(covplot, legend, rel_widths = c(3/4, 1/4), axis = 't', align = "v")
+
+covplot2
+
+covplot3 <- cowplot::plot_grid(covplot2, vlowcovp, rel_heights = c(7/10,3/10),
+                               ncol = 1, axis = 't', align = "v")
+
+covplot3
+
+#tiff("Figures/current/spec_cover_plot.tif",width = 9, height = 8, units = "in", res = 400)
+covplot3
+#dev.off()
+
+png("Figures/current/spec_cover_plot.png", width = 9, height = 8, units = "in", res = 400)
+covplot3
 dev.off()

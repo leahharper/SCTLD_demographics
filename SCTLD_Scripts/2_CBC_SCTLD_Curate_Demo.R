@@ -311,7 +311,7 @@ hull.data1
 library(ggrepel)
 library(viridis)
 
-tiff("Figures/adultNMDS_bray.tif",width = 7, height = 7, units = "in", res = 400)
+tiff("Figures/current/adultNMDS_bray.png",width = 7, height = 7, units = "in", res = 400)
 ggplot() + 
   #geom_polygon(data=hull.data1,aes(x=NMDS1,y=NMDS2,fill=survey,group=survey),alpha=0.30, color = "black") + 
   geom_point(data=data.scores1,aes(x=NMDS1,y=NMDS2,colour = survey, fill = survey, shape = location_name),size=4, alpha = 0.8) +
