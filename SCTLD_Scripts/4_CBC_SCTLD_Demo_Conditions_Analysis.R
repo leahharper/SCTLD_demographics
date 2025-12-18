@@ -4,6 +4,7 @@ library(car)
 library(tidyverse)
 library(reshape2) 
 library(piecewiseSEM)
+library(kableExtra)
 
 # Change working directory
 setwd("C:/Users/harperl/OneDrive - Smithsonian Institution/Documents/GitHub/SCTLD_demographics/")
@@ -123,6 +124,8 @@ zibinom <- mixed_model(fixed = total ~ survey * species, random = ~1 | location_
                        max_coef_value = 30,
                        control = list(iter_EM = 0))
 hist(resid(zibinom))
+summary(zibinom)
+
 
 AIC(zibinom)
 AIC(nbinommod)
@@ -147,6 +150,23 @@ simple <- pairs(emm, simple = "survey")
 pairwise <- as.data.frame(pairs(emm, simple = "survey"))
 
 eff <- as.data.frame(eff_size(emm, sigma = 26, edf = Inf))
+
+
+demo_emmtable <- pairwise %>%
+  kbl(caption = "<span style='color: black;'> <b>Table S2.</b> Pairwise contrasts - colony counts over time.
+      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
+      digits = 4,
+      format = "html", booktabs = TRUE, longtable = TRUE) %>%
+  kable_styling(latex_options = c("repeat_header"))
+save_kable(demo_emmtable, file = "Tables/Table S2.pdf")
+
+demo_efftable <- eff %>%
+  kbl(caption = "<span style='color: black;'> <b>Table S3.</b> Effect sizes - colony counts over time.
+      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
+      digits = 4) %>%
+  kable_styling(latex_options = c("repeat_header", "scale_down"))
+
+demo_efftable
 
 
 df <- data.frame()
@@ -248,6 +268,24 @@ pairwise <- as.data.frame(pairs(emm, simple = "survey"))
 eff <- as.data.frame(eff_size(emm, sigma = 26, edf = Inf))
 
 
+
+cond_emmtable <- pairwise %>%
+  kbl(caption = "<span style='color: black;'> <b>Table S4.</b> Pairwise contrasts - tissue loss prevalence over time.
+      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
+      digits = 4) %>%
+  kable_styling()
+
+cond_emmtable
+
+
+cond_efftable <- eff %>%
+  kbl(caption = "<span style='color: black;'> <b>Table S5.</b> Effect sizes - tissue loss prevalence over time.
+      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
+      digits = 4) %>%
+  kable_styling()
+
+cond_efftable
+
 df <- data.frame()
 
 Spec <- levels(as.factor(pairwise$species))
@@ -293,7 +331,7 @@ highdensp <- ggplot() +
               width = 2, 
               height = 0, alpha = 0) +
   geom_text(data = high, aes(x = survey, y = max+20, label = Letter)) +
-  geom_boxplot(data = high, aes(x = survey, y = total), fill = "gray80", width = 7) +
+  geom_boxplot(data = high, aes(x = survey, y = total), fill = "gray80", width = 7, outlier.shape = NA) +
   geom_jitter(data = high, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
               width = 2, height = 0) +
   geom_vline(xintercept = "July21", 
@@ -325,7 +363,7 @@ meddensp <- ggplot() +
               width = 2, 
               height = 0, alpha = 0) +
   geom_text(data = med, aes(x = survey, y = max+15, label = Letter)) +
-  geom_boxplot(data = med, aes(x = survey, y = total), fill = "gray80", width = 7) +
+  geom_boxplot(data = med, aes(x = survey, y = total), fill = "gray80", width = 7, outlier.shape = NA) +
   geom_jitter(data = med, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
               width = 2, height = 0) +
   geom_vline(xintercept = "July21", 
@@ -359,7 +397,7 @@ lowdensp <- ggplot() +
               width = 2, 
               height = 0, alpha = 0) +
   geom_text(data = low, aes(x = survey, y = max+2, label = Letter)) +
-  geom_boxplot(data = low, aes(x = survey, y = total), fill = "gray80", width = 7) +
+  geom_boxplot(data = low, aes(x = survey, y = total), fill = "gray80", width = 7, outlier.shape = NA) +
   geom_jitter(data = low, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
               width = 2, height = 0) +
   geom_vline(xintercept = "July21", 
@@ -392,7 +430,7 @@ vlowdensp <- ggplot() +
               width = 2, 
               height = 0, alpha = 0) +
   geom_text(data = vlow, aes(x = survey, y = max+0.9, label = Letter)) +
-  geom_boxplot(data = vlow, aes(x = survey, y = total), fill = "gray80", width = 7) +
+  geom_boxplot(data = vlow, aes(x = survey, y = total), fill = "gray80", width = 7, outlier.shape = NA) +
   geom_jitter(data = vlow, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
               width = 2, height = 0) +
   geom_vline(xintercept = "July21", 
@@ -455,7 +493,7 @@ prev_highdensp <- ggplot() +
               width = 2, 
               height = 0, alpha = 0) +
   geom_text(data = high, aes(x = survey, y = max_tl + 0.02, label = prev_letter)) +
-  geom_boxplot(data = high, aes(x = survey, y = prev_tl), fill = "gray80", width = 7) +
+  geom_boxplot(data = high, aes(x = survey, y = prev_tl), fill = "gray80", width = 7, outlier.shape = NA) +
   geom_jitter(data = high, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
               width = 2, height = 0) +
   geom_vline(xintercept = "July21", 
@@ -484,7 +522,7 @@ prev_meddensp <- ggplot() +
               width = 2, 
               height = 0, alpha = 0) +
   geom_text(data = med, aes(x = survey, y = max_tl + 0.04, label = prev_letter)) +
-  geom_boxplot(data = med, aes(x = survey, y = prev_tl), fill = "gray80", width = 7) +
+  geom_boxplot(data = med, aes(x = survey, y = prev_tl), fill = "gray80", width = 7, outlier.shape = NA) +
   geom_jitter(data = med, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
               width = 2, height = 0) +
   geom_vline(xintercept = "July21", 
@@ -513,7 +551,7 @@ prev_lowdensp <- ggplot() +
               width = 2, 
               height = 0, alpha = 0) +
   geom_text(data = low, aes(x = survey, y = max_tl + 0.01, label = prev_letter)) +
-  geom_boxplot(data = low, aes(x = survey, y = prev_tl), fill = "gray80", width = 7) +
+  geom_boxplot(data = low, aes(x = survey, y = prev_tl), fill = "gray80", width = 7, outlier.shape = NA) +
   geom_jitter(data = low, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
               width = 2, height = 0) +
   geom_vline(xintercept = "July21", 
@@ -543,7 +581,7 @@ prev_vlowdensp <- ggplot() +
               width = 2, 
               height = 0, alpha = 0) +
   geom_text(data = vlow, aes(x = survey, y = max_tl + 0.01, label = prev_letter)) +
-  geom_boxplot(data = vlow, aes(x = survey, y = prev_tl), fill = "gray80", width = 7) +
+  geom_boxplot(data = vlow, aes(x = survey, y = prev_tl), fill = "gray80", width = 7, outlier.shape = NA) +
   geom_jitter(data = vlow, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
               width = 2, height = 0) +
   geom_vline(xintercept = "July21", 

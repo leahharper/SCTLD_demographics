@@ -14,6 +14,7 @@ setwd("C:/Users/harperl/OneDrive - Smithsonian Institution/Documents/GitHub/SCTL
 
 fate <- read_csv("CBC_ColonyData.csv")
 
+# correct coding errors ----
 fate2 <-fate %>% rename("Condition_062019" = "062019_Condition",
                         "Condition_052022" = "052022_Condition",
                         "Condition_122022" = "122022_Condition")
@@ -40,7 +41,7 @@ fate4 <- fate3 %>% subset(Year_Initial == "19") %>%
                                       Condition_122022 == "CLB",
                                     "Healthy", Condition_122022))
 
-#identify recoveries
+# identify recoveries----
 rec <- fate4 %>% subset(Condition_052022 == "Diseased" &
                           Condition_122022 == "Healthy")
 
@@ -64,8 +65,18 @@ Long <- Long %>% mutate_at(.vars = vars("Time_Point"),
   mutate_at(.vars = vars("Species"),
             .funs = funs(factor(.,levels = SpecLevels, ordered = TRUE)))
 
+# summaries----
 
-sumsimple <- Long %>% group_by(Time_Point,Species) %>% count(Condition) %>% ungroup()
+sumsimple <- Long %>% group_by(Time_Point,Species) %>% count(Condition) %>% ungroup() %>%
+  unite("timespp", c("Time_Point", "Species"), remove = FALSE) %>%
+  rename("n_cond" = n)
+
+sumtime <- Long %>% group_by(Time_Point, Species) %>% count() %>%
+  unite("timespp", c("Time_Point", "Species"), remove = TRUE)
+
+sum <- sumsimple %>% left_join(sumtime, by = "timespp") %>%
+  mutate(percent = (n_cond/n)*100)
+
 
 condcolors2 = c('Dead'='coral3','Diseased'='gold1','Healthy'='springgreen4',
                 'Increased Old Mortality'='gray60',

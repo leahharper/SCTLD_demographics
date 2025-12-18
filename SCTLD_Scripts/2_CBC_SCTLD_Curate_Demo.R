@@ -78,6 +78,7 @@ demo <- demo %>%
   mutate(adult = rowSums(.[17:21])) %>%
   rename("total" = Total)#>5cm
 
+demo$scientific_name <- recode(demo$scientific_name, "Porites porities" = "Porites porites")
 levels(as.factor(demo$location_name))
 
 
@@ -342,8 +343,12 @@ dev.off()
 
 
 braydf <- adonis2(formula = mat ~ location_name + survey, data = cast, permutations = 10000)
+rownames(braydf) <- c("Transect", "Survey Timepoint", "Residual", "Total")
+
+
 braytable <- braydf %>%
-  kbl() %>%
+  kbl(caption = "<span style='color: black;'> <b>Table 1.</b> PERMANOVA Results. <span>",
+          digits = 4) %>%
   kable_styling()
 
 braytable
