@@ -73,9 +73,9 @@ demo <- demo %>%
 
 
 demo <- demo %>%
-  mutate(total_small = rowSums(.[17:19])) %>% #5-40cm
-  mutate(total_lg = rowSums(.[20:21])) %>% #>40cm
-  mutate(adult = rowSums(.[17:21])) %>%
+  mutate(total_small = rowSums(.[17:20])) %>% #5-40cm
+  mutate(total_lg = rowSums(.[21:22])) %>% #>40cm
+  mutate(adult = rowSums(.[17:22])) %>%
   rename("total" = Total)#>5cm
 
 demo$scientific_name <- recode(demo$scientific_name, "Porites porities" = "Porites porites")
@@ -218,7 +218,7 @@ hull.data1
 library(ggrepel)
 library(viridis)
 
-tiff("Figures/adultNMDS_jaccard.tif",width = 7, height = 7, units = "in", res = 400)
+#tiff("Figures/adultNMDS_jaccard.tif",width = 7, height = 7, units = "in", res = 400)
 ggplot() + 
   #geom_polygon(data=hull.data1,aes(x=NMDS1,y=NMDS2,fill=survey,group=survey),alpha=0.30, color = "black") + 
   geom_point(data=data.scores1,aes(x=NMDS1,y=NMDS2,colour = survey, fill = survey, shape = location_name),size=4, alpha = 0.8) +
@@ -245,7 +245,7 @@ ggplot() +
         panel.grid.minor = element_blank(),  #remove minor-grid labels
         plot.background = element_blank(),
         plot.title = element_text(hjust = 0.5))
-dev.off()
+#dev.off()
 
 library(kableExtra)
 
@@ -312,7 +312,7 @@ hull.data1
 library(ggrepel)
 library(viridis)
 
-tiff("Figures/current/adultNMDS_bray.png",width = 7, height = 7, units = "in", res = 400)
+tiff("Figures/current/Fig 5.png",width = 7, height = 7, units = "in", res = 400)
 ggplot() + 
   #geom_polygon(data=hull.data1,aes(x=NMDS1,y=NMDS2,fill=survey,group=survey),alpha=0.30, color = "black") + 
   geom_point(data=data.scores1,aes(x=NMDS1,y=NMDS2,colour = survey, fill = survey, shape = location_name),size=4, alpha = 0.8) +
@@ -351,6 +351,8 @@ braytable <- braydf %>%
           digits = 4) %>%
   kable_styling()
 
-braytable
+save_kable(braytable, file = "Tables/Table 1.pdf")
+
+
 
 

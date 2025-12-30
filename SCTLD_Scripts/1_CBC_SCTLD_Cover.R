@@ -19,6 +19,14 @@ cover <- read.csv("annotations_CBC_19-22.csv")
 pd <- position_dodge(width = 0.93)
 se<-function(x)sqrt(var(x)/length(x))
 
+isSig <- function(p) {
+  
+  ifelse(p > 0.01 & p < 0.05, "*",
+         ifelse(p > 0.001 & p <= 0.01, "**",
+                ifelse(p <= 0.001, "***", "")))
+  
+}
+
 # Establish time levels
 TimeLevels <- c("October19","November19","December19",
                 "January20", "February20", "March20" ,"April20","May20", "June20","July20",
@@ -38,6 +46,8 @@ cover <- cbind(cover, split2)
 cover <- cover %>% rename("Year" = "V3", "Day" = "V2", "Month" = "V1") %>%
   select(Name, Date, Habitat, SiteName, Year, Month, Day, Label, Row, Column)
 
+npics <- cover %>% group_by(Date, SiteName) %>%
+  summarize(n = length(unique(Name)))
 
 levels(as.factor(cover$SiteName))
 
@@ -230,20 +240,26 @@ mod1 <- glmer(cov_prop ~ Survey*Label_General +
               data=covgen,family="binomial")
 hist(resid(mod1))
 Anova(mod1)
+AIC(mod1)
+
+
+gentable <- as.data.frame(Anova(mod1)) %>%
+  mutate(`Pr(>Chisq)` = ifelse(`Pr(>Chisq)` < 0.001 ,
+                            "<0.001", `Pr(>Chisq)` )) %>%
+  mutate(sig = isSig(`Pr(>Chisq)`)) %>%
+  kbl(caption = "<span style='color: black;'> <b>Table 6.</b> Model results testing for
+      variation in cover of major benthic functional groups over time.<span>",
+      digits = 3,
+      format = "html", booktabs = TRUE, longtable = TRUE) %>%
+  kable_styling(latex_options = c("repeat_header"))
+save_kable(gentable, file = "Tables/Table 6.pdf")
+
 
 emm <- emmeans(mod1, ~ Survey*Label_General)
 simple <- pairs(emm, simple = "Survey")
 pairwise <- as.data.frame(pairs(emm, simple = "Survey"))
 
-
-isSig <- function(p) {
-  
-  ifelse(p > 0.01 & p < 0.05, "*",
-         ifelse(p > 0.001 & p <= 0.01, "**",
-                ifelse(p <= 0.001, "***", "")))
-  
-}
-
+eff <- as.data.frame(eff_size(simple, sigma = 26, edf = Inf)) 
 
 
 df <- data.frame()
@@ -254,8 +270,6 @@ for(current_Label in Labels) {
   
   Lab_df <- pairwise %>% subset(Label_General == current_Label) 
   
-  pairwise$sig <- isSig(pairwise$p.value)
-  
   letters <- as.data.frame(cldList(p.value ~ contrast,
                                    data = Lab_df,
                                    threshold = 0.05)) %>%
@@ -265,13 +279,34 @@ for(current_Label in Labels) {
     bind_rows(letters)
 }
 
-
-
-
-#devtools::install_github("ianmoran11/mmtable2")
-library(mmtable2)
-library(gt)
+#make tables
 library(kableExtra)
+
+pairwise <- pairwise %>%
+mutate(`p.value` =round(`p.value`, digits = 3)) %>%
+  mutate(`p.value` = ifelse(`p.value` < 0.001 ,
+                            "<0.001", `p.value` )) %>%
+  mutate(sig = isSig(`p.value`))
+
+
+gen_emmtable <- pairwise %>%
+  kbl(caption = "<span style='color: black;'> <b>Table S11.</b> Pairwise contrasts - cover of benthic
+  functional groups over time.
+      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
+      digits = 3,
+      format = "html", booktabs = TRUE, longtable = TRUE) %>%
+  kable_styling(latex_options = c("repeat_header"))
+save_kable(gen_emmtable, file = "Tables/Table S11.pdf")
+
+
+gen_efftable <- eff %>%
+  kbl(caption = "<span style='color: black;'> <b>Table S12.</b> Effect sizes - cover of benthic functional
+  groups over time.
+      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
+      digits = 3,
+      format = "html", booktabs = TRUE, longtable = TRUE) %>%
+  kable_styling(latex_options = c("repeat_header"))
+save_kable(gen_efftable, file = "Tables/Table S12.pdf")
 
 
 
@@ -301,54 +336,54 @@ covgen1 <- covgenx %>% subset(Label_General == "Turf Algae"|
 covgen2 <- covgenx %>% subset(Label_General == "Macroalgae"|
                                 Label_General == "Octocoral")
 
-##model susceptible coral cover ----
-modsus <- glm(cov_prop ~ Survey + SiteName, data = suscep, family = "quasibinomial")
-modsus <- glmer(cov_prop ~ Survey +
-                  (1|SiteName),
-                weights=npoints,
-                data=suscep,family="binomial")
-hist(resid(modsus))
-Anova(modsus)
-rsquared(modsus)
-
-susresult <- as.data.frame(Anova(modsus)) %>%
-  mutate(Label_General = "SCTLD Susceptible Coral")
-susresult$sig <- isSig(susresult$"Pr(>Chisq)")
-mod_df <- data.frame()
-mod_df <- mod_df %>% rbind(susresult)
-
-covtable <- mod_df %>%
-  remove_rownames %>% column_to_rownames(var="Label_General") %>%
-  select(-c(sig)) %>%
-  rename('p-value' = 'Pr(>Chisq)') %>%
-  mutate('p-value' = '<0.001') %>%
-  kbl() %>%
-  kable_styling()
-
-#png("Tables/CovTable.png", width = 8, height = 6, units = "in", res = 300)
-covtable
-#dev.off()
-
-suspairwise <- as.data.frame(pairs(emmeans(modsus, ~ Survey)))
-
-suspairwise$sig <- isSig(suspairwise$p.value)
-
-susletters <- as.data.frame(cldList(p.value ~ contrast,
-                                    data = suspairwise,
-                                    threshold = 0.05))
-
-suscep <- suscep %>% left_join(susletters, by = c("Survey" = "Group")) %>%
-  mutate(TimePoint = case_when(
-    SiteName == "SR30N" & Survey == "November19" ~ "January20",
-    SiteName == "CBC30N" & Survey == "November19" ~ "January20",
-    SiteName == "CBC Central" & Survey == "November19" ~ "October19",
-    SiteName == "South Reef Central" & Survey == "November19" ~ "October19",
-    SiteName == "House Reef" & Survey == "November19" ~ "October19",
-    SiteName == "Curlew Patch" & Survey == "November19" ~ "October19",
-    SiteName == "CBC Lagoon" & Survey == "November19" ~ "October19",
-    TRUE ~ as.factor(Survey))) %>%
-  mutate_at(.vars = vars("TimePoint"),
-            .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
+# ##model susceptible coral cover ----
+# modsus <- glm(cov_prop ~ Survey + SiteName, data = suscep, family = "quasibinomial")
+# modsus <- glmer(cov_prop ~ Survey +
+#                   (1|SiteName),
+#                 weights=npoints,
+#                 data=suscep,family="binomial")
+# hist(resid(modsus))
+# Anova(modsus)
+# rsquared(modsus)
+# 
+# susresult <- as.data.frame(Anova(modsus)) %>%
+#   mutate(Label_General = "SCTLD Susceptible Coral")
+# susresult$sig <- isSig(susresult$"Pr(>Chisq)")
+# mod_df <- data.frame()
+# mod_df <- mod_df %>% rbind(susresult)
+# 
+# covtable <- mod_df %>%
+#   remove_rownames %>% column_to_rownames(var="Label_General") %>%
+#   select(-c(sig)) %>%
+#   rename('p-value' = 'Pr(>Chisq)') %>%
+#   mutate('p-value' = '<0.001') %>%
+#   kbl() %>%
+#   kable_styling()
+# 
+# #png("Tables/CovTable.png", width = 8, height = 6, units = "in", res = 300)
+# covtable
+# #dev.off()
+# 
+# suspairwise <- as.data.frame(pairs(emmeans(modsus, ~ Survey)))
+# 
+# suspairwise$sig <- isSig(suspairwise$p.value)
+# 
+# susletters <- as.data.frame(cldList(p.value ~ contrast,
+#                                     data = suspairwise,
+#                                     threshold = 0.05))
+# 
+# suscep <- suscep %>% left_join(susletters, by = c("Survey" = "Group")) %>%
+#   mutate(TimePoint = case_when(
+#     SiteName == "SR30N" & Survey == "November19" ~ "January20",
+#     SiteName == "CBC30N" & Survey == "November19" ~ "January20",
+#     SiteName == "CBC Central" & Survey == "November19" ~ "October19",
+#     SiteName == "South Reef Central" & Survey == "November19" ~ "October19",
+#     SiteName == "House Reef" & Survey == "November19" ~ "October19",
+#     SiteName == "Curlew Patch" & Survey == "November19" ~ "October19",
+#     SiteName == "CBC Lagoon" & Survey == "November19" ~ "October19",
+#     TRUE ~ as.factor(Survey))) %>%
+#   mutate_at(.vars = vars("TimePoint"),
+#             .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
 
 #suscep <- suscep %>% mutate(Survey = fct_relevel(Survey,
 # "Novemer19", "May22", "Deccember22")) 
@@ -424,43 +459,43 @@ labyearp2 <- ggplot() +
         legend.position = 'none',
         plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"))
 labyearp2
-
-suscepyearp <- ggplot() +
-  geom_jitter(data = suscep, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 4, alpha = 0, pch = 21,  
-              width = 0.25, 
-              height = 0, alpha = 0) +
-  geom_text(data = suscep, 
-            aes(x = Survey, y = maxCov, label = Letter), nudge_y = 1) +
-  geom_violin(data = suscep, aes(x = Survey, y = cov_gen), fill = "gray80", outlier.shape = NA) +
-  geom_jitter(data = suscep, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 4, alpha = 0.5, pch = 21,  
-              width = 0.25, 
-              height = 0) +
-  geom_vline(xintercept = "July21", 
-             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
-  facet_wrap(~Label_Suscep, scales = "free") +
-  scale_y_continuous("") +
-  #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
-                                                'May22','December22'),
-                   expand = expansion(add = c(2, 2))) +   
-  scale_fill_manual("Site",values=c(sitecolors)) +
-  theme(plot.title = element_text(size = 16,hjust = 0.5),
-        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"),
-        axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
-        axis.title = element_text(size = 10),
-        legend.position = 'none',
-        plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"))
-suscepyearp
+# 
+# suscepyearp <- ggplot() +
+#   geom_jitter(data = suscep, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 4, alpha = 0, pch = 21,  
+#               width = 0.25, 
+#               height = 0, alpha = 0) +
+#   geom_text(data = suscep, 
+#             aes(x = Survey, y = maxCov, label = Letter), nudge_y = 1) +
+#   geom_violin(data = suscep, aes(x = Survey, y = cov_gen), fill = "gray80", outlier.shape = NA) +
+#   geom_jitter(data = suscep, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 4, alpha = 0.5, pch = 21,  
+#               width = 0.25, 
+#               height = 0) +
+#   geom_vline(xintercept = "July21", 
+#              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+#   facet_wrap(~Label_Suscep, scales = "free") +
+#   scale_y_continuous("") +
+#   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
+#   scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
+#                                                 'May22','December22'),
+#                    expand = expansion(add = c(2, 2))) +   
+#   scale_fill_manual("Site",values=c(sitecolors)) +
+#   theme(plot.title = element_text(size = 16,hjust = 0.5),
+#         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#         panel.background = element_blank(), axis.line = element_line(colour = "black"),
+#         axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+#         axis.title = element_text(size = 10),
+#         legend.position = 'none',
+#         plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"))
+# suscepyearp
 
 
 legendp <- ggplot() +
-  geom_boxplot(data = suscep, aes(x = TimePoint, y = cov_gen), alpha = 0) +
+  geom_boxplot(data = covgen1, aes(x = TimePoint, y = cov_gen), alpha = 0) +
   #geom_point(data = covgen, aes(x = TimePoint, y = cov_gen, fill = SiteName)) +
-  geom_jitter(data = suscep, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 2, pch = 21,  
+  geom_jitter(data = covgen1, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 2, pch = 21,  
               width = 0.25, 
               height = 0) +
-  facet_wrap(~Label_Suscep, scales = "free") +
+  facet_wrap(~Label_General, scales = "free") +
   scale_y_continuous("") +
   scale_x_discrete("") +
   scale_fill_manual("Site",values=c(sitecolors)) +
@@ -482,12 +517,15 @@ plot2 <- cowplot::plot_grid(plot1, legend, rel_widths = c(4/5, 1/5), axis = 't',
 plot2
 #dev.off()
 
-png("Figures/current/CBCCover_General.png", width = 7, height = 7, units = "in", res = 300)
+png("Figures/current/Fig 7.png", width = 7, height = 7, units = "in", res = 300)
 plot2
 dev.off()
 
+#Mean cover values over time ----
+covsum <- covgen %>% group_by(Survey, Label_General) %>%
+  summarize(mean_cov = mean(cov_gen))
 
-
+#species specific cover ----
 sto <- cover %>% subset(Label_General == "All Stony Coral") %>% droplevels()
 levels(as.factor(sto$Label))
 
@@ -535,12 +573,24 @@ mod3 <- glmer(cov_prop ~ Survey*Species +
 hist(resid(mod3))
 Anova(mod3)
 
-df <- data.frame()
+spptable <- as.data.frame(Anova(mod3)) %>%
+  mutate(`Pr(>Chisq)` = ifelse(`Pr(>Chisq)` < 0.001 ,
+                            "<0.001", `Pr(>Chisq)` )) %>%
+  mutate(sig = isSig(`Pr(>Chisq)`)) %>%
+  kbl(caption = "<span style='color: black;'> <b>Table 5.</b> Model results testing for
+      variation in cover of target scleractinian coral species over time.<span>",
+      digits = 3,
+      format = "html", booktabs = TRUE, longtable = TRUE) %>%
+  kable_styling(latex_options = c("repeat_header"))
+save_kable(spptable, file = "Tables/Table 5.pdf")
 
 
 emm <- emmeans(mod3, ~ Survey*Species)
 simple <- pairs(emm, simple = "Survey")
 pairwise <- as.data.frame(pairs(emm, simple = "Survey"))
+
+eff <- as.data.frame(eff_size(simple, sigma = 26, edf = Inf)) 
+
 
 df <- data.frame()
 
@@ -564,6 +614,32 @@ for(current_Spec in Spec) {
 
 speclet <- df %>% unite("Event", c("Species", "Group"))
 
+#make tables
+pairwise <- pairwise %>%
+  mutate(`p.value` =round(`p.value`, digits = 3)) %>%
+  mutate(`p.value` = ifelse(`p.value` < 0.001 ,
+                            "<0.001", `p.value` )) %>%
+  mutate(sig = isSig(`p.value`))
+
+
+spp_emmtable <- pairwise %>%
+  kbl(caption = "<span style='color: black;'> <b>Table S9.</b> Pairwise contrasts - cover of scleractinian coral
+  species over time.
+      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
+      digits = 3,
+      format = "html", booktabs = TRUE, longtable = TRUE) %>%
+  kable_styling(latex_options = c("repeat_header"))
+save_kable(spp_emmtable, file = "Tables/Table S9.pdf")
+
+
+spp_efftable <- eff %>%
+  kbl(caption = "<span style='color: black;'> <b>Table S10.</b> Effect sizes - cover of coral species over time.
+      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
+      digits = 3,
+      format = "html", booktabs = TRUE, longtable = TRUE) %>%
+  kable_styling(latex_options = c("repeat_header"))
+save_kable(spp_efftable, file = "Tables/Table S10.pdf")
+
 stomeans <- sto2 %>% group_by(Species, Survey) %>%
   summarize(MeanCov = mean(cover), seCov = se(cover), maxCov = max(cover)) %>%
   unite("Event", c(Species,Survey))
@@ -583,7 +659,8 @@ sto3 <- sto2 %>%
     SiteName == "CBC Lagoon" & Survey == "November19" ~ "October19",
     TRUE ~ as.factor(Survey))) %>%
   mutate(Letter = ifelse(Species == "AAGA" |
-                           Species == "PPOR", 
+                           Species == "PPOR" | 
+                           Species == "SINT",
                          "", Letter))
 
 zeros <- read.csv("add_zero_cover.csv")
@@ -628,7 +705,7 @@ highcovp <- ggplot() +
               width = 0.25, 
               height = 0) +
   geom_text(data = highcov, 
-            aes(x = Survey, y = maxCov*1.1, label = Letter)) +
+            aes(x = Survey, y = maxCov+2, label = Letter)) +
   geom_boxplot(data = highcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
   geom_jitter(data = highcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
               width = 0.25, 
@@ -660,7 +737,7 @@ medcovp <- ggplot() +
               width = 0.25, 
               height = 0) +
   geom_text(data = medcov, 
-            aes(x = Survey, y = maxCov*1.1, label = Letter), nudge_y = 0.1) +
+            aes(x = Survey, y = maxCov+0.4, label = Letter), nudge_y = 0.1) +
   geom_boxplot(data = medcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
   geom_jitter(data = medcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
               width = 0.25, 
@@ -692,7 +769,7 @@ lowcovp <- ggplot() +
               width = 0.25, 
               height = 0) +
   geom_text(data = lowcov, 
-            aes(x = Survey, y = maxCov*1.1, label = Letter), nudge_y = 0.1) +
+            aes(x = Survey, y = maxCov+0.25, label = Letter), nudge_y = 0.1) +
   geom_boxplot(data = lowcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
   geom_jitter(data = lowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
               width = 0.25, 
@@ -777,6 +854,6 @@ covplot3
 covplot3
 #dev.off()
 
-png("Figures/current/spec_cover_plot.png", width = 9, height = 8, units = "in", res = 400)
+png("Figures/current/Fig 6.png", width = 9, height = 8, units = "in", res = 400)
 covplot3
 dev.off()

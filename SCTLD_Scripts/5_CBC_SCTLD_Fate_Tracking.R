@@ -202,6 +202,6 @@ sankey <- ggplot(sankeydf, aes(x = x,
         legend.text = element_text(size = 12))
 sankey
 
-png("Figures/current/ConditionSankey.png",width = 9, height = 6, units = "in", res = 300)
+png("Figures/current/Fig 3.png",width = 9, height = 6, units = "in", res = 300)
 sankey
 dev.off()
