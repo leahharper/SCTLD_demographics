@@ -701,13 +701,13 @@ highcov <- sto3 %>% subset(Species == "Agaricia tenuifolia" | Species == "Orbice
                           Species == "Siderastrea siderea")
 
 highcovp <- ggplot() +
-  geom_jitter(data = highcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0,  
+  geom_jitter(data = highcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0,  
               width = 0.25, 
               height = 0) +
   geom_text(data = highcov, 
             aes(x = Survey, y = maxCov+2, label = Letter)) +
   geom_boxplot(data = highcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
-  geom_jitter(data = highcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
+  geom_jitter(data = highcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0.5,  
               width = 0.25, 
               height = 0)+
   geom_vline(xintercept = "July21", 
@@ -733,13 +733,13 @@ medcov <- sto3 %>% subset(Species == "Porites astreoides" | Species == "Porites 
                          Species == "Agaricia agaricites")
 
 medcovp <- ggplot() +
-  geom_jitter(data = medcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0,  
+  geom_jitter(data = medcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0,  
               width = 0.25, 
               height = 0) +
   geom_text(data = medcov, 
             aes(x = Survey, y = maxCov+0.4, label = Letter), nudge_y = 0.1) +
   geom_boxplot(data = medcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
-  geom_jitter(data = medcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
+  geom_jitter(data = medcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0.5,  
               width = 0.25, 
               height = 0)+
   geom_vline(xintercept = "July21", 
@@ -765,13 +765,13 @@ lowcov <- sto3 %>% subset(Species == "Montastraea cavernosa" | Species == "Pseud
                             Species == "Stephanocoenia intersepta")
 
 lowcovp <- ggplot() +
-  geom_jitter(data = lowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0,  
+  geom_jitter(data = lowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0,  
               width = 0.25, 
               height = 0) +
   geom_text(data = lowcov, 
             aes(x = Survey, y = maxCov+0.25, label = Letter), nudge_y = 0.1) +
   geom_boxplot(data = lowcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
-  geom_jitter(data = lowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
+  geom_jitter(data = lowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0.5,  
               width = 0.25, 
               height = 0)+
   geom_vline(xintercept = "July21", 
@@ -798,13 +798,13 @@ vlowcov <- sto3 %>% subset(Species == "Diploria labyrinthiformis" | Species == "
                             Species == "Eusmilia fastigiata" | Species == "Dichocoenia stokesii")
 
 vlowcovp <- ggplot() +
-  geom_jitter(data = vlowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0,  
+  geom_jitter(data = vlowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0,  
               width = 0.25, 
               height = 0) +
   geom_text(data = vlowcov, 
             aes(x = Survey, y = maxCov*1.1, label = Letter), nudge_y = 0.1) +
   geom_boxplot(data = vlowcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
-  geom_jitter(data = vlowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
+  geom_jitter(data = vlowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0.5,  
               width = 0.25, 
               height = 0)+
   geom_vline(xintercept = "July21", 

@@ -88,7 +88,9 @@ denssum <- demo_tl %>% group_by(species) %>% summarize(total_all = sum(total)) %
 demo_tl <- demo_tl %>% left_join(denssum, by = "species") %>% subset(species != "Agaricia spp.") %>% droplevels()
 
 #drop rarest species ----
-exclude <- demo_tl %>% subset(total_all < 8) %>%
+exclude <- demo_tl %>% subset(total_all < 8 |
+                                species == "Helioseris cucullata"|
+                                species == "Madracis decactis") %>%
   group_by(species, survey) %>%
   summarize("total count" = sum(total)) %>%
   pivot_wider(id_cols = c(species), names_from = survey, 
@@ -98,7 +100,8 @@ exclude <- demo_tl %>% subset(total_all < 8) %>%
   
 exclude_table <- exclude %>%
   kbl(caption = "<span style='color: black;'> <b>Table S2.</b> Total counts by survey timepoint of 
-      species dropped from models (fewer than 8 total observations <span>",
+      species dropped from models (fewer than 8 total observations for all
+      except H. cuculatta and M. decactis)<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
@@ -237,13 +240,13 @@ demowald <- rbind(demowald1,demowald2,demowald3) %>%
 
 
 demo_table <- demowald %>%
-  kbl(caption = "<span style='color: black;'> <b>Table 1.</b> Results of
+  kbl(caption = "<span style='color: black;'> <b>Table 3.</b> Results of
       zero inflated negative binomial model testing effects of survey timepoint, 
       species, and their interaction on total coral count in transect surveys.<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(demo_table, file = "Tables/Table 1.pdf")
+save_kable(demo_table, file = "Tables/Table 3.pdf")
 
 
 # Fit a reduced model for comparison
@@ -326,20 +329,20 @@ pairwise <- pairwise %>%
 
 
 demo_emmtable <- pairwise %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S3.</b> Pairwise contrasts - colony counts over time.
+  kbl(caption = "<span style='color: black;'> <b>Table S7.</b> Pairwise contrasts - colony counts over time.
       Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(demo_emmtable, file = "Tables/Table S3.pdf")
+save_kable(demo_emmtable, file = "Tables/Table S7.pdf")
 
 demo_efftable <- eff %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S4.</b> Effect sizes - colony counts over time.
+  kbl(caption = "<span style='color: black;'> <b>Table S8.</b> Effect sizes - colony counts over time.
       Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(demo_efftable, file = "Tables/Table S4.pdf")
+save_kable(demo_efftable, file = "Tables/Table S8.pdf")
 
 #####################################
 #Species-specific condition models----
@@ -470,13 +473,13 @@ condwald <- rbind(condwald1,condwald2) %>%
 
 
 cond_table <- condwald %>%
-  kbl(caption = "<span style='color: black;'> <b>Table 3.</b> Results of
+  kbl(caption = "<span style='color: black;'> <b>Table 2.</b> Results of
       beta binomial model testing effects of survey timepoint and
       species on disease prevalence in transect surveys.<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(cond_table, file = "Tables/Table 3.pdf")
+save_kable(cond_table, file = "Tables/Table 2.pdf")
 
 
 library(emmeans)
@@ -504,21 +507,21 @@ eff_surv <- as.data.frame(eff_size(simple_surv, sigma = 26, edf = Inf))
 
 
 surv_cond_emmtable <- pairwise_surv %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S5.</b> Pairwise contrasts - tissue loss prevalence over time.
+  kbl(caption = "<span style='color: black;'> <b>Table S3.</b> Pairwise contrasts - tissue loss prevalence over time.
       Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
       digits = 3,
   format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(surv_cond_emmtable, file = "Tables/Table S5.pdf")
+save_kable(surv_cond_emmtable, file = "Tables/Table S3.pdf")
 
 
 surv_cond_efftable <- eff_surv %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S6.</b> Effect sizes - tissue loss prevalence over time.
+  kbl(caption = "<span style='color: black;'> <b>Table S4.</b> Effect sizes - tissue loss prevalence over time.
       Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(surv_cond_efftable, file = "Tables/Table S6.pdf")
+save_kable(surv_cond_efftable, file = "Tables/Table S4.pdf")
 
 #pairwise species
 emm_spp <- emmeans(betabinom, ~ species)
@@ -534,21 +537,21 @@ eff_spp <- as.data.frame(eff_size(simple_spp, sigma = 26, edf = Inf))
 
 
 spp_cond_emmtable <- pairwise_spp %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S7.</b> Pairwise contrasts - difference in tissue loss 
+  kbl(caption = "<span style='color: black;'> <b>Table S5.</b> Pairwise contrasts - difference in tissue loss 
   prevalence between pairs of species across all timepoints.",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(spp_cond_emmtable, file = "Tables/Table S7.pdf")
+save_kable(spp_cond_emmtable, file = "Tables/Table S5.pdf")
 
 
 spp_cond_efftable <- eff_spp %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S8.</b> Effect sizes - tissue loss prevalence among species.
+  kbl(caption = "<span style='color: black;'> <b>Table S6.</b> Effect sizes - tissue loss prevalence among species.
       <span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(spp_cond_efftable, file = "Tables/Table S8.pdf")
+save_kable(spp_cond_efftable, file = "Tables/Table S6.pdf")
 
 desired_order <- c("November19", "May22", "December22")
 
@@ -565,13 +568,13 @@ lesionsum <- demo_tl %>% group_by(survey, species) %>%
          "Dec 2022 TL" = n_tl_December22, "Dec 2022 Healthy" = n_healthy_December22)
 
 lesion_summary_table <- lesionsum %>%
-  kbl(caption = "<span style='color: black;'> <b>Table 2.</b> Total counts of colonies with tissue loss and
+  kbl(caption = "<span style='color: black;'> <b>Table 1.</b> Total counts of colonies with tissue loss and
   healthy colonies (without tissue loss) by survey timepoint and species.
       <span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(lesion_summary_table, file = "Tables/Table 2.pdf")
+save_kable(lesion_summary_table, file = "Tables/Table 1.pdf")
 
 #Generates sig letters for disease, cant do without interaction
 # 
