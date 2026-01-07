@@ -186,6 +186,11 @@ covgen <- cover %>% group_by(SiteName, Habitat, Date, Survey, npoints, Label_Gen
   mutate(cov_prop = cov_gen/100) %>%
   subset(!(is.na(Label_General))) 
 
+meanstony <- covgen %>% 
+  subset(Label_General == "All Stony Coral") %>%
+  group_by(Survey) %>%
+  summarize(mean = mean(cov_gen))
+
 covgen$Survey_a <- covgen$Survey
 covgen$Label_General_a <- covgen$Label_General
 

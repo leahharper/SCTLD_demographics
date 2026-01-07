@@ -347,11 +347,11 @@ rownames(braydf) <- c("Transect", "Survey Timepoint", "Residual", "Total")
 
 
 braytable <- braydf %>%
-  kbl(caption = "<span style='color: black;'> <b>Table 1.</b> PERMANOVA Results. <span>",
+  kbl(caption = "<span style='color: black;'> <b>Table 4.</b> PERMANOVA Results. <span>",
           digits = 4) %>%
   kable_styling()
 
-save_kable(braytable, file = "Tables/Table 1.pdf")
+save_kable(braytable, file = "Tables/Table 4.pdf")
 
 
 

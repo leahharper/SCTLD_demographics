@@ -14,6 +14,16 @@ setwd("C:/Users/harperl/OneDrive - Smithsonian Institution/Documents/GitHub/SCTL
 
 fate <- read_csv("CBC_ColonyData.csv")
 
+# Establish time levels
+TimeLevels <- c("October19","November19","December19",
+                "January20", "February20", "March20" ,"April20","May20", "June20","July20",
+                "August20" ,"September20", "October20","November20","December20",
+                "January21","February21","March21" ,"April21","May21", "June21",
+                "July21","August21" ,"September21", "October21","November21","December21",
+                "January22","February22","March22" ,"April22","May22", "June22","July22",
+                "August22" ,"September22", "October22","November22","December22")
+
+
 # correct coding errors ----
 fate2 <-fate %>% rename("Condition_062019" = "062019_Condition",
                         "Condition_052022" = "052022_Condition",
@@ -54,8 +64,8 @@ Long <-melt(fate4, id.vars =c("Species","NewTagNum",
 Long$Condition <- recode(Long$Condition, "Healthy?" = "Healthy")
 
 Long$Time_Point <- recode(Long$Time_Point, "Condition_052022" = "May22",
-                          "Condition_122022" = "Dec22",
-                          "Condition_062019" = "Oct19")
+                          "Condition_122022" = "December22",
+                          "Condition_062019" = "October19")
 
 
 SpecLevels = c('SSID','MCAV','PSTR','PAST','MMEA','CNAT')
@@ -70,6 +80,8 @@ Long <- Long %>% mutate_at(.vars = vars("Time_Point"),
 sumsimple <- Long %>% group_by(Time_Point,Species) %>% count(Condition) %>% ungroup() %>%
   unite("timespp", c("Time_Point", "Species"), remove = FALSE) %>%
   rename("n_cond" = n)
+
+sumsimpler <- Long %>% group_by(Time_Point) %>% count(Condition) 
 
 sumtime <- Long %>% group_by(Time_Point, Species) %>% count() %>%
   unite("timespp", c("Time_Point", "Species"), remove = TRUE)
@@ -169,9 +181,9 @@ for(current_Specie in SpecList) {
 
 sankeydf <- sankeydf %>% left_join(counts, by = "Species")
 
-sankeydf$x <- recode(sankeydf$x, "Condition_062019" = "Oct19",
+sankeydf$x <- recode(sankeydf$x, "Condition_062019" = "October19",
                      "Condition_052022" = "May22",
-                     "Condition_122022" = "Dec22")
+                     "Condition_122022" = "December22")
 
 sankeydf <- sankeydf %>% mutate(Species = fct_relevel(Species,
                                                       "SSID", "PAST", "MMEA", "MCAV", "PSTR")) 
