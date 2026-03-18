@@ -93,40 +93,12 @@ denssum <- demo_tl %>% group_by(species) %>% summarize(total_all = sum(total)) %
 
 demo_tl <- demo_tl %>% left_join(denssum, by = "species") %>% subset(species != "Agaricia spp.") %>% droplevels()
 
-#drop rarest species ----
-exclude <- demo_tl %>% subset(total_all < 8 |
-                                species == "Helioseris cucullata"|
-                                species == "Madracis decactis") %>%
-  group_by(species, survey) %>%
-  summarize("total count" = sum(total)) %>%
-  pivot_wider(id_cols = c(species), names_from = survey, 
-              values_from = "total count") %>%
-  select(species, November19, May22, December22) %>%
-  rename("Oct 2019/Jan 2020" = November19, "May 2022" = May22, "Dec 2022" = December22)
-
-exclude_table <- exclude %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S2.</b> Total counts by survey timepoint of 
-      species dropped from models (fewer than 8 total observations for all
-      except H. cuculatta and M. decactis)<span>",
-      digits = 3,
-      format = "html", booktabs = TRUE, longtable = TRUE) %>%
-  kable_styling(latex_options = c("repeat_header"))
-save_kable(exclude_table, file = "Tables/Table S2.pdf")
-
+#drop rarest species BUT NOT HCUC and MDEC----
 demo_df <- demo_tl %>% subset(total_all > 7) %>% mutate_at(.vars = vars("time_point"),
                                                            .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE))) 
 
 
 levels(as.factor(demo_df$species))
-
-#determine thresholds for inclusion
-test <- demo_df %>% 
-  group_by(species, survey) %>% summarize(n0 = sum(total == 0)) 
-
-totals <- demo_df %>% group_by(species, total_all) %>% summarize(n = n())
-
-demo_df <- demo_df %>% subset(species != "Helioseris cucullata" &
-                                species != "Madracis decactis") %>% droplevels()
 
 
 #P-A Model
@@ -250,35 +222,22 @@ demowald <- rbind(demowald1,demowald2,demowald3) %>%
 
 
 demo_table <- demowald %>%
-  kbl(caption = "<span style='color: black;'> <b>Table 3.</b> Results of
+  kbl(caption = "<span style='color: black;'> <b>Table SX.</b> Results of
       zero inflated negative binomial model testing effects of survey timepoint, 
       species, and their interaction on total coral count in transect surveys.<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(demo_table, file = "Tables/Table 3.pdf")
+save_kable(demo_table, file = "Tables/Table SX.pdf")
 
 
-# Fit a reduced model for comparison
-zibinom_reduced <- mixed_model(
-  fixed = total ~ survey + species,  # No interaction
-  random = ~1 | location_name, 
-  data = demo_df, 
-  family = zi.negative.binomial(), 
-  zi_fixed = ~ species, 
-  zi_random = NULL,
-  max_coef_value = 30,
-  control = list(iter_EM = 0)
-)
+
 
 
 # Compare models
 
 AIC(zibinom)
 AIC(nbinommod)
-AIC(zibinom_reduced)
-
-anova(zibinom_reduced, zibinom)
 
 
 sd(demo_df$total)
@@ -346,10 +305,10 @@ est_eff <- est_eff %>%
 
 
 demo_emmefftable <- est_eff %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S7.</b> Pairwise contrasts - colony counts over time.
+  kbl(caption = "<span style='color: black;'> <b>Table SX.</b> Pairwise contrasts - colony counts over time.
       Note that the October 2019/January 2020 timepoint is represented as November 2019. SE_est is standard error 
       of the estimate<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(demo_emmefftable, file = "Tables/Table S7&8.pdf")
+save_kable(demo_emmefftable, file = "Tables/Table SX_pairwise.pdf")
