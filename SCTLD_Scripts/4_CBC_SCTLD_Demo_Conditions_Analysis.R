@@ -28,6 +28,12 @@ sitecolors = c('CBC Central'='red3','CBC Lagoon'='darkorchid','CBC30N'='gold1',
                'South Reef Central' = 'orange', 'SR30N' = 'pink')
 
 
+isSig <- function(p) {
+  ifelse(p > 0.01 & p < 0.05, "*",
+         ifelse(p > 0.001 & p <= 0.01, "**",
+                ifelse(p <= 0.001, "***", "")))
+  
+}
 ############################
 #DEMO
 ############################
@@ -182,7 +188,11 @@ summary(zibinom2)
 
 anova(zibinom, zibinom2)
 
+
 #Wald Tests, Demo ----
+#note we did Wald tests because they are default for GLMMadaptive 
+#model structures, not the most conservative though
+library(car)
 
 # Get coefficient names first
 coef_names <- names(fixef(zibinom))
@@ -277,20 +287,22 @@ library(emmeans)
 library(rcompanion)
 
 
-isSig <- function(p) {
-  
-  ifelse(p > 0.01 & p < 0.05, "*",
-         ifelse(p > 0.001 & p <= 0.01, "**",
-                ifelse(p <= 0.001, "***", "")))
-  
-}
 
 emm <- emmeans(zibinom, ~ survey*species)
 simple <- pairs(emm, simple = "survey")
 pairwise <- as.data.frame(pairs(emm, simple = "survey")) 
+pairwisemerge <- pairwise %>%
+  separate(contrast, into = c("time1", "time2"), sep = " - ", remove = FALSE) %>%
+  mutate(contrast_labeled = paste(time1, species, "-", time2, species)) %>%
+  select(-time1, -time2, -df) %>% rename("SE_est" = SE)
+
 eff <- as.data.frame(eff_size(emm, sigma = 26, edf = Inf)) 
 
-
+est_eff <- pairwisemerge %>% left_join(eff, by = c("contrast_labeled" = "contrast")) %>%
+  select(-SE, -contrast_labeled)
+est_eff$sig <- isSig(est_eff$p.value)
+  
+  
 df <- data.frame()
 
 Spec <- levels(as.factor(pairwise$species))
@@ -322,27 +334,26 @@ demsum <- dem2 %>% group_by(event) %>%
 
 dem3 <- dem2 %>% left_join(demsum, by = "event")
 
-pairwise <- pairwise %>%
+# pairwise <- pairwise %>%
+#   mutate(`p.value` =round(`p.value`, digits = 3)) %>%
+#   mutate(`p.value` = ifelse(`p.value` < 0.001 ,
+#                             "<0.001", `p.value` ))
+
+est_eff <- est_eff %>%
   mutate(`p.value` =round(`p.value`, digits = 3)) %>%
   mutate(`p.value` = ifelse(`p.value` < 0.001 ,
                             "<0.001", `p.value` ))
 
 
-demo_emmtable <- pairwise %>%
+demo_emmefftable <- est_eff %>%
   kbl(caption = "<span style='color: black;'> <b>Table S7.</b> Pairwise contrasts - colony counts over time.
-      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
+      Note that the October 2019/January 2020 timepoint is represented as November 2019. SE_est is standard error 
+      of the estimate<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(demo_emmtable, file = "Tables/Table S7.pdf")
+save_kable(demo_emmefftable, file = "Tables/Table S7&8.pdf")
 
-demo_efftable <- eff %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S8.</b> Effect sizes - colony counts over time.
-      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
-      digits = 3,
-      format = "html", booktabs = TRUE, longtable = TRUE) %>%
-  kable_styling(latex_options = c("repeat_header"))
-save_kable(demo_efftable, file = "Tables/Table S8.pdf")
 
 #####################################
 #Species-specific condition models----
@@ -486,13 +497,6 @@ library(emmeans)
 library(rcompanion)
 
 
-isSig <- function(p) {
-  
-  ifelse(p > 0.01 & p < 0.05, "*",
-         ifelse(p > 0.001 & p <= 0.01, "**",
-                ifelse(p <= 0.001, "***", "")))
-  
-}
 
 #pairwise surveys
 emm_surv <- emmeans(betabinom, ~ survey)
@@ -500,28 +504,29 @@ simple_surv <- pairs(emm_surv, simple = "survey")
 pairwise_surv <- as.data.frame(pairs(emm_surv, simple = "survey")) %>%
   mutate(`p.value` =round(`p.value`, digits = 3)) %>%
   mutate(`p.value` = ifelse(`p.value` < 0.001 ,
-                            "<0.001", `p.value` )) %>%
+                            "<0.001", `p.value` ))
+
+pair_surv_merge <- pairwise_surv %>%
+  select(-df) %>% rename("SE_est" = SE)
+
+eff_surv <- as.data.frame(eff_size(emm_surv, sigma = 26, edf = Inf)) 
+
+est_eff_surv <- pair_surv_merge %>% left_join(eff_surv, by = "contrast") %>%
+  select(-SE)  %>%
   mutate(sig = isSig(`p.value`))
 
-eff_surv <- as.data.frame(eff_size(simple_surv, sigma = 26, edf = Inf)) 
 
 
-surv_cond_emmtable <- pairwise_surv %>%
+
+surv_cond_emmtable <- est_eff_surv %>%
   kbl(caption = "<span style='color: black;'> <b>Table S3.</b> Pairwise contrasts - tissue loss prevalence over time.
       Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
       digits = 3,
   format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(surv_cond_emmtable, file = "Tables/Table S3.pdf")
+save_kable(surv_cond_emmtable, file = "Tables/Table S3&4.pdf")
 
 
-surv_cond_efftable <- eff_surv %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S4.</b> Effect sizes - tissue loss prevalence over time.
-      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
-      digits = 3,
-      format = "html", booktabs = TRUE, longtable = TRUE) %>%
-  kable_styling(latex_options = c("repeat_header"))
-save_kable(surv_cond_efftable, file = "Tables/Table S4.pdf")
 
 #pairwise species
 emm_spp <- emmeans(betabinom, ~ species)
@@ -529,29 +534,27 @@ simple_spp <- pairs(emm_spp, simple = "species")
 pairwise_spp <- as.data.frame(pairs(emm_spp, simple = "species")) %>%
   mutate(`p.value` =round(`p.value`, digits = 3)) %>%
   mutate(`p.value` = ifelse(`p.value` < 0.001 ,
-                            "<0.001", `p.value` )) %>%
+                            "<0.001", `p.value` ))
+
+pair_spp_merge <- pairwise_spp %>%
+  select(-df) %>% rename("SE_est" = SE)
+
+eff_spp <- as.data.frame(eff_size(emm_spp, sigma = 26, edf = Inf)) 
+
+est_eff_spp <- pair_spp_merge %>% left_join(eff_spp, by = "contrast") %>%
+  select(-SE)  %>%
   mutate(sig = isSig(`p.value`))
 
 
-eff_spp <- as.data.frame(eff_size(simple_spp, sigma = 26, edf = Inf))
-
-
-spp_cond_emmtable <- pairwise_spp %>%
+spp_cond_emmtable <- est_eff_spp %>%
   kbl(caption = "<span style='color: black;'> <b>Table S5.</b> Pairwise contrasts - difference in tissue loss 
   prevalence between pairs of species across all timepoints.",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(spp_cond_emmtable, file = "Tables/Table S5.pdf")
+save_kable(spp_cond_emmtable, file = "Tables/Table S5&6.pdf")
 
 
-spp_cond_efftable <- eff_spp %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S6.</b> Effect sizes - tissue loss prevalence among species.
-      <span>",
-      digits = 3,
-      format = "html", booktabs = TRUE, longtable = TRUE) %>%
-  kable_styling(latex_options = c("repeat_header"))
-save_kable(spp_cond_efftable, file = "Tables/Table S6.pdf")
 
 desired_order <- c("November19", "May22", "December22")
 

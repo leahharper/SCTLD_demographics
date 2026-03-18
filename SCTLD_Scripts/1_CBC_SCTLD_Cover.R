@@ -150,7 +150,8 @@ cover <- within(cover, Label_General[Label == "Hal_spp"|Label == "Macro"|Label =
                                        Label == "Lob_spp"|Label == "Dicsp"|Label == "BRAN-CALC"] <- "Macroalgae")
 cover <- within(cover, Label_General[Label == "Sand"|Label == "LSUB_RUB"] <- "Unconsolidated (Sand/Rubble)")
 cover <- within(cover, Label_General[Label == "Tk Tf"|Label == "Tn Tf"] <- "Turf Algae")
-cover <- within(cover, Label_General[Label == "Sand"|Label == "LSUB_RUB"] <- "Unconsolidated (Sand/Rubble)")
+cover <- within(cover, Label_General[Label == "Sand"] <- "Sand")
+cover <- within(cover, Label_General[Label == "LSUB_RUB"] <- "Rubble")
 cover <- within(cover, Label_General[Label == "SpgOth"|Label == "SPONGR"|Label == "SPTU"|
                                        Label == "ENSP"|Label == "CLIONI"|Label == "SPONGB"|
                                        Label == "SPONGV"] <- "Sponge")
@@ -163,7 +164,18 @@ cover <- within(cover, Label_General[Label == "CYAN"|Label == "Cyan red"] <- "Cy
 
 levels(as.factor(cover$Label_General))
 
+covgen_all <- cover %>% group_by(SiteName, Habitat, Date, npoints, Label_General) %>% 
+  summarize(sum_gen = sum(n)) %>% 
+  mutate(cov_gen = (sum_gen/npoints)*100) %>% 
+  mutate(cov_gensq = sqrt(cov_gen)) %>%
+  mutate(cov_prop = cov_gen/100) %>%
+  #subset(!(is.na(Label_General))) 
+  subset(Label_General == "Sand")
 
+meansand <- covgen_all %>% 
+  subset(Label_General == "Sand") %>%
+  group_by(SiteName) %>%
+  summarize(mean = mean(cov_gen), se = se(cov_gen))
 
 
 LabLevels = c('Turf Algae','All Stony Coral','Macroalgae','Octocoral')
@@ -262,10 +274,11 @@ save_kable(gentable, file = "Tables/Table 6.pdf")
 
 emm <- emmeans(mod1, ~ Survey*Label_General)
 simple <- pairs(emm, simple = "Survey")
+con_df <- as.data.frame(summary(simple, infer = TRUE))
 pairwise <- as.data.frame(pairs(emm, simple = "Survey"))
-
-eff <- as.data.frame(eff_size(simple, sigma = 26, edf = Inf)) 
-
+  pairwise$OR <- exp(pairwise$estimate) #add odds ratio in place of effect size
+  pairwise$OR_lower <- exp(con_df$asymp.LCL)
+  pairwise$OR_upper <- exp(con_df$asymp.UCL)
 
 df <- data.frame()
 
@@ -294,26 +307,15 @@ mutate(`p.value` =round(`p.value`, digits = 3)) %>%
   mutate(sig = isSig(`p.value`))
 
 
-gen_emmtable <- pairwise %>%
+gen_table <- pairwise %>%
   kbl(caption = "<span style='color: black;'> <b>Table S11.</b> Pairwise contrasts - cover of benthic
   functional groups over time.
-      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
+      Note that the October 2019/January 2020 timepoint is represented as November 2019.
+      SE = standard error of estimate. OR = odds ratio<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(gen_emmtable, file = "Tables/Table S11.pdf")
-
-
-gen_efftable <- eff %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S12.</b> Effect sizes - cover of benthic functional
-  groups over time.
-      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
-      digits = 3,
-      format = "html", booktabs = TRUE, longtable = TRUE) %>%
-  kable_styling(latex_options = c("repeat_header"))
-save_kable(gen_efftable, file = "Tables/Table S12.pdf")
-
-
+save_kable(gen_table, file = "Tables/Table S11&12.pdf")
 
 
 MainLetters <- df %>% unite("GroupEvent", c(Label_General,Group))
@@ -332,7 +334,6 @@ covgenx <- covgen %>%
     TRUE ~ as.factor(Survey))) %>%
   mutate_at(.vars = vars("TimePoint"),
             .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
-
 
 
 covgen1 <- covgenx %>% subset(Label_General == "Turf Algae"|
@@ -592,9 +593,11 @@ save_kable(spptable, file = "Tables/Table 5.pdf")
 
 emm <- emmeans(mod3, ~ Survey*Species)
 simple <- pairs(emm, simple = "Survey")
+con_df <- as.data.frame(summary(simple, infer = TRUE))
 pairwise <- as.data.frame(pairs(emm, simple = "Survey"))
-
-eff <- as.data.frame(eff_size(simple, sigma = 26, edf = Inf)) 
+pairwise$OR <- exp(pairwise$estimate) #add odds ratio in place of effect size
+pairwise$OR_lower <- exp(con_df$asymp.LCL)
+pairwise$OR_upper <- exp(con_df$asymp.UCL)
 
 
 df <- data.frame()
@@ -630,20 +633,13 @@ pairwise <- pairwise %>%
 spp_emmtable <- pairwise %>%
   kbl(caption = "<span style='color: black;'> <b>Table S9.</b> Pairwise contrasts - cover of scleractinian coral
   species over time.
-      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
+      Note that the October 2019/January 2020 timepoint is represented as November 2019.
+      SE = SE of estimate. OR = odds ratio.<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(spp_emmtable, file = "Tables/Table S9.pdf")
+save_kable(spp_emmtable, file = "Tables/Table S9&10.pdf")
 
-
-spp_efftable <- eff %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S10.</b> Effect sizes - cover of coral species over time.
-      Note that the October 2019/January 2020 timepoint is represented as November 2019.<span>",
-      digits = 3,
-      format = "html", booktabs = TRUE, longtable = TRUE) %>%
-  kable_styling(latex_options = c("repeat_header"))
-save_kable(spp_efftable, file = "Tables/Table S10.pdf")
 
 stomeans <- sto2 %>% group_by(Species, Survey) %>%
   summarize(MeanCov = mean(cover), seCov = se(cover), maxCov = max(cover)) %>%
