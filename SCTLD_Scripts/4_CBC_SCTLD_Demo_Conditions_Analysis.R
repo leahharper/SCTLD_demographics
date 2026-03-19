@@ -1,7 +1,5 @@
 library(nlme)
 library(plyr)
-
-
 library(car)
 library(tidyverse)
 library(reshape2) 
@@ -262,25 +260,25 @@ save_kable(demo_table, file = "Tables/Table 3.pdf")
 
 
 # Fit a reduced model for comparison
-zibinom_reduced <- mixed_model(
-  fixed = total ~ survey + species,  # No interaction
-  random = ~1 | location_name, 
-  data = demo_df, 
-  family = zi.negative.binomial(), 
-  zi_fixed = ~ species, 
-  zi_random = NULL,
-  max_coef_value = 30,
-  control = list(iter_EM = 0)
-)
+# zibinom_reduced <- mixed_model(
+#   fixed = total ~ survey + species,  # No interaction
+#   random = ~1 | location_name, 
+#   data = demo_df, 
+#   family = zi.negative.binomial(), 
+#   zi_fixed = ~ species, 
+#   zi_random = NULL,
+#   max_coef_value = 30,
+#   control = list(iter_EM = 0)
+# )
 
 
 # Compare models
 
 AIC(zibinom)
 AIC(nbinommod)
-AIC(zibinom_reduced)
+#AIC(zibinom_reduced)
 
-anova(zibinom_reduced, zibinom)
+#anova(zibinom_reduced, zibinom)
 
 
 sd(demo_df$total)
@@ -938,5 +936,109 @@ prevplot3
 png("Figures/current/Fig S3.png", width = 9, height = 8, units = "in", res = 400)
 prevplot3
 dev.off()
+
+
+#check SSID isolates over time
+iso <- demo %>% subset(scientific_name == "Siderastrea siderea" |
+                         scientific_name == "Montastraea cavernosa"|
+                         scientific_name == "Orbicella spp."|
+                       scientific_name == "Pseudidploria strigosa"|
+                       scientific_name == "Porites astreoides"|
+                         scientific_name == "Agaricia agaricites"|
+                         scientific_name == "Agaricia tenuifolia") %>%
+  group_by(event, scientific_name, location_name, time_point, survey) %>%
+  summarize(isos = sum(isolate_1_to_4_cm), total = sum(total)) %>%
+  mutate(prop_iso = isos/total) %>%
+  mutate_at(.vars = vars("time_point"),
+            .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE))) %>%
+  mutate_at(.vars = vars("survey"),
+            .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
+
+iso_p <- ggplot() +
+  geom_jitter(data = iso, aes(x = time_point, y = prop_iso, fill = location_name), pch = 21,  
+              width = 2, 
+              height = 0, alpha = 0) +
+  #geom_text(data = ssid_iso, aes(x = survey, y = max+0.9, label = Letter)) +
+  geom_boxplot(data = iso, aes(x = survey, y = prop_iso), fill = "gray80", width = 7, outlier.shape = NA) +
+  geom_jitter(data = iso, aes(x = time_point, y = prop_iso, fill = location_name), alpha = 0.5, pch = 21,  
+              width = 2, height = 0) +
+  geom_vline(xintercept = "July21", 
+             color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
+  scale_y_continuous("Proportion Isolates <4cm", limits = c(0,0.3), expand = expansion(mult = c(0, 0.1))) +
+  #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
+  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
+                                                'May22','December22'),
+                   expand = expansion(add = c(5, 5.5))) + 
+  facet_wrap(~scientific_name, nrow = 2, scales = "free") +
+  #scale_size_continuous("Total Adult Colonies", range = c(2,7)) +
+  scale_fill_manual("Site",values=c(sitecolors)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
+        axis.title = element_text(size = 10),
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
+
+iso_p
+
+ssid <- demo %>% subset(scientific_name == "Siderastrea siderea") %>%
+  select(-c(X.1, day, month, year, total, juveniles_1_to_4_cm,
+            total_lg, total_small, adult)) %>%
+  group_by(event, scientific_name, location_name, time_point, survey) %>%
+  summarise(across(where(is.numeric), sum, .names = "total_{.col}")) %>%
+pivot_longer(
+  cols = starts_with("total_"),
+  names_to = "size_class",
+  values_to = "total"
+) %>%
+  mutate_at(.vars = vars("survey"),
+            .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
+
+
+
+ssid$size_class <- recode(ssid$size_class,
+                          "total_isolate_1_to_4_cm" = "4",
+                          "total_X5_to_10_cm" = "10",
+                          "total_X11_to_20_cm" = "20",
+                          "total_X21_to_40_cm" = "40",
+                          "total_X41_to_80_cm" = "80",
+                          "total_over_80_cm" = "120")
+
+ssid$size_class <- as.numeric(ssid$size_class)
+
+ssid_sum <- ssid %>% group_by(survey, size_class) %>%
+  summarize(total = sum(total))
+
+ssid_size <- ssid %>% 
+  uncount(total) 
+
+#size curve plots----
+library(viridis)
+
+sizespecs <- ggplot() +
+  geom_bar(data = ssid_size, aes(x= size_class, fill=survey),
+               alpha=0.4, adjust = 2) +
+  facet_grid(~survey) +
+  #scale_color_viridis("", discrete=TRUE, end = 0.92) +  # end = 0.9 makes yellow darker
+  #scale_fill_viridis("Survey", discrete=TRUE, end = 0.92) +
+  guides(color = "none") + 
+  ylab("Number in Class") +
+  scale_x_continuous("Size Class (cm)") +
+  #scale_x_continuous("Size Class (cm)",breaks = c(4, 10, 20, 40, 80, 120)) +
+  theme(plot.title = element_text(size = 16,hjust = 0.5),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text.x = element_text(colour = "black", size = 10),
+        axis.title = element_text(size = 10),
+        plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"))
+
+#png("report_Belize/SizeSpec_Belize.png",width = 8, height = 5, units = "in", res = 300)
+sizespecs
+#()
+
+check <- demo %>% subset(scientific_name == "Siderastrea siderea") %>%
+  select(diver, location_name, survey, X21_to_40_cm, X41_to_80_cm, over_80_cm) %>%
+  group_by(location_name, survey) %>%
+  summarize(total_under = sum(X21_to_40_cm), total_q = sum(X41_to_80_cm), total_over = sum(over_80_cm)) 
 
 

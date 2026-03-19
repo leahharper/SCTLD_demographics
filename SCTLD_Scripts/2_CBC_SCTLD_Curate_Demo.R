@@ -353,6 +353,26 @@ braytable <- braydf %>%
 
 save_kable(braytable, file = "Tables/Table 4.pdf")
 
+cast_w_juvs <- demo %>% group_by(location_name, time_point, survey, event, scientific_name) %>%
+  summarize(total = sum(total)) %>%
+  pivot_wider(id_cols = c(location_name, survey, event), names_from = scientific_name, 
+              values_from = total)
+
+mat_w_juvs = cast_w_juvs[,3:ncol(cast_w_juvs)]
+mat_w_juvs <- mat_w_juvs %>% remove_rownames %>% column_to_rownames(var="event")
+mat_w_juvs[is.na(mat_w_juvs)] <- 0
+#mat_w_juvs[mat_w_juvs > 0] <- 1
+mat_w_juvs <- as.matrix(mat_w_juvs)
+mat_w_juvs <- sqrt(mat_w_juvs)
+set.seed(123456)
 
 
+braydf_w_juvs <- adonis2(formula = mat_w_juvs ~ location_name + survey, data = cast, permutations = 10000)
+rownames(braydf_w_juvs) <- c("Transect", "Survey Timepoint", "Residual", "Total")
 
+brayjuvstable <- braydf_w_juvs %>%
+  kbl(caption = "<span style='color: black;'> <b>Table S?.</b> PERMANOVA Results with juvenile corals included. <span>",
+      digits = 4) %>%
+  kable_styling()
+
+save_kable(brayjuvstable, file = "Tables/Table SXY.pdf")
