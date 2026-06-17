@@ -185,8 +185,15 @@ sankeydf$x <- recode(sankeydf$x, "Condition_062019" = "October19",
                      "Condition_052022" = "May22",
                      "Condition_122022" = "December22")
 
+sankeydf$Species <- recode(sankeydf$Species, "MCAV" = "Montastraea cavernosa",
+                           "PSTR" = "Pseudodiploria strigosa",
+                           "SSID" = "Siderastrea siderea",
+                           "PAST" = "Porites astreoides",
+                           "MMEA" = "Meandrina meandrites")
+
 sankeydf <- sankeydf %>% mutate(Species = fct_relevel(Species,
-                                                      "SSID", "PAST", "MMEA", "MCAV", "PSTR")) 
+                                                      "Siderastrea siderea", "Porites astreoides", 
+                                    "Meandrina meandrites", "Montastraea cavernosa", "Pseudodiploria strigosa")) 
 
 sankey <- ggplot(sankeydf, aes(x = x, 
                                next_x = next_x, 
@@ -204,13 +211,14 @@ sankey <- ggplot(sankeydf, aes(x = x,
   theme(plot.title = element_text(size = 12,hjust = 0.5),
         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line.x = element_line(colour = "black"),
-        strip.text = element_text(size = 13),
+        strip.text = element_text(size = 12, face = "italic"),
         axis.line.y = element_blank(), axis.text.y = element_blank(), axis.ticks.y = element_blank(),
         axis.text.x = element_text(colour = "black", angle = 45, hjust = 1, size = 12),
         axis.text = element_text(colour = "black"),
         axis.title.x = element_blank(),
         legend.position = c(0.8,0.8),
         legend.title = element_text(size = 12),
+        plot.margin = unit(c(0, 0, 0, 0.1), "cm"),
         legend.text = element_text(size = 12))
 sankey
 

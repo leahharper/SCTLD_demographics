@@ -4,7 +4,7 @@ library(car)
 library(tidyverse)
 library(reshape2) 
 library(piecewiseSEM)
-
+library(kableExtra)
 
 #To do
 
@@ -51,7 +51,7 @@ npics <- cover %>% group_by(Date, SiteName) %>%
 
 levels(as.factor(cover$SiteName))
 
-cover$SiteName <- recode(cover$SiteName, "CBC 30 N" = "CBC30N",
+cover$SiteName <- dplyr::recode(cover$SiteName, "CBC 30 N" = "CBC30N",
                          "CBC House Reef" = "House Reef")
 
 cover$Year <-  paste("20", cover$Year, sep="")
@@ -264,12 +264,12 @@ gentable <- as.data.frame(Anova(mod1)) %>%
   mutate(`Pr(>Chisq)` = ifelse(`Pr(>Chisq)` < 0.001 ,
                             "<0.001", `Pr(>Chisq)` )) %>%
   mutate(sig = isSig(`Pr(>Chisq)`)) %>%
-  kbl(caption = "<span style='color: black;'> <b>Table 6.</b> Model results testing for
+  kbl(caption = "<span style='color: black;'> <b>Table 3.</b> Model results testing for
       variation in cover of major benthic functional groups over time.<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(gentable, file = "Tables/Table 6.pdf")
+save_kable(gentable, file = "Tables/Table 3.pdf")
 
 
 emm <- emmeans(mod1, ~ Survey*Label_General)
@@ -298,7 +298,6 @@ for(current_Label in Labels) {
 }
 
 #make tables
-library(kableExtra)
 
 pairwise <- pairwise %>%
 mutate(`p.value` =round(`p.value`, digits = 3)) %>%
@@ -308,14 +307,14 @@ mutate(`p.value` =round(`p.value`, digits = 3)) %>%
 
 
 gen_table <- pairwise %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S11.</b> Pairwise contrasts - cover of benthic
+  kbl(caption = "<span style='color: black;'> <b>Table S6.</b> Pairwise contrasts - cover of benthic
   functional groups over time.
       Note that the October 2019/January 2020 timepoint is represented as November 2019.
       SE = standard error of estimate. OR = odds ratio<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(gen_table, file = "Tables/Table S11&12.pdf")
+save_kable(gen_table, file = "Tables/Table S6.pdf")
 
 
 MainLetters <- df %>% unite("GroupEvent", c(Label_General,Group))
@@ -523,7 +522,7 @@ plot2 <- cowplot::plot_grid(plot1, legend, rel_widths = c(4/5, 1/5), axis = 't',
 plot2
 #dev.off()
 
-png("Figures/current/Fig 7.png", width = 7, height = 7, units = "in", res = 300)
+png("Figures/current/Fig 5.png", width = 7, height = 7, units = "in", res = 300)
 plot2
 dev.off()
 
@@ -551,13 +550,11 @@ sto <- sto %>% mutate(Category = ifelse(Label == "ACER" | Label == "ATEN" |
 
 
 
-
 sto2 <- sto %>% rename("Species" = Label) %>%
   mutate(cov_prop = cover/100) %>%
   subset(Species != "ACER" & Species != "CNAT" &
            Species != "DLAB" & Species != "MALC" &
-           Species != "MCOM" & 
-           Species != "SRAD") %>% droplevels()
+           Species != "MCOM") %>% droplevels()
 
 orbi <- sto2 %>% subset(Species == "ORBI"|Species == "OFAV"|
                           Species == "OANN"|Species == "OANN") %>%
@@ -569,6 +566,17 @@ orbi <- sto2 %>% subset(Species == "ORBI"|Species == "OFAV"|
 sto2 <- sto2 %>% rbind(orbi) %>% subset(Species != "OFAV" & Species != "OANN") %>% droplevels()
 
 SpecList <- levels(as.factor(sto2$Species))
+
+sto2$Species <- recode(sto2$Species, "AAGA" = "Agaricia agaricites",
+                    "ATEN" = "Agaricia tenuifolia",
+                    "MCAV" = "Montastraea cavernosa",
+                    "ORBI" = "Orbicella spp.",
+                    "PAST" = "Porites astreoides",
+                    "PPOR" = "Porites porites",
+                    "PSTR" = "Pseudodiploria strigosa",
+                    "SINT" = "Stephanocoenia intersepta",
+                    "SRAD" = "Siderastrea radians",
+                    "SSID" = "Siderastrea siderea")
 
 #models species specific cover ----
 mod3 <- glmer(cov_prop ~ Survey*Species +
@@ -583,12 +591,12 @@ spptable <- as.data.frame(Anova(mod3)) %>%
   mutate(`Pr(>Chisq)` = ifelse(`Pr(>Chisq)` < 0.001 ,
                             "<0.001", `Pr(>Chisq)` )) %>%
   mutate(sig = isSig(`Pr(>Chisq)`)) %>%
-  kbl(caption = "<span style='color: black;'> <b>Table 5.</b> Model results testing for
+  kbl(caption = "<span style='color: black;'> <b>Table 4.</b> Model results testing for
       variation in cover of target scleractinian coral species over time.<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(spptable, file = "Tables/Table 5.pdf")
+save_kable(spptable, file = "Tables/Table 4.pdf")
 
 
 emm <- emmeans(mod3, ~ Survey*Species)
@@ -631,14 +639,15 @@ pairwise <- pairwise %>%
 
 
 spp_emmtable <- pairwise %>%
-  kbl(caption = "<span style='color: black;'> <b>Table S9.</b> Pairwise contrasts - cover of scleractinian coral
+  kbl(caption = "<span style='color: black;'> <b>Table S8.</b> Pairwise contrasts - cover of scleractinian coral
   species over time.
       Note that the October 2019/January 2020 timepoint is represented as November 2019.
       SE = SE of estimate. OR = odds ratio.<span>",
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
-  kable_styling(latex_options = c("repeat_header"))
-save_kable(spp_emmtable, file = "Tables/Table S9&10.pdf")
+  kable_styling(latex_options = c("repeat_header")) %>%
+  column_spec(2, italic = TRUE)
+save_kable(spp_emmtable, file = "Tables/Table S8.pdf")
 
 
 stomeans <- sto2 %>% group_by(Species, Survey) %>%
@@ -677,24 +686,15 @@ zeros$Survey <- recode(zeros$Survey,
                           "May-22" = "May22",
                           "Nov-19" = "November19")
 
+zeros$Species <- recode(zeros$Species, "DSTO" = "Dichocoenia stokesii",
+                        "EFAS" = "Eusmilia fastigiata",
+                        "DLAB" = "Diploria labyrinthiformis",
+                        "MMEA" = "Meandrina meandrites")
+
 
 sto3 <- rbind(sto3, zeros) %>% mutate_at(.vars = vars("TimePoint"),
                                        .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
 
-sto3$Species <- recode(sto3$Species,
-                       "AAGA" = "Agaricia agaricites",
-                       "ATEN" = "Agaricia tenuifolia",
-                       "MCAV" = "Montastraea cavernosa",
-                       "PAST" = "Porites astreoides",
-                       "PPOR" = "Porites porites",
-                       "PSTR" = "Pseudodiploria strigosa",
-                       "SINT" = "Stephanocoenia intersepta",
-                       "SSID" = "Siderastrea siderea",
-                       "ORBI" = "Orbicella spp.",
-                       "DSTO" = "Dichocoenia stokesii",
-                       "EFAS" = "Eusmilia fastigiata",
-                       "MMEA" = "Meandrina meandrites",
-                       "DLAB" = "Diploria labyrinthiformis")
 
 library(ggh4x)
 
@@ -726,6 +726,7 @@ highcovp <- ggplot() +
         axis.text.x = element_blank(),
         axis.title = element_text(size = 10),
         legend.position = 'none',
+        strip.text = element_text(face = "italic"),
         plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
 
 highcovp
@@ -758,6 +759,7 @@ medcovp <- ggplot() +
         axis.text.x = element_blank(),
         axis.title = element_text(size = 10),
         legend.position = 'none',
+        strip.text = element_text(face = "italic"),
         plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
 medcovp
 
@@ -790,8 +792,8 @@ lowcovp <- ggplot() +
         axis.text.x = element_blank(),
         axis.title = element_text(size = 10),
         legend.position = 'none',
+        strip.text = element_text(face = "italic"),
         plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
-
 lowcovp
 
 
@@ -822,6 +824,7 @@ vlowcovp <- ggplot() +
         axis.text.x = element_text(colour = "black", hjust = 1, size = 10, angle = 45),
         axis.title = element_text(size = 10),
         legend.position = 'none',
+        strip.text = element_text(face = "italic"),
         plot.margin = unit(c(0, 0, 0, 0.1), "cm"))
 
 vlowcovp

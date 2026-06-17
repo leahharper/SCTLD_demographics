@@ -249,7 +249,11 @@ ggplot() +
 
 library(kableExtra)
 
-jacdf <- adonis2(formula = mat ~ location_name + survey, data = cast, permutations = 10000)
+jacdf <- adonis2(mat ~ survey, 
+                  data = cast,
+                  permutation = how(nperm = 9999, blocks = cast$location_name))
+rownames(jacdf) <- c("Year", "Residual", "Total")
+
 jactable <- jacdf %>%
   kbl() %>%
   kable_styling()
@@ -312,7 +316,7 @@ hull.data1
 library(ggrepel)
 library(viridis)
 
-tiff("Figures/current/Fig 5.png",width = 7, height = 7, units = "in", res = 400)
+tiff("Figures/current/Fig S5.png",width = 7, height = 7, units = "in", res = 400)
 ggplot() + 
   #geom_polygon(data=hull.data1,aes(x=NMDS1,y=NMDS2,fill=survey,group=survey),alpha=0.30, color = "black") + 
   geom_point(data=data.scores1,aes(x=NMDS1,y=NMDS2,colour = survey, fill = survey, shape = location_name),size=4, alpha = 0.8) +
@@ -342,16 +346,18 @@ ggplot() +
 dev.off()
 
 
-braydf <- adonis2(formula = mat ~ location_name + survey, data = cast, permutations = 10000)
-rownames(braydf) <- c("Transect", "Survey Timepoint", "Residual", "Total")
+braydf <- adonis2(mat ~ survey, 
+                  data = cast,
+                  permutation = how(nperm = 9999, blocks = cast$location_name))
+rownames(braydf) <- c("Year", "Residual", "Total")
 
 
 braytable <- braydf %>%
-  kbl(caption = "<span style='color: black;'> <b>Table 4.</b> PERMANOVA Results. <span>",
+  kbl(caption = "<span style='color: black;'> <b>Table 6.</b> PERMANOVA Results. <span>",
           digits = 4) %>%
   kable_styling()
 
-save_kable(braytable, file = "Tables/Table 4.pdf")
+save_kable(braytable, file = "Tables/Table 6.pdf")
 
 cast_w_juvs <- demo %>% group_by(location_name, time_point, survey, event, scientific_name) %>%
   summarize(total = sum(total)) %>%
@@ -366,13 +372,15 @@ mat_w_juvs <- as.matrix(mat_w_juvs)
 mat_w_juvs <- sqrt(mat_w_juvs)
 set.seed(123456)
 
+braydf_w_juvs <- adonis2(mat ~ survey, 
+                  data = cast,
+                  permutation = how(nperm = 9999, blocks = cast$location_name))
+rownames(braydf_w_juvs) <- c("Year", "Residual", "Total")
 
-braydf_w_juvs <- adonis2(formula = mat_w_juvs ~ location_name + survey, data = cast, permutations = 10000)
-rownames(braydf_w_juvs) <- c("Transect", "Survey Timepoint", "Residual", "Total")
 
 brayjuvstable <- braydf_w_juvs %>%
   kbl(caption = "<span style='color: black;'> <b>Table S?.</b> PERMANOVA Results with juvenile corals included. <span>",
       digits = 4) %>%
   kable_styling()
 
-save_kable(brayjuvstable, file = "Tables/Table SXY.pdf")
+save_kable(brayjuvstable, file = "Tables/Table bray_with_juvs.pdf")
