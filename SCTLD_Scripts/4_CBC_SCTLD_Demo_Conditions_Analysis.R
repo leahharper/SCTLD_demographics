@@ -23,9 +23,13 @@
                   "August22" ,"September22", "October22","November22","December22")
   
   
-  sitecolors = c('CBC Central'='red3','CBC Lagoon'='darkorchid','CBC30N'='gold1',
-                 'Curlew Patch' = 'blue', 'House Reef' ='seagreen4', 
-                 'South Reef Central' = 'orange', 'SR30N' = 'pink')
+  sitecolors = c('CBC Central'        = '#E69F00',  # amber
+                 'CBC Lagoon'         = '#56B4E9',  # sky blue
+                 'CBC30N'             = '#009E73',  # teal green
+                 'Curlew Patch'       = '#F0E442',  # butter yellow
+                 'House Reef'         = '#0072B2',  # deep blue
+                 'South Reef Central' = '#D55E00',  # burnt orange
+                 'SR30N'              = '#CC79A7')  # dusty rose             # yellow
   
   
   isSig <- function(p) {
@@ -106,15 +110,17 @@
     select(species, November19, May22, December22) %>%
     rename("Oct 2019/Jan 2020" = November19, "May 2022" = May22, "Dec 2022" = December22)
     
-  exclude_table <- exclude %>%
-    kbl(caption = "<span style='color: black;'> <b>Table S2.</b> Total counts by survey timepoint of 
-        species dropped from models (fewer than 8 total observations for all
-        except H. cuculatta and M. decactis)<span>",
-        digits = 3,
-        format = "html", booktabs = TRUE, longtable = TRUE) %>%
-    kable_styling(latex_options = c("repeat_header")) %>%
-    column_spec(column = 1, italic = TRUE)
-  save_kable(exclude_table, file = "Tables/Table S2.pdf")
+  # exclude_table <- exclude %>%
+  #   kbl(caption = "<span style='color: black;'> <b>Table S2.</b> Total counts by survey timepoint of 
+  #       species dropped from models (fewer than 8 total observations for all
+  #       except H. cuculatta and M. decactis)<span>",
+  #       digits = 3,
+  #       format = "html", booktabs = TRUE, longtable = TRUE) %>%
+  #   kable_styling(latex_options = c("repeat_header")) %>%
+  #   column_spec(column = 1, italic = TRUE)
+  # save_kable(exclude_table, file = "Tables/Table S2.pdf")
+  
+  write.csv(exclude, "Tables/exclude_table.csv")
   
   demo_df <- demo_tl %>% subset(total_all > 7) %>% mutate_at(.vars = vars("time_point"),
                                                    .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE))) 
@@ -127,11 +133,11 @@
     group_by(species, survey) %>% summarize(n0 = sum(total == 0)) 
    
   totals <- demo_df %>% group_by(species, total_all) %>% summarize(n = n())
-  
+
   demo_df <- demo_df %>% subset(species != "Helioseris cucullata" &
                                   species != "Madracis decactis") %>% droplevels()
-  
-  
+  # 
+  # 
   #P-A Model
   
   # pa_df <- demo_df %>% mutate(total = ifelse(total > 0, 1, total))
@@ -151,25 +157,25 @@
   library(GLMMadaptive)
   #remotes::install_github("glmmTMB/glmmTMB/glmmTMB")
   
-  densmod <- glmer(total ~ survey*species + (1|location_name), family = "poisson", 
-                   control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)),
-                   data = demo_df)
-  
-  hist(resid(densmod)) 
-  Anova(densmod)
-  summary(densmod)
-  fixed_effects_coefficients <- summary(densmod)$coefficients
-  fixed_effects_coefficients
-  
-  demo_df <- demo_df %>%
-    mutate(survey_numeric = as.numeric(factor(survey, levels = c("November19", "May22", "December22")))) %>%
-    mutate(survey_scaled = as.numeric(scale(as.numeric(survey_numeric))))
-  
-  nbinommod <- mixed_model(fixed = total ~ survey + species, random = ~1 | location_name, 
-                           data = demo_df, family = negative.binomial(), 
-                           max_coef_value = 30,
-                           control = list(iter_EM = 0))
-  hist(resid(nbinommod))
+  # densmod <- glmer(total ~ survey*species + (1|location_name), family = "poisson", 
+  #                  control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=2e5)),
+  #                  data = demo_df)
+  # 
+  # hist(resid(densmod)) 
+  # Anova(densmod)
+  # summary(densmod)
+  # fixed_effects_coefficients <- summary(densmod)$coefficients
+  # fixed_effects_coefficients
+  # 
+  # demo_df <- demo_df %>%
+  #   mutate(survey_numeric = as.numeric(factor(survey, levels = c("November19", "May22", "December22")))) %>%
+  #   mutate(survey_scaled = as.numeric(scale(as.numeric(survey_numeric))))
+  # 
+  # nbinommod <- mixed_model(fixed = total ~ survey + species, random = ~1 | location_name, 
+  #                          data = demo_df, family = negative.binomial(), 
+  #                          max_coef_value = 30,
+  #                          control = list(iter_EM = 0))
+  #hist(resid(nbinommod))
   
   demo_df <- as.data.frame(demo_df)
   
@@ -254,22 +260,25 @@
   
   # demo_table <- demowald %>%
   #   kbl(caption = "<span style='color: black;'> <b>Table S3.</b> Results of
-  #       zero inflated negative binomial model testing effects of survey timepoint, 
-  #       species, and their interaction on total coral count in transect surveys, with 
+  #       zero inflated negative binomial model testing effects of survey timepoint,
+  #       species, and their interaction on total coral count in transect surveys, with
   #       <i>Madracis decactis</i> and <i>Helioseris cucullata</i> included.<span>",
   #       digits = 3,
   #       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   #   kable_styling(latex_options = c("repeat_header"))
   # save_kable(demo_table, file = "Tables/Table S3.pdf")
+  # 
+  # write.csv(demowald, "Tables/TableS3.csv")
   
   demo_table <- demowald %>%
     kbl(caption = "<span style='color: black;'> <b>Table 5.</b> Results of
-        zero inflated negative binomial model testing effects of survey timepoint, 
+        zero inflated negative binomial model testing effects of survey timepoint,
         species, and their interaction on total coral count in transect surveys.<span>",
         digits = 3,
         format = "html", booktabs = TRUE, longtable = TRUE) %>%
     kable_styling(latex_options = c("repeat_header"))
   save_kable(demo_table, file = "Tables/Table 5.pdf")
+  write.csv(demowald, "Tables/Table 5.csv")
   
   
   # Fit a reduced model for comparison
@@ -367,7 +376,7 @@
     kable_styling(latex_options = c("repeat_header")) %>%
     column_spec(column = 2, italic = TRUE)
   save_kable(demo_emmefftable, file = "Tables/Table S7.pdf")
-  
+  write.csv(est_eff, "Tables/Table S7.csv")
   
   #####################################
   #Species-specific condition models----
@@ -505,7 +514,7 @@
         format = "html", booktabs = TRUE, longtable = TRUE) %>%
     kable_styling(latex_options = c("repeat_header"))
   save_kable(cond_table, file = "Tables/Table 2.pdf")
-  
+  write.csv(condwald, "Tables/Table 2.csv")
   
   library(emmeans)
   library(rcompanion)
@@ -539,7 +548,7 @@
     format = "html", booktabs = TRUE, longtable = TRUE) %>%
     kable_styling(latex_options = c("repeat_header"))
   save_kable(surv_cond_emmtable, file = "Tables/Table S4.pdf")
-  
+  write.csv(est_eff_surv, "Tables/Table S4.csv")
   
   
   #pairwise species
@@ -568,7 +577,7 @@
     kable_styling(latex_options = c("repeat_header")) %>%
     column_spec(column = 1, italic = TRUE)
   save_kable(spp_cond_emmtable, file = "Tables/Table S5.pdf")
-  
+  write.csv(est_eff_spp, "Tables/Table S5.csv")
   
   
   desired_order <- c("November19", "May22", "December22")
@@ -594,7 +603,21 @@
     kable_styling(latex_options = c("repeat_header")) %>%
     column_spec(column = 1, italic = TRUE)
   save_kable(lesion_summary_table, file = "Tables/Table 1.pdf")
+  write.csv(lesionsum, "Tables/Table 1.csv")
   
+  
+  lesionsum2 <- demo_tl %>% group_by(survey, location_name, species) %>%
+    summarize(n_tl = sum(n_tl), n_healthy = sum(n_healthy)) %>%
+    mutate(survey = factor(survey, levels = desired_order)) %>%
+    arrange(survey) 
+  
+  lesionsum2$survey <- recode(lesionsum2$survey,
+                              "November19" = "Oct 2019/Jan 2020",
+                              "May22" = "May 2022",
+                              "Dec22" = "Dec 2022")
+  
+  write.csv(lesionsum2, "lesion_summary.csv")
+
   #Generates sig letters for disease, cant do without interaction
   # 
   # df <- data.frame()

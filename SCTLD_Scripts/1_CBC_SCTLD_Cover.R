@@ -137,7 +137,7 @@ cover <- within(cover, Label_General[Label == "AAGA"|Label == "APAL"|Label == "A
                                        Label == "SINT"|Label == "SSID"|Label == "PCLI"|
                                        Label == "CNAT"|Label == "ACER"|Label == "AAGA"|
                                        Label == "ATEN"|Label == "DLAB"|Label == "MCOM"|
-                                       Label == "SRAD"] <- "All Stony Coral")
+                                       Label == "SRAD"|Label == "AGAR"|Label == "ALAM"] <- "All Stony Coral")
 cover <- within(cover, Label_Suscep[Label == "MCAV"|
                                       Label == "OANN"|Label == "OFAV"|
                                       Label == "PSTR"|Label == "CNAT"|
@@ -161,6 +161,10 @@ cover <- within(cover, Label_General[Label == "CCA 1"] <- "Hard Substrate")
 cover <- within(cover, Label_General[Label == "TAPE"|Label == "Unk"|Label == "SHAD"] <- "Unidentified")
 
 cover <- within(cover, Label_General[Label == "CYAN"|Label == "Cyan red"] <- "Cyanobacteria")
+
+check <- cover %>% subset(Label == "AGAR"|Label == "ALAM")
+
+write.csv(cover, "cover_cleaned.csv")
 
 levels(as.factor(cover$Label_General))
 
