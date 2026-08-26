@@ -260,6 +260,7 @@ jactable <- jacdf %>%
 
 jactable
 
+
 ##Bray-Curtis
 
 mat = cast[,3:ncol(cast)]
@@ -358,6 +359,8 @@ braytable <- braydf %>%
   kable_styling()
 
 save_kable(braytable, file = "Tables/Table 6.pdf")
+
+write.csv(braydf, "Tables/Table 6.csv")
 
 cast_w_juvs <- demo %>% group_by(location_name, time_point, survey, event, scientific_name) %>%
   summarize(total = sum(total)) %>%

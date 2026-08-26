@@ -4,6 +4,7 @@ library(car)
 library(tidyverse)
 library(reshape2) 
 library(piecewiseSEM)
+library(ggh4x)
 
 #################
 #Fate Tracking
@@ -90,7 +91,9 @@ sum <- sumsimple %>% left_join(sumtime, by = "timespp") %>%
   mutate(percent = (n_cond/n)*100)
 
 
-condcolors2 = c('Dead'='coral3','Diseased'='gold1','Healthy'='springgreen4',
+condcolors2 = c('Dead'='#B22222',                  # cool dark red
+                'Diseased'='#F0B400',               # yellow
+                'Healthy'='#6B8E23',                 # warm medium green
                 'Increased Old Mortality'='gray60',
                 'Not Found' = 'black')
 
@@ -185,33 +188,85 @@ sankeydf$x <- recode(sankeydf$x, "Condition_062019" = "October19",
                      "Condition_052022" = "May22",
                      "Condition_122022" = "December22")
 
-sankeydf <- sankeydf %>% mutate(Species = fct_relevel(Species,
-                                                      "SSID", "PAST", "MMEA", "MCAV", "PSTR")) 
+sankeydf$Species <- recode(sankeydf$Species, "MCAV" = "Montastraea cavernosa",
+                           "SSID" = "Siderastrea siderea",
+                           "PAST" = "Porites astreoides",
+                           "MMEA" = "Meandrina meandrites",
+                           "PSTR" = "Pseudodiploria strigosa")
 
-sankey <- ggplot(sankeydf, aes(x = x, 
-                               next_x = next_x, 
-                               node = node, 
-                               next_node = next_node,
-                               fill = factor(node))) +
-  facet_wrap(~Species, as.table = FALSE) +
-  geom_sankey(flow.alpha = 0.6, node.color = 'black', flow.color = 'black') +
-  geom_sankey_label(
-    aes(
-      x = as.numeric(x) - 0.2,
-      label = after_stat(freq)),
-    size = 7 / .pt, color = "black", fill = "white") +  
-  scale_fill_manual("Condition", values = c(condcolors2)) +
-  theme(plot.title = element_text(size = 12,hjust = 0.5),
-        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line.x = element_line(colour = "black"),
-        strip.text = element_text(size = 13),
-        axis.line.y = element_blank(), axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-        axis.text.x = element_text(colour = "black", angle = 45, hjust = 1, size = 12),
-        axis.text = element_text(colour = "black"),
-        axis.title.x = element_blank(),
-        legend.position = c(0.8,0.8),
-        legend.title = element_text(size = 12),
-        legend.text = element_text(size = 12))
+sankeydf <- sankeydf %>% mutate(x = if_else(Species != "Pseudodiploria strigosa" & x == "October19",
+                                                   "June19", x))
+
+
+sankeydf$Species <- factor(sankeydf$Species,
+                           levels = c("Siderastrea siderea", "Porites astreoides", 
+                                      "Montastraea cavernosa", "Meandrina meandrites", "Pseudodiploria strigosa"))
+
+sankeydf$node <- factor(sankeydf$node, levels = c("Dead", "Diseased", "Healthy"))
+
+sankeydf <- sankeydf %>% mutate(x = fct_relevel(x,
+                                        "June19", "October19", "May22", "December22")) 
+
+common_ymax <- max(sankeydf$count) * 1.05 
+
+library(patchwork)
+
+make_sankey <- function(df, labs = NULL, show_x = TRUE, ymax = NULL, total = NULL, show_legend = FALSE) {
+  pad <- (ymax - total) / 2
+  p <- ggplot(df, aes(x = x, next_x = next_x, node = node,
+                      next_node = next_node, fill = factor(node))) +
+    geom_sankey(flow.alpha = 0.6, node.color = 'black', flow.color = 'black') +
+    geom_sankey_label(aes(label = after_stat(freq)), hjust = 1.1,
+                      size = 7 / .pt, color = "black", fill = "white") +
+    scale_fill_manual("Condition", values = condcolors2,
+                      breaks = c("Dead", "Diseased", "Healthy"),
+                      drop = FALSE) +
+    coord_cartesian(ylim = c(-pad, total + pad)) +
+    ggtitle(unique(df$Species)) +
+    theme(plot.title = element_text(size = 12, hjust = 0.5, face = "italic"),
+          panel.grid = element_blank(),
+          panel.background = element_blank(),
+          axis.line.x = element_line(colour = "black"),
+          axis.line.y = element_blank(), axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          axis.title.x = element_blank(),
+          axis.text = element_text(colour = "black"),
+          legend.position = if (show_legend) "right" else "none")
+  
+  
+  if (!is.null(labs)) p <- p + scale_x_discrete(labels = labs)
+  if (show_x) {
+    p <- p + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12))
+  } else {
+    p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+  }
+  p
+}
+
+
+extract_legend <- function(p) {
+  g <- ggplotGrob(p)
+  idx <- which(sapply(g$grobs, function(x) x$name) == "guide-box")
+  g$grobs[[idx]]
+}
+
+p_legend_source <- make_sankey(subset(sankeydf, Species == "Siderastrea siderea"),
+                               show_x = FALSE, show_legend = TRUE, ymax = common_ymax)
+shared_legend <- extract_legend(p_legend_source)
+
+p_ssid <- make_sankey(subset(sankeydf, Species == "Siderastrea siderea"), show_x = FALSE, ymax = common_ymax,
+                      total = sankeydf$count[sankeydf$Species == "Siderastrea siderea"])
+p_past <- make_sankey(subset(sankeydf, Species == "Porites astreoides"), show_x = TRUE, ymax = common_ymax)
+p_mcav <- make_sankey(subset(sankeydf, Species == "Montastraea cavernosa"), show_x = FALSE, ymax = common_ymax)
+p_mmea <- make_sankey(subset(sankeydf, Species == "Meandrina meandrites"), show_x = TRUE, ymax = common_ymax)
+p_pstr <- make_sankey(subset(sankeydf, Species == "Pseudodiploria strigosa"),
+                      labs = c("Oct19","May22","Dec22"), show_x = TRUE, ymax = common_ymax)
+
+
+sankey <- (p_mcav | p_ssid | wrap_elements(full = shared_legend) ) /
+  (p_past |p_mmea | p_pstr) +
+  plot_layout(guides = "collect") 
+
 sankey
 
 png("Figures/current/Fig 3.png",width = 9, height = 6, units = "in", res = 300)

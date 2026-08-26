@@ -275,6 +275,7 @@ gentable <- as.data.frame(Anova(mod1)) %>%
   kable_styling(latex_options = c("repeat_header"))
 save_kable(gentable, file = "Tables/Table 3.pdf")
 
+write.csv(as.data.frame(Anova(mod1)), "Tables/Table 3.csv")
 
 emm <- emmeans(mod1, ~ Survey*Label_General)
 simple <- pairs(emm, simple = "Survey")
@@ -318,9 +319,9 @@ gen_table <- pairwise %>%
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(gen_table, file = "Tables/Table S6.pdf")
+save_kable(pairwise, file = "Tables/Table S6.pdf")
 
-
+write.csv(gen_table, "Tables/Table S6.csv")
 MainLetters <- df %>% unite("GroupEvent", c(Label_General,Group))
 
 
@@ -602,6 +603,7 @@ spptable <- as.data.frame(Anova(mod3)) %>%
   kable_styling(latex_options = c("repeat_header"))
 save_kable(spptable, file = "Tables/Table 4.pdf")
 
+write.csv(as.data.frame(Anova(mod3)), "Tables/Table 4.csv")
 
 emm <- emmeans(mod3, ~ Survey*Species)
 simple <- pairs(emm, simple = "Survey")
@@ -653,6 +655,7 @@ spp_emmtable <- pairwise %>%
   column_spec(2, italic = TRUE)
 save_kable(spp_emmtable, file = "Tables/Table S8.pdf")
 
+write.csv(pairwise, "Tables/Table S8.csv")
 
 stomeans <- sto2 %>% group_by(Species, Survey) %>%
   summarize(MeanCov = mean(cover), seCov = se(cover), maxCov = max(cover)) %>%
