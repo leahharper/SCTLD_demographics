@@ -14,22 +14,18 @@
   se<-function(x)sqrt(var(x)/length(x))
   
   # Establish time levels
-  TimeLevels <- c("October19","November19","December19",
-                  "January20", "February20", "March20" ,"April20","May20", "June20","July20",
-                  "August20" ,"September20", "October20","November20","December20",
-                  "January21","February21","March21" ,"April21","May21", "June21",
-                  "July21","August21" ,"September21", "October21","November21","December21",
-                  "January22","February22","March22" ,"April22","May22", "June22","July22",
-                  "August22" ,"September22", "October22","November22","December22")
+  TimeLevels <- c("Oct2019","Nov2019","Dec2019",
+                  "Jan2020", "Feb2020", "Mar2020" ,"Apr2020","May2020", "Jun2020","Jul2020",
+                  "Aug2020" ,"Sep2020", "Oct2020","Nov2020","Dec2020",
+                  "Jan2021","Feb2021","Mar2021" ,"Apr2021","May2021", "Jun2021",
+                  "Jul2021","Aug2021" ,"Sep2021", "Oct2021","Nov2021","Dec2021",
+                  "Jan2022","Feb2022","Mar2022" ,"Apr2022","May2022", "Jun2022","Jul2022",
+                  "Aug2022" ,"Sep2022", "Oct2022","Nov2022","Dec2022")
   
   
-  sitecolors = c('CBC Central'        = '#E69F00',  # amber
-                 'CBC Lagoon'         = '#56B4E9',  # sky blue
-                 'CBC30N'             = '#009E73',  # teal green
-                 'Curlew Patch'       = '#F0E442',  # butter yellow
-                 'House Reef'         = '#0072B2',  # deep blue
-                 'South Reef Central' = '#D55E00',  # burnt orange
-                 'SR30N'              = '#CC79A7')  # dusty rose             # yellow
+  sitecolors = c('CBC Central'='#882255','CBC Lagoon'='#117733','CBC30N'='#DDCC77',
+                 'Curlew Patch' = '#332288', 'House Reef' ='#44AA99', 
+                 'South Reef Central' = '#999933', 'SR30N' = '#CC6677')         # yellow
   
   
   isSig <- function(p) {
@@ -41,8 +37,8 @@
   ############################
   #DEMO
   ############################
-  demo <- read.csv("CBC_demo_curated.csv")
-  cond <- read.csv("CBC_conditions_curated.csv")
+  demo <- read.csv("CBC_demo_curated.csv") %>% select(-c(X.1, ID))
+  cond <- read.csv("CBC_conditions_curated.csv") %>% select(-X)
   
   demolong <- demo %>% 
     group_by(location_name, time_point, survey, event, scientific_name) %>%
@@ -56,11 +52,11 @@
     mutate_at(.vars = vars("time_point"),
               .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
   
-  srad_check <- demolong %>% subset(time_point == "October19" & species == "Siderastrea radians")
+  srad_check <- demolong %>% subset(time_point == "Oct2019" & species == "Siderastrea radians")
   
   demolong <- demolong %>% 
     mutate(survey = case_when(
-      survey == "October19" | survey == "January20" ~ "November19",
+      survey == "Oct2019" | survey == "Jan2020" ~ "Nov2019",
       TRUE ~ as.factor(survey))) %>%
       unite("merge_event", c(survey,location_name,species))
   
@@ -84,7 +80,7 @@
   
   thresh <- demo_tl %>% group_by(species, survey) %>%
     summarize(count = sum(adult > 0), sum = sum(adult)) %>%
-    subset(survey == "November19") %>%
+    subset(survey == "Nov2019") %>%
     arrange(count)
   
   library(lme4)
@@ -107,8 +103,8 @@
     summarize("total count" = sum(total)) %>%
     pivot_wider(id_cols = c(species), names_from = survey, 
                 values_from = "total count") %>%
-    select(species, November19, May22, December22) %>%
-    rename("Oct 2019/Jan 2020" = November19, "May 2022" = May22, "Dec 2022" = December22)
+    select(species, Nov2019, May2022, Dec2022) %>%
+    rename("Oct 2019/Jan 2020" = Nov2019, "May 2022" = May2022, "Dec 2022" = Dec2022)
     
   # exclude_table <- exclude %>%
   #   kbl(caption = "<span style='color: black;'> <b>Table S2.</b> Total counts by survey timepoint of 
@@ -277,8 +273,8 @@
         digits = 3,
         format = "html", booktabs = TRUE, longtable = TRUE) %>%
     kable_styling(latex_options = c("repeat_header"))
-  save_kable(demo_table, file = "Tables/Table 5.pdf")
-  write.csv(demowald, "Tables/Table 5.csv")
+  #save_kable(demo_table, file = "Tables/Table 5.pdf")
+  #write.csv(demowald, "Tables/Table 5.csv")
   
   
   # Fit a reduced model for comparison
@@ -340,6 +336,10 @@
                                      threshold = 0.05)) %>%
       mutate("Species" = current_Spec)
     
+    letters$Group <- recode(letters$Group, "Nov219" = "Nov2019",
+                            "May222" = "May2022",
+                            "Dec222" = "Dec2022")
+    
     df <- df %>%
       bind_rows(letters)
   }
@@ -375,8 +375,8 @@
         format = "html", booktabs = TRUE, longtable = TRUE) %>%
     kable_styling(latex_options = c("repeat_header")) %>%
     column_spec(column = 2, italic = TRUE)
-  save_kable(demo_emmefftable, file = "Tables/Table S7.pdf")
-  write.csv(est_eff, "Tables/Table S7.csv")
+  #save_kable(demo_emmefftable, file = "Tables/Table S7.pdf")
+  #write.csv(est_eff, "Tables/Table S7.csv")
   
   #####################################
   #Species-specific condition models----
@@ -386,22 +386,23 @@
   zero_tl <- dem3 %>% group_by(species) %>% summarize(total_tl = sum(n_tl)) %>% 
      subset(total_tl < 1)
   
-  tldf_sub <- dem3 %>% subset(!(species %in% zero_tl$species))
+  tldf_sub <- dem3 %>% subset(!(species %in% zero_tl$species)) 
   
+
   
   ##create binomial dataframe where each colony is 0 (healthy) or 1 (diseased)----
-  sum_demo_long <- tldf_sub %>% dplyr::select(event, survey, location_name, species, 
-                                              prev_tl, n_healthy) %>%
-    uncount(n_healthy) %>% mutate("tl_val"  = 0)
-  
-  sum_tl_long <- tldf_sub %>% dplyr::select(event, survey, location_name,
-                                            species, prev_tl, n_tl) %>%
-    uncount(n_tl) %>% mutate("tl_val" = 1)
-  
-  tl_df_long <- rbind(sum_demo_long, sum_tl_long) %>% arrange(prev_tl) %>% 
-    droplevels()
-  
-  levels(as.factor(tl_df_long$species))
+  # sum_demo_long <- tldf_sub %>% dplyr::select(event, survey, location_name, species, 
+  #                                             prev_tl, n_healthy) %>%
+  #   uncount(n_healthy) %>% mutate("tl_val"  = 0)
+  # 
+  # sum_tl_long <- tldf_sub %>% dplyr::select(event, survey, location_name,
+  #                                           species, prev_tl, n_tl) %>%
+  #   uncount(n_tl) %>% mutate("tl_val" = 1)
+  # 
+  # tl_df_long <- rbind(sum_demo_long, sum_tl_long) %>% arrange(prev_tl) %>% 
+  #   droplevels()
+  # 
+  # levels(as.factor(tl_df_long$species))
   
   library(GLMMadaptive)
   
@@ -421,6 +422,10 @@
   table(tldf_sub$prev_tl == 0)  # All healthy
   table(tldf_sub$prev_tl == 1)  #All disease
   
+ check <-  tldf_sub %>%
+     group_by(survey, species) %>%
+    summarise(total_tl = sum(n_tl), total_healthy = sum(n_healthy), n = n())
+  
   #tldf_sub <- tldf_sub %>%
     #group_by(survey, species) %>%
     #subset(prev_tl < 1 & prev_tl > 0) %>% ungroup()
@@ -436,8 +441,11 @@
   )
   
   hist(resid(betabinom))
+  qqnorm(resid(betabinom)) 
   AIC(betabinom)
   summary(betabinom)
+
+  
   
   #attempt specifying starting vals
   # betabinom_simple <- mixed_model(
@@ -513,8 +521,8 @@
         digits = 3,
         format = "html", booktabs = TRUE, longtable = TRUE) %>%
     kable_styling(latex_options = c("repeat_header"))
-  save_kable(cond_table, file = "Tables/Table 2.pdf")
-  write.csv(condwald, "Tables/Table 2.csv")
+  #save_kable(cond_table, file = "Tables/Table 2.pdf")
+  #write.csv(condwald, "Tables/Table 2.csv")
   
   library(emmeans)
   library(rcompanion)
@@ -547,8 +555,8 @@
         digits = 3,
     format = "html", booktabs = TRUE, longtable = TRUE) %>%
     kable_styling(latex_options = c("repeat_header"))
-  save_kable(surv_cond_emmtable, file = "Tables/Table S4.pdf")
-  write.csv(est_eff_surv, "Tables/Table S4.csv")
+  #save_kable(surv_cond_emmtable, file = "Tables/Table S4.pdf")
+  #write.csv(est_eff_surv, "Tables/Table S4.csv")
   
   
   #pairwise species
@@ -576,11 +584,11 @@
         format = "html", booktabs = TRUE, longtable = TRUE) %>%
     kable_styling(latex_options = c("repeat_header")) %>%
     column_spec(column = 1, italic = TRUE)
-  save_kable(spp_cond_emmtable, file = "Tables/Table S5.pdf")
-  write.csv(est_eff_spp, "Tables/Table S5.csv")
+  #save_kable(spp_cond_emmtable, file = "Tables/Table S5.pdf")
+  #write.csv(est_eff_spp, "Tables/Table S5.csv")
   
   
-  desired_order <- c("November19", "May22", "December22")
+  desired_order <- c("Nov2019", "May2022", "Dec2022")
   
   lesionsum <- demo_tl %>% group_by(survey, species) %>%
     summarize(n_tl = sum(n_tl), n_healthy = sum(n_healthy)) %>%
@@ -588,11 +596,11 @@
     arrange(survey) %>%
     pivot_wider(names_from = survey,
                 values_from = c(n_tl, n_healthy)) %>%
-    select(species, n_tl_November19, n_healthy_November19,
-           n_tl_May22, n_healthy_May22, n_tl_December22, n_healthy_December22) %>%
-    rename("Oct 2019/Jan 2020 TL" = n_tl_November19, "Oct 2019/Jan 2020 Healthy" = n_healthy_November19,
-           "May 2022 TL" = n_tl_May22, "May 2022 Healthy" = n_healthy_May22,
-           "Dec 2022 TL" = n_tl_December22, "Dec 2022 Healthy" = n_healthy_December22)
+    select(species, n_tl_Nov2019, n_healthy_Nov2019,
+           n_tl_May2022, n_healthy_May2022, n_tl_Dec2022, n_healthy_Dec2022) %>%
+    rename("Oct 2019/Jan 2020 TL" = n_tl_Nov2019, "Oct 2019/Jan 2020 Healthy" = n_healthy_Nov2019,
+           "May 2022 TL" = n_tl_May2022, "May 2022 Healthy" = n_healthy_May2022,
+           "Dec 2022 TL" = n_tl_Dec2022, "Dec 2022 Healthy" = n_healthy_Dec2022)
   
   lesion_summary_table <- lesionsum %>%
     kbl(caption = "<span style='color: black;'> <b>Table 1.</b> Total counts of colonies with tissue loss and
@@ -602,8 +610,8 @@
         format = "html", booktabs = TRUE, longtable = TRUE) %>%
     kable_styling(latex_options = c("repeat_header")) %>%
     column_spec(column = 1, italic = TRUE)
-  save_kable(lesion_summary_table, file = "Tables/Table 1.pdf")
-  write.csv(lesionsum, "Tables/Table 1.csv")
+  #save_kable(lesion_summary_table, file = "Tables/Table 1.pdf")
+  #write.csv(lesionsum, "Tables/Table 1.csv")
   
   
   lesionsum2 <- demo_tl %>% group_by(survey, location_name, species) %>%
@@ -612,11 +620,11 @@
     arrange(survey) 
   
   lesionsum2$survey <- recode(lesionsum2$survey,
-                              "November19" = "Oct 2019/Jan 2020",
-                              "May22" = "May 2022",
-                              "Dec22" = "Dec 2022")
+                              "Nov2019" = "Oct 2019/Jan 2020",
+                              "May2022" = "May 2022",
+                              "Dec2022" = "Dec 2022")
   
-  write.csv(lesionsum2, "lesion_summary.csv")
+  #write.csv(lesionsum2, "lesion_summary.csv")
 
   #Generates sig letters for disease, cant do without interaction
   # 
@@ -672,15 +680,15 @@ highdensp <- ggplot() +
               height = 0, alpha = 0) +
   geom_text(data = high, aes(x = survey, y = max+20, label = Letter)) +
   geom_boxplot(data = high, aes(x = survey, y = total), fill = "gray80", width = 7, outlier.shape = NA) +
-  geom_jitter(data = high, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
+  geom_jitter(data = high, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.7, pch = 21,  
               width = 2, height = 0) +
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~species, nrow = 1, scales = "free") +
   scale_y_continuous("# Colonies", limits = c(0,205), expand = expansion(mult = c(0, 0.1))) +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(5, 5))) + 
   scale_size_continuous("TL Prevalence", range = c(2,7)) +
   scale_fill_manual("Site",values=c(sitecolors)) +
@@ -705,15 +713,15 @@ meddensp <- ggplot() +
               height = 0, alpha = 0) +
   geom_text(data = med, aes(x = survey, y = max+15, label = Letter)) +
   geom_boxplot(data = med, aes(x = survey, y = total), fill = "gray80", width = 7, outlier.shape = NA) +
-  geom_jitter(data = med, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
+  geom_jitter(data = med, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.7, pch = 21,  
               width = 2, height = 0) +
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~species, nrow = 1, scales = "free") +
   scale_y_continuous("# Colonies", limits = c(0,135), expand = expansion(mult = c(0, 0.1))) +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(5, 5))) + 
   scale_size_continuous("TL Prevalence", range = c(2,7)) +
   scale_fill_manual("Site",values=c(sitecolors)) +
@@ -740,15 +748,15 @@ lowdensp <- ggplot() +
               height = 0, alpha = 0) +
   geom_text(data = low, aes(x = survey, y = max+2, label = Letter)) +
   geom_boxplot(data = low, aes(x = survey, y = total), fill = "gray80", width = 7, outlier.shape = NA) +
-  geom_jitter(data = low, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
+  geom_jitter(data = low, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.7, pch = 21,  
               width = 2, height = 0) +
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~species, nrow = 1, scales = "free") +
   scale_y_continuous("# Colonies", limits = c(0,14), expand = expansion(mult = c(0, 0.1))) +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(5, 5))) + 
   scale_size_continuous("TL Prevalence", range = c(2,7)) +
   scale_fill_manual("Site",values=c(sitecolors)) +
@@ -774,15 +782,15 @@ vlowdensp <- ggplot() +
               height = 0, alpha = 0) +
   geom_text(data = vlow, aes(x = survey, y = max+0.9, label = Letter)) +
   geom_boxplot(data = vlow, aes(x = survey, y = total), fill = "gray80", width = 7, outlier.shape = NA) +
-  geom_jitter(data = vlow, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
+  geom_jitter(data = vlow, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.7, pch = 21,  
               width = 2, height = 0) +
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~species, nrow = 1, scales = "free") +
   scale_y_continuous("# Colonies", limits = c(0,6), expand = expansion(mult = c(0, 0.1))) +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(5, 5.5))) + 
   scale_size_continuous("TL Prevalence", range = c(2,7)) +
   scale_fill_manual("Site",values=c(sitecolors)) +
@@ -798,7 +806,7 @@ vlowdensp <- ggplot() +
 vlowdensp
 
 legendp <- ggplot() +
-  geom_jitter(data = vlow, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.5, pch = 21,  
+  geom_jitter(data = vlow, aes(x = time_point, y = total, fill = location_name, size = prev_tl), alpha = 0.7, pch = 21,  
               width = 2, height = 0) +
   scale_size_continuous("TL Prevalence", range = c(2,7)) +
   scale_fill_manual("Site",values=c(sitecolors)) +
@@ -838,15 +846,15 @@ prev_highdensp <- ggplot() +
               height = 0, alpha = 0) +
   #geom_text(data = high, aes(x = survey, y = max_tl + 0.02, label = prev_letter)) +
   geom_boxplot(data = high, aes(x = survey, y = prev_tl), fill = "gray80", width = 7, outlier.shape = NA) +
-  geom_jitter(data = high, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
+  geom_jitter(data = high, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.7, pch = 21,  
               width = 2, height = 0) +
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~species, nrow = 1, scales = "free") +
   scale_y_continuous("TL Prevalence", limits = c(0,0.23), expand = expansion(mult = c(0, 0.1))) +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(5, 5))) + 
   scale_size_continuous("Total Colonies", range = c(2,7), limits = c(0,185)) +
   scale_fill_manual("Site",values=c(sitecolors)) +
@@ -868,15 +876,15 @@ prev_meddensp <- ggplot() +
               height = 0, alpha = 0) +
   #geom_text(data = med, aes(x = survey, y = max_tl + 0.04, label = prev_letter)) +
   geom_boxplot(data = med, aes(x = survey, y = prev_tl), fill = "gray80", width = 7, outlier.shape = NA) +
-  geom_jitter(data = med, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
+  geom_jitter(data = med, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.7, pch = 21,  
               width = 2, height = 0) +
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~species, nrow = 1, scales = "free") +
   scale_y_continuous("TL Prevalence", limits = c(0,0.55), expand = expansion(mult = c(0, 0.1))) +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(5, 5))) + 
   scale_size_continuous("Total Colonies", range = c(2,7), limits = c(0,185)) +
   scale_fill_manual("Site",values=c(sitecolors)) +
@@ -898,15 +906,15 @@ prev_lowdensp <- ggplot() +
               height = 0, alpha = 0) +
   #geom_text(data = low, aes(x = survey, y = max_tl + 0.01, label = prev_letter)) +
   geom_boxplot(data = low, aes(x = survey, y = prev_tl), fill = "gray80", width = 7, outlier.shape = NA) +
-  geom_jitter(data = low, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
+  geom_jitter(data = low, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.7, pch = 21,  
               width = 2, height = 0) +
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~species, nrow = 1, scales = "free") +
   scale_y_continuous("TL Prevalence", limits = c(0,1), expand = expansion(mult = c(0, 0.1))) +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(5, 5))) + 
   scale_size_continuous("Total Colonies", range = c(2,7), limits = c(0,185)) +
   scale_fill_manual("Site",values=c(sitecolors)) +
@@ -933,15 +941,15 @@ prev_vlowdensp <- ggplot() +
               height = 0, alpha = 0) +
   #geom_text(data = vlow, aes(x = survey, y = max_tl + 0.01, label = prev_letter)) +
   geom_boxplot(data = vlow, aes(x = survey, y = prev_tl), fill = "gray80", width = 7, outlier.shape = NA) +
-  geom_jitter(data = vlow, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
+  geom_jitter(data = vlow, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.7, pch = 21,  
               width = 2, height = 0) +
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~species, nrow = 1, scales = "free") +
   scale_y_continuous("TL Prevalence", limits = c(0,1), expand = expansion(mult = c(0, 0.1))) +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(5, 5.5))) + 
   scale_size_continuous("Total Colonies", range = c(2,7), limits = c(0,185)) +
   scale_fill_manual("Site",values=c(sitecolors)) +
@@ -957,7 +965,7 @@ prev_vlowdensp <- ggplot() +
 prev_vlowdensp
 
 prev_legendp <- ggplot() +
-  geom_jitter(data = vlow, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.5, pch = 21,  
+  geom_jitter(data = vlow, aes(x = time_point, y = prev_tl, fill = location_name, size = total), alpha = 0.7, pch = 21,  
               width = 2, height = 0) +
   scale_size_continuous("Total Colonies", range = c(2,7), limits = c(0,185)) +
   scale_fill_manual("Site",values=c(sitecolors)) +

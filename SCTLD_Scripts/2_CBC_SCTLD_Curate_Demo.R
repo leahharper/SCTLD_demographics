@@ -16,13 +16,13 @@ pd <- position_dodge(width = 0.93)
 se<-function(x)sqrt(var(x)/length(x))
 
 # Establish time levels
-TimeLevels <- c("October19","November19","December19",
-                "January20", "February20", "March20" ,"April20","May20", "June20","July20",
-                "August20" ,"September20", "October20","November20","December20",
-                "January21","February21","March21" ,"April21","May21", "June21",
-                "July21","August21" ,"September21", "October21","November21","December21",
-                "January22","February22","March22" ,"April22","May22", "June22","July22",
-                "August22" ,"September22", "October22","November22","December22")
+TimeLevels <- c("Oct2019","Nov2019","Dec2019",
+                "Jan2020", "Feb2020", "Mar2020" ,"Apr2020","May2020", "Jun2020","Jul2020",
+                "Aug2020" ,"Sep2020", "Oct2020","Nov2020","Dec2020",
+                "Jan2021","Feb2021","Mar2021" ,"Apr2021","May2021", "Jun2021",
+                "Jul2021","Aug2021" ,"Sep2021", "Oct2021","Nov2021","Dec2021",
+                "Jan2022","Feb2022","Mar2022" ,"Apr2022","May2022", "Jun2022","Jul2022",
+                "Aug2022" ,"Sep2022", "Oct2022","Nov2022","Dec2022")
 
 
 
@@ -82,9 +82,9 @@ demo$scientific_name <- recode(demo$scientific_name, "Porites porities" = "Porit
 levels(as.factor(demo$location_name))
 
 
-sitecolors = c('CBC Central'='red3','CBC Lagoon'='darkorchid','CBC30N'='gold1',
-               'Curlew Patch' = 'blue', 'House Reef' ='seagreen4', 
-               'South Reef Central' = 'orange', 'SR30N' = 'pink')
+sitecolors = c('CBC Central'='#882255','CBC Lagoon'='#117733','CBC30N'='#DDCC77',
+               'Curlew Patch' = '#332288', 'House Reef' ='#44AA99', 
+               'South Reef Central' = '#999933', 'SR30N' = '#CC6677')
 
 demo$location_name <- recode(demo$location_name,
                              "CBC 30 North" = "CBC30N",
@@ -116,10 +116,10 @@ demo <- demo %>% unite("time_point", c("Year_a","Month_a"), sep = "-")
 
 levels(as.factor(demo$time_point))
 
-demo$time_point <- recode(demo$time_point, "2019-10" = "October19",
-                          "2022-12" = "December22", 
-                          "2022-5" = "May22",
-                          "2020-1" = "January20")
+demo$time_point <- recode(demo$time_point, "2019-10" = "Oct2019",
+                          "2022-12" = "Dec2022", 
+                          "2022-5" = "May2022",
+                          "2020-1" = "Jan2020")
 
 #cover <- cover %>% mutate("TimeDate" = TimePoint)
 
@@ -152,7 +152,7 @@ demo <- demo %>%
   mutate("survey" = time_point)
 
 
-demo$survey <- recode(demo$survey, "October19" = "January20")
+demo$survey <- recode(demo$survey, "Oct2019" = "Jan2020")
 
 write.csv(demo, "CBC_demo_curated.csv")
 
@@ -184,6 +184,7 @@ NMDS1 <-
 goodness(NMDS1)
 stressplot(NMDS1)
 plot(NMDS1, type = "t")
+NMDS1$stress
 
 #set up grouping variables
 data.scores1 = as.data.frame(scores(NMDS1)$sites)
@@ -194,23 +195,23 @@ data.scores1$event = cast$event
 
 data.scores1 <- data.scores1 %>% 
   mutate(survey = fct_relevel(survey,
-                              "January20", "May22", "December22")) 
+                              "Jan2020", "May2022", "Dec2022")) 
 
 
 
 species.scores1 <- as.data.frame(scores(NMDS1, "species")) 
 species.scores1$species <- rownames(species.scores1)  # create a column of species, from the rownames of species.scores
 
-uno <- data.scores1[data.scores1$survey == "January20", ][chull(data.scores1[data.scores1$survey == 
-                                                                               "January20", c("NMDS1", "NMDS2")]), ]
-dos <- data.scores1[data.scores1$survey == "May22", ][chull(data.scores1[data.scores1$survey == 
-                                                                           "May22", c("NMDS1", "NMDS2")]), ]
-tres <- data.scores1[data.scores1$survey == "December22", ][chull(data.scores1[data.scores1$survey == 
-                                                                                 "December22", c("NMDS1", "NMDS2")]), ]
+jan <- data.scores1[data.scores1$survey == "Jan2020", ][chull(data.scores1[data.scores1$survey == 
+                                                                               "Jan2020", c("NMDS1", "NMDS2")]), ]
+may <- data.scores1[data.scores1$survey == "May2022", ][chull(data.scores1[data.scores1$survey == 
+                                                                           "May2022", c("NMDS1", "NMDS2")]), ]
+dec <- data.scores1[data.scores1$survey == "Dec2022", ][chull(data.scores1[data.scores1$survey == 
+                                                                                 "Dec2022", c("NMDS1", "NMDS2")]), ]
 
-hull.data1 <- rbind(uno, dos, tres) %>% 
+hull.data1 <- rbind(jan, may, dec) %>% 
   mutate(survey = fct_relevel(survey,
-                              "January20", "May22", "December22")) 
+                              "Jan2020", "May2022", "Dec2022")) 
 
 
 hull.data1
@@ -283,6 +284,7 @@ NMDS1 <-
 goodness(NMDS1)
 stressplot(NMDS1)
 plot(NMDS1, type = "t")
+NMDS1$stress
 
 #set up grouping variables
 data.scores1 = as.data.frame(scores(NMDS1)$sites)
@@ -293,23 +295,23 @@ data.scores1$event = cast$event
 
 data.scores1 <- data.scores1 %>% 
   mutate(survey = fct_relevel(survey,
-                              "January20", "May22", "December22")) 
+                              "Jan2020", "May2022", "Dec2022")) 
 
 
 
 species.scores1 <- as.data.frame(scores(NMDS1, "species")) 
 species.scores1$species <- rownames(species.scores1)  # create a column of species, from the rownames of species.scores
 
-uno <- data.scores1[data.scores1$survey == "January20", ][chull(data.scores1[data.scores1$survey == 
-                                                                               "January20", c("NMDS1", "NMDS2")]), ]
-dos <- data.scores1[data.scores1$survey == "May22", ][chull(data.scores1[data.scores1$survey == 
-                                                                           "May22", c("NMDS1", "NMDS2")]), ]
-tres <- data.scores1[data.scores1$survey == "December22", ][chull(data.scores1[data.scores1$survey == 
-                                                                                 "December22", c("NMDS1", "NMDS2")]), ]
+jan <- data.scores1[data.scores1$survey == "Jan2020", ][chull(data.scores1[data.scores1$survey == 
+                                                                               "Jan2020", c("NMDS1", "NMDS2")]), ]
+may <- data.scores1[data.scores1$survey == "May2022", ][chull(data.scores1[data.scores1$survey == 
+                                                                           "May2022", c("NMDS1", "NMDS2")]), ]
+dec <- data.scores1[data.scores1$survey == "Dec2022", ][chull(data.scores1[data.scores1$survey == 
+                                                                                 "Dec2022", c("NMDS1", "NMDS2")]), ]
 
-hull.data1 <- rbind(uno, dos, tres) %>% 
+hull.data1 <- rbind(jan, may, dec) %>% 
   mutate(survey = fct_relevel(survey,
-                              "January20", "May22", "December22")) 
+                              "Jan2020", "May2022", "Dec2022")) 
 
 
 hull.data1
@@ -330,6 +332,8 @@ ggplot() +
                                      "South Reef Central" = 25, "Curlew Patch" = 3, "SR30N" = 9)) +
   #xlim(-1,2) +  
   ggtitle("Bray-Curtis Dissimilarity") +
+  annotate("text", x = Inf, y = -Inf, label = "stress = 0.15",
+           hjust = 1.1, vjust = -0.5, size = 3) +
   coord_equal() +
   theme_bw() +
   theme(axis.text.x = element_blank(),  # remove x-axis text

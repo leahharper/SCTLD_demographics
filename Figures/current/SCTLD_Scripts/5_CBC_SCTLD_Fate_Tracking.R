@@ -16,13 +16,13 @@ setwd("C:/Users/harperl/OneDrive - Smithsonian Institution/Documents/GitHub/SCTL
 fate <- read_csv("CBC_ColonyData.csv")
 
 # Establish time levels
-TimeLevels <- c("October19","November19","December19",
-                "January20", "February20", "March20" ,"April20","May20", "June20","July20",
-                "August20" ,"September20", "October20","November20","December20",
-                "January21","February21","March21" ,"April21","May21", "June21",
-                "July21","August21" ,"September21", "October21","November21","December21",
-                "January22","February22","March22" ,"April22","May22", "June22","July22",
-                "August22" ,"September22", "October22","November22","December22")
+TimeLevels <- c("Oct2019","Nov2019","Dec2019",
+                "Jan2020", "Feb2020", "Mar2020" ,"Apr2020","May2020", "Jun2020","Jul2020",
+                "Aug2020" ,"Sep2020", "Oct2020","Nov2020","Dec2020",
+                "Jan2021","Feb2021","Mar2021" ,"Apr2021","May2021", "Jun2021",
+                "Jul2021","Aug2021" ,"Sep2021", "Oct2021","Nov2021","Dec2021",
+                "Jan2022","Feb2022","Mar2022" ,"Apr2022","May2022", "Jun2022","Jul2022",
+                "Aug2022" ,"Sep2022", "Oct2022","Nov2022","Dec2022")
 
 
 # correct coding errors ----
@@ -64,9 +64,9 @@ Long <-melt(fate4, id.vars =c("Species","NewTagNum",
 
 Long$Condition <- recode(Long$Condition, "Healthy?" = "Healthy")
 
-Long$Time_Point <- recode(Long$Time_Point, "Condition_052022" = "May22",
-                          "Condition_122022" = "December22",
-                          "Condition_062019" = "October19")
+Long$Time_Point <- recode(Long$Time_Point, "Condition_052022" = "May2022",
+                          "Condition_122022" = "Dec2022",
+                          "Condition_062019" = "Oct2019")
 
 
 SpecLevels = c('SSID','MCAV','PSTR','PAST','MMEA','CNAT')
@@ -91,7 +91,7 @@ sum <- sumsimple %>% left_join(sumtime, by = "timespp") %>%
   mutate(percent = (n_cond/n)*100)
 
 
-condcolors2 = c('Dead'='#B22222',                  # cool dark red
+condcolors2 = c('Dead'='#581845',                  # cool dark red
                 'Diseased'='#F0B400',               # yellow
                 'Healthy'='#6B8E23',                 # warm medium green
                 'Increased Old Mortality'='gray60',
@@ -184,9 +184,9 @@ for(current_Specie in SpecList) {
 
 sankeydf <- sankeydf %>% left_join(counts, by = "Species")
 
-sankeydf$x <- recode(sankeydf$x, "Condition_062019" = "October19",
-                     "Condition_052022" = "May22",
-                     "Condition_122022" = "December22")
+sankeydf$x <- recode(sankeydf$x, "Condition_062019" = "Oct2019",
+                     "Condition_052022" = "May2022",
+                     "Condition_122022" = "Dec2022")
 
 sankeydf$Species <- recode(sankeydf$Species, "MCAV" = "Montastraea cavernosa",
                            "SSID" = "Siderastrea siderea",
@@ -194,8 +194,8 @@ sankeydf$Species <- recode(sankeydf$Species, "MCAV" = "Montastraea cavernosa",
                            "MMEA" = "Meandrina meandrites",
                            "PSTR" = "Pseudodiploria strigosa")
 
-sankeydf <- sankeydf %>% mutate(x = if_else(Species != "Pseudodiploria strigosa" & x == "October19",
-                                                   "June19", x))
+sankeydf <- sankeydf %>% mutate(x = if_else(Species != "Pseudodiploria strigosa" & x == "Oct2019",
+                                                   "Jun2019", x))
 
 
 sankeydf$Species <- factor(sankeydf$Species,
@@ -205,9 +205,9 @@ sankeydf$Species <- factor(sankeydf$Species,
 sankeydf$node <- factor(sankeydf$node, levels = c("Dead", "Diseased", "Healthy"))
 
 sankeydf <- sankeydf %>% mutate(x = fct_relevel(x,
-                                        "June19", "October19", "May22", "December22")) 
+                                        "Jun2019", "Oct2019", "May2022", "Dec2022")) 
 
-common_ymax <- max(sankeydf$count) * 1.05 
+common_ymax <- max(sankeydf$count) * 1.5
 
 library(patchwork)
 
@@ -221,7 +221,7 @@ make_sankey <- function(df, labs = NULL, show_x = TRUE, ymax = NULL, total = NUL
     scale_fill_manual("Condition", values = condcolors2,
                       breaks = c("Dead", "Diseased", "Healthy"),
                       drop = FALSE) +
-    coord_cartesian(ylim = c(-pad, total + pad)) +
+    coord_cartesian(ylim = c(-ymax / 2, ymax / 2))  +
     ggtitle(unique(df$Species)) +
     theme(plot.title = element_text(size = 12, hjust = 0.5, face = "italic"),
           panel.grid = element_blank(),
@@ -231,6 +231,8 @@ make_sankey <- function(df, labs = NULL, show_x = TRUE, ymax = NULL, total = NUL
           axis.ticks.y = element_blank(),
           axis.title.x = element_blank(),
           axis.text = element_text(colour = "black"),
+          legend.text = element_text(size = 12),
+          legend.title = element_text(size = 12),
           legend.position = if (show_legend) "right" else "none")
   
   
@@ -250,17 +252,26 @@ extract_legend <- function(p) {
   g$grobs[[idx]]
 }
 
-p_legend_source <- make_sankey(subset(sankeydf, Species == "Siderastrea siderea"),
+ssid <- subset(sankeydf, Species == "Siderastrea siderea")
+p_legend_source <- make_sankey(ssid,
                                show_x = FALSE, show_legend = TRUE, ymax = common_ymax)
+
 shared_legend <- extract_legend(p_legend_source)
 
-p_ssid <- make_sankey(subset(sankeydf, Species == "Siderastrea siderea"), show_x = FALSE, ymax = common_ymax,
-                      total = sankeydf$count[sankeydf$Species == "Siderastrea siderea"])
-p_past <- make_sankey(subset(sankeydf, Species == "Porites astreoides"), show_x = TRUE, ymax = common_ymax)
-p_mcav <- make_sankey(subset(sankeydf, Species == "Montastraea cavernosa"), show_x = FALSE, ymax = common_ymax)
-p_mmea <- make_sankey(subset(sankeydf, Species == "Meandrina meandrites"), show_x = TRUE, ymax = common_ymax)
-p_pstr <- make_sankey(subset(sankeydf, Species == "Pseudodiploria strigosa"),
-                      labs = c("Oct19","May22","Dec22"), show_x = TRUE, ymax = common_ymax)
+p_ssid <- make_sankey(ssid, show_x = FALSE, ymax = common_ymax)
+
+past <- subset(sankeydf, Species == "Porites astreoides")
+p_past <- make_sankey(past, show_x = TRUE, ymax = common_ymax)
+
+mcav <- subset(sankeydf, Species == "Montastraea cavernosa")
+p_mcav <- make_sankey(mcav, show_x = FALSE, ymax = common_ymax)
+
+mmea <- subset(sankeydf, Species == "Meandrina meandrites")
+p_mmea <- make_sankey(mmea, show_x = TRUE, ymax = common_ymax)
+
+pstr <- subset(sankeydf, Species == "Pseudodiploria strigosa")
+p_pstr <- make_sankey(pstr,
+                      labs = c("Oct2019","May2022","Dec2022"), show_x = TRUE, ymax = common_ymax)
 
 
 sankey <- (p_mcav | p_ssid | wrap_elements(full = shared_legend) ) /
@@ -269,6 +280,6 @@ sankey <- (p_mcav | p_ssid | wrap_elements(full = shared_legend) ) /
 
 sankey
 
-png("Figures/current/Fig 3.png",width = 9, height = 6, units = "in", res = 300)
+png("Figures/current/Fig 3.png",width = 8, height = 5, units = "in", res = 300)
 sankey
 dev.off()

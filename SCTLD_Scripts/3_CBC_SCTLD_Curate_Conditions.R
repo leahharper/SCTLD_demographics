@@ -14,14 +14,13 @@ pd <- position_dodge(width = 0.93)
 se<-function(x)sqrt(var(x)/length(x))
 
 # Establish time levels
-TimeLevels <- c("October19","November19","December19",
-                "January20", "February20", "March20" ,"April20","May20", "June20","July20",
-                "August20" ,"September20", "October20","November20","December20",
-                "January21","February21","March21" ,"April21","May21", "June21",
-                "July21","August21" ,"September21", "October21","November21","December21",
-                "January22","February22","March22" ,"April22","May22", "June22","July22",
-                "August22" ,"September22", "October22","November22","December22")
-
+TimeLevels <- c("Oct2019","Nov2019","Dec2019",
+                "Jan2020", "Feb2020", "Mar2020" ,"Apr2020","May2020", "Jun2020","Jul2020",
+                "Aug2020" ,"Sep2020", "Oct2020","Nov2020","Dec2020",
+                "Jan2021","Feb2021","Mar2021" ,"Apr2021","May2021", "Jun2021",
+                "Jul2021","Aug2021" ,"Sep2021", "Oct2021","Nov2021","Dec2021",
+                "Jan2022","Feb2022","Mar2022" ,"Apr2022","May2022", "Jun2022","Jul2022",
+                "Aug2022" ,"Sep2022", "Oct2022","Nov2022","Dec2022")
 
 
 demo <- read.csv("CBC_demo_curated.csv")
@@ -84,14 +83,14 @@ cond <- cond %>% unite("time_point", c("year_a","month_a"), sep = "-")
 
 levels(as.factor(cond$time_point))
 
-cond$time_point <- recode(cond$time_point, "2019-10" = "October19",
-                          "2022-12" = "December22", 
-                          "2022-5" = "May22",
-                          "2020-1" = "January20")
+cond$time_point <- recode(cond$time_point, "2019-10" = "Oct2019",
+                          "2022-12" = "Dec2022", 
+                          "2022-5" = "May2022",
+                          "2020-1" = "Jan2020")
 
 cond <- cond %>% mutate("survey" = time_point)
-cond$survey <- recode(cond$survey, "October19" = "November19",
-                      "January20" = "November19")
+cond$survey <- recode(cond$survey, "Oct2019" = "Nov2019",
+                      "Jan2020" = "Nov2019")
 
 cond <- cond %>% subset(location_name != "Tobacco Reef")
 
@@ -206,7 +205,7 @@ sum_tl <- sum_tl %>% unite("event", c("survey_a", "location_name_a", "scientific
 
 demo <- demo %>% 
   mutate(survey = case_when(
-    survey == "October19" | survey == "January20" ~ "November19",
+    survey == "Oct2019" | survey == "Jan2020" ~ "Nov2019",
     TRUE ~ as.factor(survey)))
 
 sum_demo <- demo %>%
@@ -232,7 +231,7 @@ colnames(tldf) <- gsub("\\.x","",colnames(tldf))
 
 
 tldf$survey <- recode(tldf$survey, 
-                      "January20" = "November19")
+                      "Jan2020" = "Nov2019")
 
 
 tldf <- tldf %>% rename("species" = scientific_name)

@@ -28,13 +28,13 @@ isSig <- function(p) {
 }
 
 # Establish time levels
-TimeLevels <- c("October19","November19","December19",
-                "January20", "February20", "March20" ,"April20","May20", "June20","July20",
-                "August20" ,"September20", "October20","November20","December20",
-                "January21","February21","March21" ,"April21","May21", "June21",
-                "July21","August21" ,"September21", "October21","November21","December21",
-                "January22","February22","March22" ,"April22","May22", "June22","July22",
-                "August22" ,"September22", "October22","November22","December22")
+TimeLevels <- c("Oct2019","Nov2019","Dec2019",
+                "Jan2020", "Feb2020", "Mar2020" ,"Apr2020","May2020", "Jun2020","Jul2020",
+                "Aug2020" ,"Sep2020", "Oct2020","Nov2020","Dec2020",
+                "Jan2021","Feb2021","Mar2021" ,"Apr2021","May2021", "Jun2021",
+                "Jul2021","Aug2021" ,"Sep2021", "Oct2021","Nov2021","Dec2021",
+                "Jan2022","Feb2022","Mar2022" ,"Apr2022","May2022", "Jun2022","Jul2022",
+                "Aug2022" ,"Sep2022", "Oct2022","Nov2022","Dec2022")
 
 
 #clean up dates & site names ----
@@ -86,10 +86,10 @@ levels(as.factor(cover$TimePoint))
 
 #cover$TimePoint <- recode(cover$TimePoint, "20-01" = "19-10")
 
-cover$TimePoint <- recode(cover$TimePoint, "2019-10" = "October19",
-                          "2022-12" = "December22", 
-                          "2022-05" = "May22",
-                          "2020-01" = "January20")
+cover$TimePoint <- recode(cover$TimePoint, "2019-10" = "Oct2019",
+                          "2022-12" = "Dec2022", 
+                          "2022-05" = "May2022",
+                          "2020-01" = "Jan2020")
 
 #cover <- cover %>% mutate("TimeDate" = TimePoint)
 
@@ -192,8 +192,8 @@ cover <- cover %>%
             .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
 
 cover <- cover %>% mutate(Survey = TimePoint)
-cover$Survey <- recode(cover$Survey, "October19" = "November19",
-                       "January20" = "November19")
+cover$Survey <- recode(cover$Survey, "Oct2019" = "Nov2019",
+                       "Jan2020" = "Nov2019")
 
 covgen <- cover %>% group_by(SiteName, Habitat, Date, Survey, npoints, Label_General) %>% 
   summarize(sum_gen = sum(n)) %>% 
@@ -319,9 +319,9 @@ gen_table <- pairwise %>%
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(pairwise, file = "Tables/Table S6.pdf")
+save_kable(gen_table, file = "Tables/Table S6.pdf")
 
-write.csv(gen_table, "Tables/Table S6.csv")
+write.csv(pairwise, "Tables/Table S6.csv")
 MainLetters <- df %>% unite("GroupEvent", c(Label_General,Group))
 
 
@@ -405,9 +405,9 @@ library(gridExtra)
 
 levels(as.factor(covgen$SiteName))
 
-sitecolors = c('CBC Central'='red3','CBC Lagoon'='darkorchid','CBC30N'='gold1',
-               'Curlew Patch' = 'blue', 'House Reef' ='seagreen4', 
-               'South Reef Central' = 'orange', 'SR30N' = 'pink')
+sitecolors = c('CBC Central'='#882255','CBC Lagoon'='#117733','CBC30N'='#DDCC77',
+               'Curlew Patch' = '#332288', 'House Reef' ='#44AA99', 
+               'South Reef Central' = '#999933', 'SR30N' = '#CC6677')
 
 every_nth = function(n) {
   return(function(x) {x[c(TRUE, rep(FALSE, n - 1))]})
@@ -421,16 +421,16 @@ labyearp1 <- ggplot() +
   geom_text(data = covgen1, 
             aes(x = Survey, y = maxCov, label = Letter), nudge_y = 3) +
   geom_boxplot(data = covgen1, aes(x = Survey, y = cov_gen), fill = "gray80",width = 4, outlier.shape = NA) +
-  geom_jitter(data = covgen1, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 4, alpha = 0.5, pch = 21,  
+  geom_jitter(data = covgen1, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 3, alpha = 0.7, pch = 21,  
               width = 0.25, 
               height = 0) +
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~Label_General, scales = "free") +
   scale_y_continuous("Percent Cover") +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20', 'July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(2, 2))) +   
   scale_fill_manual("Site",values=c(sitecolors)) +
   theme(plot.title = element_text(size = 16,hjust = 0.5),
@@ -449,16 +449,16 @@ labyearp2 <- ggplot() +
   geom_text(data = covgen2, 
             aes(x = Survey, y = maxCov, label = Letter), nudge_y = 3) +
   geom_boxplot(data = covgen2, aes(x = Survey, y = cov_gen), fill = "gray80", width = 4, outlier.shape = NA) +
-  geom_jitter(data = covgen2, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 4, alpha = 0.5, pch = 21,  
+  geom_jitter(data = covgen2, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 3, alpha = 0.7, pch = 21,  
               width = 0.25, 
               height = 0) +
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~Label_General, scales = "free") +
   scale_y_continuous("Percent Cover") +
   #scale_x_discrete("", drop = FALSE, breaks = every_nth(n=4)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(2, 2))) +   
   scale_fill_manual("Site",values=c(sitecolors)) +
   theme(plot.title = element_text(size = 16,hjust = 0.5),
@@ -502,9 +502,9 @@ labyearp2
 legendp <- ggplot() +
   geom_boxplot(data = covgen1, aes(x = TimePoint, y = cov_gen), alpha = 0) +
   #geom_point(data = covgen, aes(x = TimePoint, y = cov_gen, fill = SiteName)) +
-  geom_jitter(data = covgen1, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 2, pch = 21,  
+  geom_jitter(data = covgen1, aes(x = TimePoint, y = cov_gen, fill = SiteName), size = 3, pch = 21,  
               width = 0.25, 
-              height = 0) +
+              height = 0, alpha = 0.7) +
   facet_wrap(~Label_General, scales = "free") +
   scale_y_continuous("") +
   scale_x_discrete("") +
@@ -527,7 +527,7 @@ plot2 <- cowplot::plot_grid(plot1, legend, rel_widths = c(4/5, 1/5), axis = 't',
 plot2
 #dev.off()
 
-png("Figures/current/Fig 5.png", width = 7, height = 7, units = "in", res = 300)
+png("Figures/current/Fig 5.png", width = 8, height = 7, units = "in", res = 300)
 plot2
 dev.off()
 
@@ -683,15 +683,15 @@ sto3 <- sto2 %>%
 zeros <- read.csv("add_zero_cover.csv")
 
 zeros$TimePoint <- recode(zeros$TimePoint,
-                          "Dec-22" = "December22",
-                          "May-22" = "May22",
-                          "Oct-19" = "October19",
-                          "Jan-20" = "January20")
+                          "Dec-22" = "Dec2022",
+                          "May-22" = "May2022",
+                          "Oct-19" = "Oct2019",
+                          "Jan-20" = "Jan2020")
 
 zeros$Survey <- recode(zeros$Survey,
-                          "Dec-22" = "December22",
-                          "May-22" = "May22",
-                          "Nov-19" = "November19")
+                          "Dec-22" = "Dec2022",
+                          "May-22" = "May2022",
+                          "Nov-19" = "Nov2019")
 
 zeros$Species <- recode(zeros$Species, "DSTO" = "Dichocoenia stokesii",
                         "EFAS" = "Eusmilia fastigiata",
@@ -715,15 +715,15 @@ highcovp <- ggplot() +
   geom_text(data = highcov, 
             aes(x = Survey, y = maxCov+2, label = Letter)) +
   geom_boxplot(data = highcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
-  geom_jitter(data = highcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0.5,  
+  geom_jitter(data = highcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0.7,  
               width = 0.25, 
               height = 0)+
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~ Species, nrow = 1, scales = "free") +
   scale_y_continuous("Percent Cover", limits = c(0,22)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(4, 4))) +   
   scale_fill_manual("Site",values=c(sitecolors)) +
   theme(plot.title = element_text(size = 16,hjust = 0.5),
@@ -748,15 +748,15 @@ medcovp <- ggplot() +
   geom_text(data = medcov, 
             aes(x = Survey, y = maxCov+0.4, label = Letter), nudge_y = 0.1) +
   geom_boxplot(data = medcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
-  geom_jitter(data = medcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0.5,  
+  geom_jitter(data = medcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0.7,  
               width = 0.25, 
               height = 0)+
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~ Species, nrow = 1, scales = "free") +
   scale_y_continuous("Percent Cover", limits = c(0,4)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(4, 4))) +   
   scale_fill_manual("Site",values=c(sitecolors)) +
   theme(plot.title = element_text(size = 16,hjust = 0.5),
@@ -781,15 +781,15 @@ lowcovp <- ggplot() +
   geom_text(data = lowcov, 
             aes(x = Survey, y = maxCov+0.25, label = Letter), nudge_y = 0.1) +
   geom_boxplot(data = lowcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
-  geom_jitter(data = lowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0.5,  
+  geom_jitter(data = lowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0.7,  
               width = 0.25, 
               height = 0)+
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~ Species, nrow = 1, scales = "free") +
   scale_y_continuous("Percent Cover", limits = c(0,2.1)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(4, 4))) +   
   scale_fill_manual("Site",values=c(sitecolors)) +
   theme(plot.title = element_text(size = 16,hjust = 0.5),
@@ -814,15 +814,15 @@ vlowcovp <- ggplot() +
   geom_text(data = vlowcov, 
             aes(x = Survey, y = maxCov*1.1, label = Letter), nudge_y = 0.1) +
   geom_boxplot(data = vlowcov, aes(x = Survey, y = cover), fill = "gray80", width = 3, outlier.shape = NA) +
-  geom_jitter(data = vlowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0.5,  
+  geom_jitter(data = vlowcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 2, pch = 21, alpha=0.7,  
               width = 0.25, 
               height = 0)+
-  geom_vline(xintercept = "July21", 
+  geom_vline(xintercept = "Jul2021", 
              color = "red", linetype = "dashed", linewidth = 0.5, alpha = 0.5) +
   facet_wrap(~ Species, nrow = 1, scales = "free") +
   scale_y_continuous("Percent Cover", limits = c(0,2)) +
-  scale_x_discrete("", drop = FALSE, breaks = c('October19','January20','July21',
-                                                'May22','December22'),
+  scale_x_discrete("", drop = FALSE, breaks = c('Oct2019','Jan2020', 'Jul2021',
+                                                'May2022','Dec2022'),
                    expand = expansion(add = c(4, 4))) +   
   scale_fill_manual("Site",values=c(sitecolors)) +
   theme(plot.title = element_text(size = 16,hjust = 0.5),
@@ -837,7 +837,7 @@ vlowcovp <- ggplot() +
 vlowcovp
 
 legendp <- ggplot() +
-  geom_jitter(data = medcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.5,  
+  geom_jitter(data = medcov, aes(x = TimePoint, y = cover, fill = SiteName), size = 4, pch = 21, alpha=0.7,  
               width = 0.25, 
               height = 0) +
   scale_fill_manual("Site",values=c(sitecolors)) +

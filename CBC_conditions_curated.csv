@@ -1,259 +1,259 @@
 "","time_point","survey","location_name","species","total","event","n_tl","prev_tl","n_healthy"
-"1","December22","December22","CBC Central","Agaricia agaricites",139,"December22_CBC Central_Agaricia agaricites",1,0.00719424460431655,138
-"2","December22","December22","CBC Central","Agaricia tenuifolia",70,"December22_CBC Central_Agaricia tenuifolia",3,0.0428571428571429,67
-"3","December22","December22","CBC Central","Helioseris cucullata",1,"December22_CBC Central_Helioseris cucullata",0,0,1
-"4","December22","December22","CBC Central","Madracis decactis",3,"December22_CBC Central_Madracis decactis",0,0,3
-"5","December22","December22","CBC Central","Montastraea cavernosa",1,"December22_CBC Central_Montastraea cavernosa",0,0,1
-"6","December22","December22","CBC Central","Orbicella spp.",2,"December22_CBC Central_Orbicella spp.",0,0,2
-"7","December22","December22","CBC Central","Porites astreoides",120,"December22_CBC Central_Porites astreoides",1,0.00833333333333333,119
-"8","December22","December22","CBC Central","Porites porites",54,"December22_CBC Central_Porites porites",0,0,54
-"9","December22","December22","CBC Central","Pseudodiploria strigosa",2,"December22_CBC Central_Pseudodiploria strigosa",0,0,2
-"10","December22","December22","CBC Central","Siderastrea radians",4,"December22_CBC Central_Siderastrea radians",0,0,4
-"11","December22","December22","CBC Central","Siderastrea siderea",79,"December22_CBC Central_Siderastrea siderea",20,0.253164556962025,59
-"12","December22","December22","CBC Central","Stephanocoenia intersepta",10,"December22_CBC Central_Stephanocoenia intersepta",0,0,10
-"13","December22","December22","CBC Lagoon","Agaricia agaricites",25,"December22_CBC Lagoon_Agaricia agaricites",1,0.04,24
-"14","December22","December22","CBC Lagoon","Agaricia tenuifolia",117,"December22_CBC Lagoon_Agaricia tenuifolia",2,0.0170940170940171,115
-"15","December22","December22","CBC Lagoon","Helioseris cucullata",2,"December22_CBC Lagoon_Helioseris cucullata",0,0,2
-"16","December22","December22","CBC Lagoon","Montastraea cavernosa",2,"December22_CBC Lagoon_Montastraea cavernosa",2,1,0
-"17","December22","December22","CBC Lagoon","Orbicella spp.",6,"December22_CBC Lagoon_Orbicella spp.",1,0.166666666666667,5
-"18","December22","December22","CBC Lagoon","Porites astreoides",49,"December22_CBC Lagoon_Porites astreoides",0,0,49
-"19","December22","December22","CBC Lagoon","Porites porites",16,"December22_CBC Lagoon_Porites porites",0,0,16
-"20","December22","December22","CBC Lagoon","Pseudodiploria strigosa",2,"December22_CBC Lagoon_Pseudodiploria strigosa",0,0,2
-"21","December22","December22","CBC Lagoon","Siderastrea siderea",12,"December22_CBC Lagoon_Siderastrea siderea",6,0.5,6
-"22","December22","December22","CBC Lagoon","Stephanocoenia intersepta",1,"December22_CBC Lagoon_Stephanocoenia intersepta",0,0,1
-"23","December22","December22","CBC30N","Agaricia agaricites",33,"December22_CBC30N_Agaricia agaricites",1,0.0303030303030303,32
-"24","December22","December22","CBC30N","Agaricia tenuifolia",16,"December22_CBC30N_Agaricia tenuifolia",0,0,16
-"25","December22","December22","CBC30N","Montastraea cavernosa",2,"December22_CBC30N_Montastraea cavernosa",0,0,2
-"26","December22","December22","CBC30N","Orbicella spp.",7,"December22_CBC30N_Orbicella spp.",1,0.142857142857143,6
-"27","December22","December22","CBC30N","Porites astreoides",57,"December22_CBC30N_Porites astreoides",0,0,57
-"28","December22","December22","CBC30N","Porites porites",12,"December22_CBC30N_Porites porites",0,0,12
-"29","December22","December22","CBC30N","Siderastrea radians",5,"December22_CBC30N_Siderastrea radians",0,0,5
-"30","December22","December22","CBC30N","Siderastrea siderea",34,"December22_CBC30N_Siderastrea siderea",16,0.470588235294118,18
-"31","December22","December22","CBC30N","Stephanocoenia intersepta",5,"December22_CBC30N_Stephanocoenia intersepta",0,0,5
-"32","December22","December22","Curlew Patch","Agaricia agaricites",50,"December22_Curlew Patch_Agaricia agaricites",0,0,50
-"33","December22","December22","Curlew Patch","Agaricia tenuifolia",66,"December22_Curlew Patch_Agaricia tenuifolia",0,0,66
-"34","December22","December22","Curlew Patch","Diploria labyrinthiformis",1,"December22_Curlew Patch_Diploria labyrinthiformis",0,0,1
-"35","December22","December22","Curlew Patch","Montastraea cavernosa",3,"December22_Curlew Patch_Montastraea cavernosa",0,0,3
-"36","December22","December22","Curlew Patch","Orbicella spp.",8,"December22_Curlew Patch_Orbicella spp.",0,0,8
-"37","December22","December22","Curlew Patch","Porites astreoides",36,"December22_Curlew Patch_Porites astreoides",0,0,36
-"38","December22","December22","Curlew Patch","Porites porites",39,"December22_Curlew Patch_Porites porites",0,0,39
-"39","December22","December22","Curlew Patch","Siderastrea siderea",28,"December22_Curlew Patch_Siderastrea siderea",8,0.285714285714286,20
-"40","December22","December22","House Reef","Agaricia agaricites",126,"December22_House Reef_Agaricia agaricites",1,0.00793650793650794,125
-"41","December22","December22","House Reef","Agaricia tenuifolia",36,"December22_House Reef_Agaricia tenuifolia",1,0.0277777777777778,35
-"42","December22","December22","House Reef","Montastraea cavernosa",1,"December22_House Reef_Montastraea cavernosa",0,0,1
-"43","December22","December22","House Reef","Orbicella spp.",23,"December22_House Reef_Orbicella spp.",2,0.0869565217391304,21
-"44","December22","December22","House Reef","Porites astreoides",30,"December22_House Reef_Porites astreoides",0,0,30
-"45","December22","December22","House Reef","Porites porites",11,"December22_House Reef_Porites porites",0,0,11
-"46","December22","December22","House Reef","Pseudodiploria strigosa",5,"December22_House Reef_Pseudodiploria strigosa",4,0.8,1
-"47","December22","December22","House Reef","Siderastrea radians",110,"December22_House Reef_Siderastrea radians",1,0.00909090909090909,109
-"48","December22","December22","House Reef","Siderastrea siderea",29,"December22_House Reef_Siderastrea siderea",8,0.275862068965517,21
-"49","December22","December22","House Reef","Stephanocoenia intersepta",4,"December22_House Reef_Stephanocoenia intersepta",0,0,4
-"50","December22","December22","SR30N","Agaricia agaricites",63,"December22_SR30N_Agaricia agaricites",0,0,63
-"51","December22","December22","SR30N","Agaricia tenuifolia",31,"December22_SR30N_Agaricia tenuifolia",0,0,31
-"52","December22","December22","SR30N","Colpophyllia natans",1,"December22_SR30N_Colpophyllia natans",0,0,1
-"53","December22","December22","SR30N","Dichocoenia stokesii",1,"December22_SR30N_Dichocoenia stokesii",0,0,1
-"54","December22","December22","SR30N","Isophyllia rigida",1,"December22_SR30N_Isophyllia rigida",0,0,1
-"55","December22","December22","SR30N","Madracis decactis",1,"December22_SR30N_Madracis decactis",0,0,1
-"56","December22","December22","SR30N","Montastraea cavernosa",2,"December22_SR30N_Montastraea cavernosa",0,0,2
-"57","December22","December22","SR30N","Orbicella spp.",11,"December22_SR30N_Orbicella spp.",0,0,11
-"58","December22","December22","SR30N","Porites astreoides",39,"December22_SR30N_Porites astreoides",0,0,39
-"59","December22","December22","SR30N","Porites porites",44,"December22_SR30N_Porites porites",0,0,44
-"60","December22","December22","SR30N","Pseudodiploria clivosa",1,"December22_SR30N_Pseudodiploria clivosa",0,0,1
-"61","December22","December22","SR30N","Pseudodiploria strigosa",6,"December22_SR30N_Pseudodiploria strigosa",1,0.166666666666667,5
-"62","December22","December22","SR30N","Siderastrea siderea",21,"December22_SR30N_Siderastrea siderea",9,0.428571428571429,12
-"63","December22","December22","SR30N","Stephanocoenia intersepta",1,"December22_SR30N_Stephanocoenia intersepta",0,0,1
-"64","December22","December22","South Reef Central","Agaricia agaricites",76,"December22_South Reef Central_Agaricia agaricites",1,0.0131578947368421,75
-"65","December22","December22","South Reef Central","Agaricia tenuifolia",43,"December22_South Reef Central_Agaricia tenuifolia",0,0,43
-"66","December22","December22","South Reef Central","Helioseris cucullata",2,"December22_South Reef Central_Helioseris cucullata",0,0,2
-"67","December22","December22","South Reef Central","Madracis decactis",2,"December22_South Reef Central_Madracis decactis",0,0,2
-"68","December22","December22","South Reef Central","Montastraea cavernosa",6,"December22_South Reef Central_Montastraea cavernosa",0,0,6
-"69","December22","December22","South Reef Central","Orbicella spp.",5,"December22_South Reef Central_Orbicella spp.",0,0,5
-"70","December22","December22","South Reef Central","Porites astreoides",78,"December22_South Reef Central_Porites astreoides",0,0,78
-"71","December22","December22","South Reef Central","Porites porites",47,"December22_South Reef Central_Porites porites",0,0,47
-"72","December22","December22","South Reef Central","Pseudodiploria strigosa",1,"December22_South Reef Central_Pseudodiploria strigosa",0,0,1
-"73","December22","December22","South Reef Central","Scolymia cubensis",1,"December22_South Reef Central_Scolymia cubensis",0,0,1
-"74","December22","December22","South Reef Central","Siderastrea siderea",32,"December22_South Reef Central_Siderastrea siderea",8,0.25,24
-"75","December22","December22","South Reef Central","Stephanocoenia intersepta",3,"December22_South Reef Central_Stephanocoenia intersepta",0,0,3
-"76","January20","November19","CBC30N","Agaricia agaricites",83,"November19_CBC30N_Agaricia agaricites",0,0,83
-"77","January20","November19","CBC30N","Agaricia lamarckiana",1,"November19_CBC30N_Agaricia lamarckiana",0,0,1
-"78","January20","November19","CBC30N","Agaricia tenuifolia",25,"November19_CBC30N_Agaricia tenuifolia",0,0,25
-"79","January20","November19","CBC30N","Dichocoenia stokesii",4,"November19_CBC30N_Dichocoenia stokesii",0,0,4
-"80","January20","November19","CBC30N","Eusmilia fastigiata",1,"November19_CBC30N_Eusmilia fastigiata",0,0,1
-"81","January20","November19","CBC30N","Meandrina meandrites",1,"November19_CBC30N_Meandrina meandrites",0,0,1
-"82","January20","November19","CBC30N","Montastraea cavernosa",5,"November19_CBC30N_Montastraea cavernosa",0,0,5
-"83","January20","November19","CBC30N","Orbicella spp.",14,"November19_CBC30N_Orbicella spp.",0,0,14
-"84","January20","November19","CBC30N","Porites astreoides",113,"November19_CBC30N_Porites astreoides",0,0,113
-"85","January20","November19","CBC30N","Porites porites",11,"November19_CBC30N_Porites porites",0,0,11
-"86","January20","November19","CBC30N","Pseudodiploria strigosa",5,"November19_CBC30N_Pseudodiploria strigosa",0,0,5
-"87","January20","November19","CBC30N","Siderastrea radians",1,"November19_CBC30N_Siderastrea radians",0,0,1
-"88","January20","November19","CBC30N","Siderastrea siderea",73,"November19_CBC30N_Siderastrea siderea",0,0,73
-"89","January20","November19","CBC30N","Stephanocoenia intersepta",2,"November19_CBC30N_Stephanocoenia intersepta",0,0,2
-"90","January20","November19","SR30N","Agaricia agaricites",129,"November19_SR30N_Agaricia agaricites",0,0,129
-"91","January20","November19","SR30N","Agaricia tenuifolia",24,"November19_SR30N_Agaricia tenuifolia",0,0,24
-"92","January20","November19","SR30N","Colpophyllia natans",1,"November19_SR30N_Colpophyllia natans",0,0,1
-"93","January20","November19","SR30N","Dendrogyra cylindrus",1,"November19_SR30N_Dendrogyra cylindrus",0,0,1
-"94","January20","November19","SR30N","Dichocoenia stokesii",2,"November19_SR30N_Dichocoenia stokesii",0,0,2
-"95","January20","November19","SR30N","Eusmilia fastigiata",1,"November19_SR30N_Eusmilia fastigiata",0,0,1
-"96","January20","November19","SR30N","Helioseris cucullata",5,"November19_SR30N_Helioseris cucullata",0,0,5
-"97","January20","November19","SR30N","Madracis decactis",2,"November19_SR30N_Madracis decactis",0,0,2
-"98","January20","November19","SR30N","Meandrina meandrites",1,"November19_SR30N_Meandrina meandrites",0,0,1
-"99","January20","November19","SR30N","Montastraea cavernosa",6,"November19_SR30N_Montastraea cavernosa",0,0,6
-"100","January20","November19","SR30N","Mycetophyllia spp.",2,"November19_SR30N_Mycetophyllia spp.",0,0,2
-"101","January20","November19","SR30N","Orbicella spp.",10,"November19_SR30N_Orbicella spp.",0,0,10
-"102","January20","November19","SR30N","Porites astreoides",61,"November19_SR30N_Porites astreoides",0,0,61
-"103","January20","November19","SR30N","Porites porites",30,"November19_SR30N_Porites porites",0,0,30
-"104","January20","November19","SR30N","Pseudodiploria strigosa",8,"November19_SR30N_Pseudodiploria strigosa",0,0,8
-"105","January20","November19","SR30N","Siderastrea siderea",85,"November19_SR30N_Siderastrea siderea",0,0,85
-"106","January20","November19","SR30N","Stephanocoenia intersepta",5,"November19_SR30N_Stephanocoenia intersepta",0,0,5
-"107","May22","May22","CBC Central","Agaricia agaricites",65,"May22_CBC Central_Agaricia agaricites",1,0.0153846153846154,64
-"108","May22","May22","CBC Central","Agaricia tenuifolia",29,"May22_CBC Central_Agaricia tenuifolia",1,0.0344827586206897,28
-"109","May22","May22","CBC Central","Diploria labyrinthiformis",2,"May22_CBC Central_Diploria labyrinthiformis",1,0.5,1
-"110","May22","May22","CBC Central","Montastraea cavernosa",1,"May22_CBC Central_Montastraea cavernosa",1,1,0
-"111","May22","May22","CBC Central","Orbicella spp.",3,"May22_CBC Central_Orbicella spp.",1,0.333333333333333,2
-"112","May22","May22","CBC Central","Porites astreoides",71,"May22_CBC Central_Porites astreoides",0,0,71
-"113","May22","May22","CBC Central","Porites porites",27,"May22_CBC Central_Porites porites",0,0,27
-"114","May22","May22","CBC Central","Pseudodiploria strigosa",5,"May22_CBC Central_Pseudodiploria strigosa",1,0.2,4
-"115","May22","May22","CBC Central","Siderastrea radians",1,"May22_CBC Central_Siderastrea radians",0,0,1
-"116","May22","May22","CBC Central","Siderastrea siderea",28,"May22_CBC Central_Siderastrea siderea",1,0.0357142857142857,27
-"117","May22","May22","CBC Central","Stephanocoenia intersepta",7,"May22_CBC Central_Stephanocoenia intersepta",0,0,7
-"118","May22","May22","CBC Lagoon","Agaricia agaricites",61,"May22_CBC Lagoon_Agaricia agaricites",0,0,61
-"119","May22","May22","CBC Lagoon","Agaricia tenuifolia",94,"May22_CBC Lagoon_Agaricia tenuifolia",19,0.202127659574468,75
-"120","May22","May22","CBC Lagoon","Dichocoenia stokesii",1,"May22_CBC Lagoon_Dichocoenia stokesii",0,0,1
-"121","May22","May22","CBC Lagoon","Diploria labyrinthiformis",1,"May22_CBC Lagoon_Diploria labyrinthiformis",1,1,0
-"122","May22","May22","CBC Lagoon","Eusmilia fastigiata",1,"May22_CBC Lagoon_Eusmilia fastigiata",0,0,1
-"123","May22","May22","CBC Lagoon","Montastraea cavernosa",5,"May22_CBC Lagoon_Montastraea cavernosa",2,0.4,3
-"124","May22","May22","CBC Lagoon","Orbicella spp.",9,"May22_CBC Lagoon_Orbicella spp.",3,0.333333333333333,6
-"125","May22","May22","CBC Lagoon","Porites astreoides",68,"May22_CBC Lagoon_Porites astreoides",0,0,68
-"126","May22","May22","CBC Lagoon","Porites porites",18,"May22_CBC Lagoon_Porites porites",0,0,18
-"127","May22","May22","CBC Lagoon","Siderastrea radians",7,"May22_CBC Lagoon_Siderastrea radians",0,0,7
-"128","May22","May22","CBC Lagoon","Siderastrea siderea",24,"May22_CBC Lagoon_Siderastrea siderea",9,0.375,15
-"129","May22","May22","CBC Lagoon","Stephanocoenia intersepta",3,"May22_CBC Lagoon_Stephanocoenia intersepta",1,0.333333333333333,2
-"130","May22","May22","CBC30N","Agaricia agaricites",46,"May22_CBC30N_Agaricia agaricites",0,0,46
-"131","May22","May22","CBC30N","Agaricia tenuifolia",21,"May22_CBC30N_Agaricia tenuifolia",2,0.0952380952380952,19
-"132","May22","May22","CBC30N","Madracis decactis",3,"May22_CBC30N_Madracis decactis",0,0,3
-"133","May22","May22","CBC30N","Montastraea cavernosa",3,"May22_CBC30N_Montastraea cavernosa",0,0,3
-"134","May22","May22","CBC30N","Porites astreoides",69,"May22_CBC30N_Porites astreoides",2,0.0289855072463768,67
-"135","May22","May22","CBC30N","Porites porites",8,"May22_CBC30N_Porites porites",0,0,8
-"136","May22","May22","CBC30N","Pseudodiploria strigosa",2,"May22_CBC30N_Pseudodiploria strigosa",1,0.5,1
-"137","May22","May22","CBC30N","Siderastrea radians",3,"May22_CBC30N_Siderastrea radians",0,0,3
-"138","May22","May22","CBC30N","Siderastrea siderea",26,"May22_CBC30N_Siderastrea siderea",4,0.153846153846154,22
-"139","May22","May22","CBC30N","Stephanocoenia intersepta",3,"May22_CBC30N_Stephanocoenia intersepta",0,0,3
-"140","May22","May22","Curlew Patch","Agaricia agaricites",27,"May22_Curlew Patch_Agaricia agaricites",0,0,27
-"141","May22","May22","Curlew Patch","Agaricia tenuifolia",22,"May22_Curlew Patch_Agaricia tenuifolia",0,0,22
-"142","May22","May22","Curlew Patch","Dichocoenia stokesii",1,"May22_Curlew Patch_Dichocoenia stokesii",0,0,1
-"143","May22","May22","Curlew Patch","Montastraea cavernosa",12,"May22_Curlew Patch_Montastraea cavernosa",2,0.166666666666667,10
-"144","May22","May22","Curlew Patch","Orbicella spp.",7,"May22_Curlew Patch_Orbicella spp.",1,0.142857142857143,6
-"145","May22","May22","Curlew Patch","Porites astreoides",20,"May22_Curlew Patch_Porites astreoides",1,0.05,19
-"146","May22","May22","Curlew Patch","Porites porites",13,"May22_Curlew Patch_Porites porites",0,0,13
-"147","May22","May22","Curlew Patch","Siderastrea radians",4,"May22_Curlew Patch_Siderastrea radians",0,0,4
-"148","May22","May22","Curlew Patch","Siderastrea siderea",25,"May22_Curlew Patch_Siderastrea siderea",6,0.24,19
-"149","May22","May22","Curlew Patch","Stephanocoenia intersepta",2,"May22_Curlew Patch_Stephanocoenia intersepta",0,0,2
-"150","May22","May22","House Reef","Agaricia agaricites",23,"May22_House Reef_Agaricia agaricites",0,0,23
-"151","May22","May22","House Reef","Agaricia tenuifolia",7,"May22_House Reef_Agaricia tenuifolia",0,0,7
-"152","May22","May22","House Reef","Diploria labyrinthiformis",2,"May22_House Reef_Diploria labyrinthiformis",1,0.5,1
-"153","May22","May22","House Reef","Isophyllia sinuosa",1,"May22_House Reef_Isophyllia sinuosa",0,0,1
-"154","May22","May22","House Reef","Orbicella spp.",16,"May22_House Reef_Orbicella spp.",2,0.125,14
-"155","May22","May22","House Reef","Porites astreoides",5,"May22_House Reef_Porites astreoides",0,0,5
-"156","May22","May22","House Reef","Porites porites",1,"May22_House Reef_Porites porites",0,0,1
-"157","May22","May22","House Reef","Pseudodiploria strigosa",7,"May22_House Reef_Pseudodiploria strigosa",3,0.428571428571429,4
-"158","May22","May22","House Reef","Siderastrea radians",2,"May22_House Reef_Siderastrea radians",0,0,2
-"159","May22","May22","House Reef","Siderastrea siderea",8,"May22_House Reef_Siderastrea siderea",1,0.125,7
-"160","May22","May22","House Reef","Stephanocoenia intersepta",7,"May22_House Reef_Stephanocoenia intersepta",0,0,7
-"161","May22","May22","SR30N","Agaricia agaricites",26,"May22_SR30N_Agaricia agaricites",0,0,26
-"162","May22","May22","SR30N","Agaricia tenuifolia",14,"May22_SR30N_Agaricia tenuifolia",0,0,14
-"163","May22","May22","SR30N","Colpophyllia natans",1,"May22_SR30N_Colpophyllia natans",0,0,1
-"164","May22","May22","SR30N","Dichocoenia stokesii",2,"May22_SR30N_Dichocoenia stokesii",0,0,2
-"165","May22","May22","SR30N","Isophyllia rigida",1,"May22_SR30N_Isophyllia rigida",0,0,1
-"166","May22","May22","SR30N","Montastraea cavernosa",3,"May22_SR30N_Montastraea cavernosa",1,0.333333333333333,2
-"167","May22","May22","SR30N","Orbicella spp.",6,"May22_SR30N_Orbicella spp.",0,0,6
-"168","May22","May22","SR30N","Porites astreoides",21,"May22_SR30N_Porites astreoides",0,0,21
-"169","May22","May22","SR30N","Porites porites",10,"May22_SR30N_Porites porites",0,0,10
-"170","May22","May22","SR30N","Pseudodiploria clivosa",1,"May22_SR30N_Pseudodiploria clivosa",0,0,1
-"171","May22","May22","SR30N","Pseudodiploria strigosa",7,"May22_SR30N_Pseudodiploria strigosa",1,0.142857142857143,6
-"172","May22","May22","SR30N","Siderastrea siderea",16,"May22_SR30N_Siderastrea siderea",3,0.1875,13
-"173","May22","May22","South Reef Central","Agaricia agaricites",69,"May22_South Reef Central_Agaricia agaricites",1,0.0144927536231884,68
-"174","May22","May22","South Reef Central","Agaricia tenuifolia",28,"May22_South Reef Central_Agaricia tenuifolia",0,0,28
-"175","May22","May22","South Reef Central","Eusmilia fastigiata",5,"May22_South Reef Central_Eusmilia fastigiata",4,0.8,1
-"176","May22","May22","South Reef Central","Madracis decactis",5,"May22_South Reef Central_Madracis decactis",0,0,5
-"177","May22","May22","South Reef Central","Montastraea cavernosa",5,"May22_South Reef Central_Montastraea cavernosa",1,0.2,4
-"178","May22","May22","South Reef Central","Orbicella spp.",5,"May22_South Reef Central_Orbicella spp.",1,0.2,4
-"179","May22","May22","South Reef Central","Porites astreoides",56,"May22_South Reef Central_Porites astreoides",0,0,56
-"180","May22","May22","South Reef Central","Porites porites",26,"May22_South Reef Central_Porites porites",0,0,26
-"181","May22","May22","South Reef Central","Pseudodiploria strigosa",2,"May22_South Reef Central_Pseudodiploria strigosa",1,0.5,1
-"182","May22","May22","South Reef Central","Siderastrea radians",5,"May22_South Reef Central_Siderastrea radians",0,0,5
-"183","May22","May22","South Reef Central","Siderastrea siderea",32,"May22_South Reef Central_Siderastrea siderea",6,0.1875,26
-"184","May22","May22","South Reef Central","Stephanocoenia intersepta",1,"May22_South Reef Central_Stephanocoenia intersepta",0,0,1
-"185","October19","November19","CBC Central","Agaricia agaricites",140,"November19_CBC Central_Agaricia agaricites",0,0,140
-"186","October19","November19","CBC Central","Agaricia spp.",2,"November19_CBC Central_Agaricia spp.",0,0,2
-"187","October19","November19","CBC Central","Agaricia tenuifolia",34,"November19_CBC Central_Agaricia tenuifolia",0,0,34
-"188","October19","November19","CBC Central","Dichocoenia stokesii",5,"November19_CBC Central_Dichocoenia stokesii",0,0,5
-"189","October19","November19","CBC Central","Diploria labyrinthiformis",2,"November19_CBC Central_Diploria labyrinthiformis",0,0,2
-"190","October19","November19","CBC Central","Eusmilia fastigiata",2,"November19_CBC Central_Eusmilia fastigiata",0,0,2
-"191","October19","November19","CBC Central","Madracis decactis",1,"November19_CBC Central_Madracis decactis",0,0,1
-"192","October19","November19","CBC Central","Meandrina meandrites",3,"November19_CBC Central_Meandrina meandrites",0,0,3
-"193","October19","November19","CBC Central","Montastraea cavernosa",9,"November19_CBC Central_Montastraea cavernosa",0,0,9
-"194","October19","November19","CBC Central","Orbicella spp.",9,"November19_CBC Central_Orbicella spp.",0,0,9
-"195","October19","November19","CBC Central","Porites astreoides",93,"November19_CBC Central_Porites astreoides",1,0.010752688172043,92
-"196","October19","November19","CBC Central","Porites porites",40,"November19_CBC Central_Porites porites",1,0.025,39
-"197","October19","November19","CBC Central","Pseudodiploria strigosa",8,"November19_CBC Central_Pseudodiploria strigosa",0,0,8
-"198","October19","November19","CBC Central","Siderastrea radians",1,"November19_CBC Central_Siderastrea radians",0,0,1
-"199","October19","November19","CBC Central","Siderastrea siderea",117,"November19_CBC Central_Siderastrea siderea",0,0,117
-"200","October19","November19","CBC Central","Stephanocoenia intersepta",9,"November19_CBC Central_Stephanocoenia intersepta",0,0,9
-"201","October19","November19","CBC Lagoon","Agaricia agaricites",121,"November19_CBC Lagoon_Agaricia agaricites",0,0,121
-"202","October19","November19","CBC Lagoon","Agaricia tenuifolia",107,"November19_CBC Lagoon_Agaricia tenuifolia",0,0,107
-"203","October19","November19","CBC Lagoon","Dichocoenia stokesii",3,"November19_CBC Lagoon_Dichocoenia stokesii",0,0,3
-"204","October19","November19","CBC Lagoon","Diploria labyrinthiformis",2,"November19_CBC Lagoon_Diploria labyrinthiformis",0,0,2
-"205","October19","November19","CBC Lagoon","Eusmilia fastigiata",2,"November19_CBC Lagoon_Eusmilia fastigiata",0,0,2
-"206","October19","November19","CBC Lagoon","Helioseris cucullata",1,"November19_CBC Lagoon_Helioseris cucullata",0,0,1
-"207","October19","November19","CBC Lagoon","Madracis decactis",3,"November19_CBC Lagoon_Madracis decactis",0,0,3
-"208","October19","November19","CBC Lagoon","Meandrina meandrites",1,"November19_CBC Lagoon_Meandrina meandrites",0,0,1
-"209","October19","November19","CBC Lagoon","Montastraea cavernosa",12,"November19_CBC Lagoon_Montastraea cavernosa",0,0,12
-"210","October19","November19","CBC Lagoon","Orbicella spp.",17,"November19_CBC Lagoon_Orbicella spp.",0,0,17
-"211","October19","November19","CBC Lagoon","Porites astreoides",71,"November19_CBC Lagoon_Porites astreoides",0,0,71
-"212","October19","November19","CBC Lagoon","Porites porites",26,"November19_CBC Lagoon_Porites porites",0,0,26
-"213","October19","November19","CBC Lagoon","Pseudodiploria strigosa",5,"November19_CBC Lagoon_Pseudodiploria strigosa",0,0,5
-"214","October19","November19","CBC Lagoon","Siderastrea radians",1,"November19_CBC Lagoon_Siderastrea radians",0,0,1
-"215","October19","November19","CBC Lagoon","Siderastrea siderea",48,"November19_CBC Lagoon_Siderastrea siderea",0,0,48
-"216","October19","November19","CBC Lagoon","Stephanocoenia intersepta",5,"November19_CBC Lagoon_Stephanocoenia intersepta",0,0,5
-"217","October19","November19","Curlew Patch","Acropora cervicornis",2,"November19_Curlew Patch_Acropora cervicornis",0,0,2
-"218","October19","November19","Curlew Patch","Agaricia agaricites",185,"November19_Curlew Patch_Agaricia agaricites",1,0.00540540540540541,184
-"219","October19","November19","Curlew Patch","Agaricia spp.",6,"November19_Curlew Patch_Agaricia spp.",0,0,6
-"220","October19","November19","Curlew Patch","Agaricia tenuifolia",100,"November19_Curlew Patch_Agaricia tenuifolia",0,0,100
-"221","October19","November19","Curlew Patch","Dichocoenia stokesii",1,"November19_Curlew Patch_Dichocoenia stokesii",0,0,1
-"222","October19","November19","Curlew Patch","Helioseris cucullata",2,"November19_Curlew Patch_Helioseris cucullata",0,0,2
-"223","October19","November19","Curlew Patch","Montastraea cavernosa",9,"November19_Curlew Patch_Montastraea cavernosa",0,0,9
-"224","October19","November19","Curlew Patch","Mycetophyllia aliciae",1,"November19_Curlew Patch_Mycetophyllia aliciae",0,0,1
-"225","October19","November19","Curlew Patch","Orbicella spp.",8,"November19_Curlew Patch_Orbicella spp.",0,0,8
-"226","October19","November19","Curlew Patch","Porites astreoides",59,"November19_Curlew Patch_Porites astreoides",0,0,59
-"227","October19","November19","Curlew Patch","Porites porites",65,"November19_Curlew Patch_Porites porites",0,0,65
-"228","October19","November19","Curlew Patch","Pseudodiploria strigosa",1,"November19_Curlew Patch_Pseudodiploria strigosa",0,0,1
-"229","October19","November19","Curlew Patch","Siderastrea siderea",39,"November19_Curlew Patch_Siderastrea siderea",0,0,39
-"230","October19","November19","Curlew Patch","Stephanocoenia intersepta",5,"November19_Curlew Patch_Stephanocoenia intersepta",0,0,5
-"231","October19","November19","House Reef","Acropora cervicornis",2,"November19_House Reef_Acropora cervicornis",0,0,2
-"232","October19","November19","House Reef","Agaricia agaricites",181,"November19_House Reef_Agaricia agaricites",2,0.0110497237569061,179
-"233","October19","November19","House Reef","Agaricia tenuifolia",29,"November19_House Reef_Agaricia tenuifolia",1,0.0344827586206897,28
-"234","October19","November19","House Reef","Dichocoenia stokesii",2,"November19_House Reef_Dichocoenia stokesii",0,0,2
-"235","October19","November19","House Reef","Eusmilia fastigiata",3,"November19_House Reef_Eusmilia fastigiata",0,0,3
-"236","October19","November19","House Reef","Favia fragum",1,"November19_House Reef_Favia fragum",0,0,1
-"237","October19","November19","House Reef","Montastraea cavernosa",1,"November19_House Reef_Montastraea cavernosa",0,0,1
-"238","October19","November19","House Reef","Orbicella spp.",77,"November19_House Reef_Orbicella spp.",0,0,77
-"239","October19","November19","House Reef","Porites astreoides",52,"November19_House Reef_Porites astreoides",0,0,52
-"240","October19","November19","House Reef","Porites porites",12,"November19_House Reef_Porites porites",0,0,12
-"241","October19","November19","House Reef","Pseudodiploria strigosa",10,"November19_House Reef_Pseudodiploria strigosa",0,0,10
-"242","October19","November19","House Reef","Siderastrea radians",56,"November19_House Reef_Siderastrea radians",0,0,56
-"243","October19","November19","House Reef","Siderastrea siderea",21,"November19_House Reef_Siderastrea siderea",0,0,21
-"244","October19","November19","House Reef","Stephanocoenia intersepta",3,"November19_House Reef_Stephanocoenia intersepta",0,0,3
-"245","October19","November19","South Reef Central","Agaricia agaricites",125,"November19_South Reef Central_Agaricia agaricites",0,0,125
-"246","October19","November19","South Reef Central","Agaricia tenuifolia",17,"November19_South Reef Central_Agaricia tenuifolia",1,0.0588235294117647,16
-"247","October19","November19","South Reef Central","Dichocoenia stokesii",5,"November19_South Reef Central_Dichocoenia stokesii",0,0,5
-"248","October19","November19","South Reef Central","Helioseris cucullata",3,"November19_South Reef Central_Helioseris cucullata",0,0,3
-"249","October19","November19","South Reef Central","Madracis decactis",6,"November19_South Reef Central_Madracis decactis",0,0,6
-"250","October19","November19","South Reef Central","Meandrina meandrites",2,"November19_South Reef Central_Meandrina meandrites",0,0,2
-"251","October19","November19","South Reef Central","Montastraea cavernosa",8,"November19_South Reef Central_Montastraea cavernosa",0,0,8
-"252","October19","November19","South Reef Central","Orbicella spp.",12,"November19_South Reef Central_Orbicella spp.",0,0,12
-"253","October19","November19","South Reef Central","Porites astreoides",77,"November19_South Reef Central_Porites astreoides",2,0.025974025974026,75
-"254","October19","November19","South Reef Central","Porites porites",25,"November19_South Reef Central_Porites porites",1,0.04,24
-"255","October19","November19","South Reef Central","Pseudodiploria strigosa",6,"November19_South Reef Central_Pseudodiploria strigosa",0,0,6
-"256","October19","November19","South Reef Central","Siderastrea radians",1,"November19_South Reef Central_Siderastrea radians",0,0,1
-"257","October19","November19","South Reef Central","Siderastrea siderea",53,"November19_South Reef Central_Siderastrea siderea",0,0,53
-"258","October19","November19","South Reef Central","Stephanocoenia intersepta",4,"November19_South Reef Central_Stephanocoenia intersepta",0,0,4
+"1","Dec2022","Dec2022","CBC Central","Agaricia agaricites",139,"Dec2022_CBC Central_Agaricia agaricites",1,0.00719424460431655,138
+"2","Dec2022","Dec2022","CBC Central","Agaricia tenuifolia",70,"Dec2022_CBC Central_Agaricia tenuifolia",3,0.0428571428571429,67
+"3","Dec2022","Dec2022","CBC Central","Helioseris cucullata",1,"Dec2022_CBC Central_Helioseris cucullata",0,0,1
+"4","Dec2022","Dec2022","CBC Central","Madracis decactis",3,"Dec2022_CBC Central_Madracis decactis",0,0,3
+"5","Dec2022","Dec2022","CBC Central","Montastraea cavernosa",1,"Dec2022_CBC Central_Montastraea cavernosa",0,0,1
+"6","Dec2022","Dec2022","CBC Central","Orbicella spp.",2,"Dec2022_CBC Central_Orbicella spp.",0,0,2
+"7","Dec2022","Dec2022","CBC Central","Porites astreoides",120,"Dec2022_CBC Central_Porites astreoides",1,0.00833333333333333,119
+"8","Dec2022","Dec2022","CBC Central","Porites porites",54,"Dec2022_CBC Central_Porites porites",0,0,54
+"9","Dec2022","Dec2022","CBC Central","Pseudodiploria strigosa",2,"Dec2022_CBC Central_Pseudodiploria strigosa",0,0,2
+"10","Dec2022","Dec2022","CBC Central","Siderastrea radians",4,"Dec2022_CBC Central_Siderastrea radians",0,0,4
+"11","Dec2022","Dec2022","CBC Central","Siderastrea siderea",79,"Dec2022_CBC Central_Siderastrea siderea",20,0.253164556962025,59
+"12","Dec2022","Dec2022","CBC Central","Stephanocoenia intersepta",10,"Dec2022_CBC Central_Stephanocoenia intersepta",0,0,10
+"13","Dec2022","Dec2022","CBC Lagoon","Agaricia agaricites",25,"Dec2022_CBC Lagoon_Agaricia agaricites",1,0.04,24
+"14","Dec2022","Dec2022","CBC Lagoon","Agaricia tenuifolia",117,"Dec2022_CBC Lagoon_Agaricia tenuifolia",2,0.0170940170940171,115
+"15","Dec2022","Dec2022","CBC Lagoon","Helioseris cucullata",2,"Dec2022_CBC Lagoon_Helioseris cucullata",0,0,2
+"16","Dec2022","Dec2022","CBC Lagoon","Montastraea cavernosa",2,"Dec2022_CBC Lagoon_Montastraea cavernosa",2,1,0
+"17","Dec2022","Dec2022","CBC Lagoon","Orbicella spp.",6,"Dec2022_CBC Lagoon_Orbicella spp.",1,0.166666666666667,5
+"18","Dec2022","Dec2022","CBC Lagoon","Porites astreoides",49,"Dec2022_CBC Lagoon_Porites astreoides",0,0,49
+"19","Dec2022","Dec2022","CBC Lagoon","Porites porites",16,"Dec2022_CBC Lagoon_Porites porites",0,0,16
+"20","Dec2022","Dec2022","CBC Lagoon","Pseudodiploria strigosa",2,"Dec2022_CBC Lagoon_Pseudodiploria strigosa",0,0,2
+"21","Dec2022","Dec2022","CBC Lagoon","Siderastrea siderea",12,"Dec2022_CBC Lagoon_Siderastrea siderea",6,0.5,6
+"22","Dec2022","Dec2022","CBC Lagoon","Stephanocoenia intersepta",1,"Dec2022_CBC Lagoon_Stephanocoenia intersepta",0,0,1
+"23","Dec2022","Dec2022","CBC30N","Agaricia agaricites",33,"Dec2022_CBC30N_Agaricia agaricites",1,0.0303030303030303,32
+"24","Dec2022","Dec2022","CBC30N","Agaricia tenuifolia",16,"Dec2022_CBC30N_Agaricia tenuifolia",0,0,16
+"25","Dec2022","Dec2022","CBC30N","Montastraea cavernosa",2,"Dec2022_CBC30N_Montastraea cavernosa",0,0,2
+"26","Dec2022","Dec2022","CBC30N","Orbicella spp.",7,"Dec2022_CBC30N_Orbicella spp.",1,0.142857142857143,6
+"27","Dec2022","Dec2022","CBC30N","Porites astreoides",57,"Dec2022_CBC30N_Porites astreoides",0,0,57
+"28","Dec2022","Dec2022","CBC30N","Porites porites",12,"Dec2022_CBC30N_Porites porites",0,0,12
+"29","Dec2022","Dec2022","CBC30N","Siderastrea radians",5,"Dec2022_CBC30N_Siderastrea radians",0,0,5
+"30","Dec2022","Dec2022","CBC30N","Siderastrea siderea",34,"Dec2022_CBC30N_Siderastrea siderea",16,0.470588235294118,18
+"31","Dec2022","Dec2022","CBC30N","Stephanocoenia intersepta",5,"Dec2022_CBC30N_Stephanocoenia intersepta",0,0,5
+"32","Dec2022","Dec2022","Curlew Patch","Agaricia agaricites",50,"Dec2022_Curlew Patch_Agaricia agaricites",0,0,50
+"33","Dec2022","Dec2022","Curlew Patch","Agaricia tenuifolia",66,"Dec2022_Curlew Patch_Agaricia tenuifolia",0,0,66
+"34","Dec2022","Dec2022","Curlew Patch","Diploria labyrinthiformis",1,"Dec2022_Curlew Patch_Diploria labyrinthiformis",0,0,1
+"35","Dec2022","Dec2022","Curlew Patch","Montastraea cavernosa",3,"Dec2022_Curlew Patch_Montastraea cavernosa",0,0,3
+"36","Dec2022","Dec2022","Curlew Patch","Orbicella spp.",8,"Dec2022_Curlew Patch_Orbicella spp.",0,0,8
+"37","Dec2022","Dec2022","Curlew Patch","Porites astreoides",36,"Dec2022_Curlew Patch_Porites astreoides",0,0,36
+"38","Dec2022","Dec2022","Curlew Patch","Porites porites",39,"Dec2022_Curlew Patch_Porites porites",0,0,39
+"39","Dec2022","Dec2022","Curlew Patch","Siderastrea siderea",28,"Dec2022_Curlew Patch_Siderastrea siderea",8,0.285714285714286,20
+"40","Dec2022","Dec2022","House Reef","Agaricia agaricites",126,"Dec2022_House Reef_Agaricia agaricites",1,0.00793650793650794,125
+"41","Dec2022","Dec2022","House Reef","Agaricia tenuifolia",36,"Dec2022_House Reef_Agaricia tenuifolia",1,0.0277777777777778,35
+"42","Dec2022","Dec2022","House Reef","Montastraea cavernosa",1,"Dec2022_House Reef_Montastraea cavernosa",0,0,1
+"43","Dec2022","Dec2022","House Reef","Orbicella spp.",23,"Dec2022_House Reef_Orbicella spp.",2,0.0869565217391304,21
+"44","Dec2022","Dec2022","House Reef","Porites astreoides",30,"Dec2022_House Reef_Porites astreoides",0,0,30
+"45","Dec2022","Dec2022","House Reef","Porites porites",11,"Dec2022_House Reef_Porites porites",0,0,11
+"46","Dec2022","Dec2022","House Reef","Pseudodiploria strigosa",5,"Dec2022_House Reef_Pseudodiploria strigosa",4,0.8,1
+"47","Dec2022","Dec2022","House Reef","Siderastrea radians",110,"Dec2022_House Reef_Siderastrea radians",1,0.00909090909090909,109
+"48","Dec2022","Dec2022","House Reef","Siderastrea siderea",29,"Dec2022_House Reef_Siderastrea siderea",8,0.275862068965517,21
+"49","Dec2022","Dec2022","House Reef","Stephanocoenia intersepta",4,"Dec2022_House Reef_Stephanocoenia intersepta",0,0,4
+"50","Dec2022","Dec2022","SR30N","Agaricia agaricites",63,"Dec2022_SR30N_Agaricia agaricites",0,0,63
+"51","Dec2022","Dec2022","SR30N","Agaricia tenuifolia",31,"Dec2022_SR30N_Agaricia tenuifolia",0,0,31
+"52","Dec2022","Dec2022","SR30N","Colpophyllia natans",1,"Dec2022_SR30N_Colpophyllia natans",0,0,1
+"53","Dec2022","Dec2022","SR30N","Dichocoenia stokesii",1,"Dec2022_SR30N_Dichocoenia stokesii",0,0,1
+"54","Dec2022","Dec2022","SR30N","Isophyllia rigida",1,"Dec2022_SR30N_Isophyllia rigida",0,0,1
+"55","Dec2022","Dec2022","SR30N","Madracis decactis",1,"Dec2022_SR30N_Madracis decactis",0,0,1
+"56","Dec2022","Dec2022","SR30N","Montastraea cavernosa",2,"Dec2022_SR30N_Montastraea cavernosa",0,0,2
+"57","Dec2022","Dec2022","SR30N","Orbicella spp.",11,"Dec2022_SR30N_Orbicella spp.",0,0,11
+"58","Dec2022","Dec2022","SR30N","Porites astreoides",39,"Dec2022_SR30N_Porites astreoides",0,0,39
+"59","Dec2022","Dec2022","SR30N","Porites porites",44,"Dec2022_SR30N_Porites porites",0,0,44
+"60","Dec2022","Dec2022","SR30N","Pseudodiploria clivosa",1,"Dec2022_SR30N_Pseudodiploria clivosa",0,0,1
+"61","Dec2022","Dec2022","SR30N","Pseudodiploria strigosa",6,"Dec2022_SR30N_Pseudodiploria strigosa",1,0.166666666666667,5
+"62","Dec2022","Dec2022","SR30N","Siderastrea siderea",21,"Dec2022_SR30N_Siderastrea siderea",9,0.428571428571429,12
+"63","Dec2022","Dec2022","SR30N","Stephanocoenia intersepta",1,"Dec2022_SR30N_Stephanocoenia intersepta",0,0,1
+"64","Dec2022","Dec2022","South Reef Central","Agaricia agaricites",76,"Dec2022_South Reef Central_Agaricia agaricites",1,0.0131578947368421,75
+"65","Dec2022","Dec2022","South Reef Central","Agaricia tenuifolia",43,"Dec2022_South Reef Central_Agaricia tenuifolia",0,0,43
+"66","Dec2022","Dec2022","South Reef Central","Helioseris cucullata",2,"Dec2022_South Reef Central_Helioseris cucullata",0,0,2
+"67","Dec2022","Dec2022","South Reef Central","Madracis decactis",2,"Dec2022_South Reef Central_Madracis decactis",0,0,2
+"68","Dec2022","Dec2022","South Reef Central","Montastraea cavernosa",6,"Dec2022_South Reef Central_Montastraea cavernosa",0,0,6
+"69","Dec2022","Dec2022","South Reef Central","Orbicella spp.",5,"Dec2022_South Reef Central_Orbicella spp.",0,0,5
+"70","Dec2022","Dec2022","South Reef Central","Porites astreoides",78,"Dec2022_South Reef Central_Porites astreoides",0,0,78
+"71","Dec2022","Dec2022","South Reef Central","Porites porites",47,"Dec2022_South Reef Central_Porites porites",0,0,47
+"72","Dec2022","Dec2022","South Reef Central","Pseudodiploria strigosa",1,"Dec2022_South Reef Central_Pseudodiploria strigosa",0,0,1
+"73","Dec2022","Dec2022","South Reef Central","Scolymia cubensis",1,"Dec2022_South Reef Central_Scolymia cubensis",0,0,1
+"74","Dec2022","Dec2022","South Reef Central","Siderastrea siderea",32,"Dec2022_South Reef Central_Siderastrea siderea",8,0.25,24
+"75","Dec2022","Dec2022","South Reef Central","Stephanocoenia intersepta",3,"Dec2022_South Reef Central_Stephanocoenia intersepta",0,0,3
+"76","Jan2020","Nov2019","CBC30N","Agaricia agaricites",83,"Nov2019_CBC30N_Agaricia agaricites",0,0,83
+"77","Jan2020","Nov2019","CBC30N","Agaricia lamarckiana",1,"Nov2019_CBC30N_Agaricia lamarckiana",0,0,1
+"78","Jan2020","Nov2019","CBC30N","Agaricia tenuifolia",25,"Nov2019_CBC30N_Agaricia tenuifolia",0,0,25
+"79","Jan2020","Nov2019","CBC30N","Dichocoenia stokesii",4,"Nov2019_CBC30N_Dichocoenia stokesii",0,0,4
+"80","Jan2020","Nov2019","CBC30N","Eusmilia fastigiata",1,"Nov2019_CBC30N_Eusmilia fastigiata",0,0,1
+"81","Jan2020","Nov2019","CBC30N","Meandrina meandrites",1,"Nov2019_CBC30N_Meandrina meandrites",0,0,1
+"82","Jan2020","Nov2019","CBC30N","Montastraea cavernosa",5,"Nov2019_CBC30N_Montastraea cavernosa",0,0,5
+"83","Jan2020","Nov2019","CBC30N","Orbicella spp.",14,"Nov2019_CBC30N_Orbicella spp.",0,0,14
+"84","Jan2020","Nov2019","CBC30N","Porites astreoides",113,"Nov2019_CBC30N_Porites astreoides",0,0,113
+"85","Jan2020","Nov2019","CBC30N","Porites porites",11,"Nov2019_CBC30N_Porites porites",0,0,11
+"86","Jan2020","Nov2019","CBC30N","Pseudodiploria strigosa",5,"Nov2019_CBC30N_Pseudodiploria strigosa",0,0,5
+"87","Jan2020","Nov2019","CBC30N","Siderastrea radians",1,"Nov2019_CBC30N_Siderastrea radians",0,0,1
+"88","Jan2020","Nov2019","CBC30N","Siderastrea siderea",73,"Nov2019_CBC30N_Siderastrea siderea",0,0,73
+"89","Jan2020","Nov2019","CBC30N","Stephanocoenia intersepta",2,"Nov2019_CBC30N_Stephanocoenia intersepta",0,0,2
+"90","Jan2020","Nov2019","SR30N","Agaricia agaricites",129,"Nov2019_SR30N_Agaricia agaricites",0,0,129
+"91","Jan2020","Nov2019","SR30N","Agaricia tenuifolia",24,"Nov2019_SR30N_Agaricia tenuifolia",0,0,24
+"92","Jan2020","Nov2019","SR30N","Colpophyllia natans",1,"Nov2019_SR30N_Colpophyllia natans",0,0,1
+"93","Jan2020","Nov2019","SR30N","Dendrogyra cylindrus",1,"Nov2019_SR30N_Dendrogyra cylindrus",0,0,1
+"94","Jan2020","Nov2019","SR30N","Dichocoenia stokesii",2,"Nov2019_SR30N_Dichocoenia stokesii",0,0,2
+"95","Jan2020","Nov2019","SR30N","Eusmilia fastigiata",1,"Nov2019_SR30N_Eusmilia fastigiata",0,0,1
+"96","Jan2020","Nov2019","SR30N","Helioseris cucullata",5,"Nov2019_SR30N_Helioseris cucullata",0,0,5
+"97","Jan2020","Nov2019","SR30N","Madracis decactis",2,"Nov2019_SR30N_Madracis decactis",0,0,2
+"98","Jan2020","Nov2019","SR30N","Meandrina meandrites",1,"Nov2019_SR30N_Meandrina meandrites",0,0,1
+"99","Jan2020","Nov2019","SR30N","Montastraea cavernosa",6,"Nov2019_SR30N_Montastraea cavernosa",0,0,6
+"100","Jan2020","Nov2019","SR30N","Mycetophyllia spp.",2,"Nov2019_SR30N_Mycetophyllia spp.",0,0,2
+"101","Jan2020","Nov2019","SR30N","Orbicella spp.",10,"Nov2019_SR30N_Orbicella spp.",0,0,10
+"102","Jan2020","Nov2019","SR30N","Porites astreoides",61,"Nov2019_SR30N_Porites astreoides",0,0,61
+"103","Jan2020","Nov2019","SR30N","Porites porites",30,"Nov2019_SR30N_Porites porites",0,0,30
+"104","Jan2020","Nov2019","SR30N","Pseudodiploria strigosa",8,"Nov2019_SR30N_Pseudodiploria strigosa",0,0,8
+"105","Jan2020","Nov2019","SR30N","Siderastrea siderea",85,"Nov2019_SR30N_Siderastrea siderea",0,0,85
+"106","Jan2020","Nov2019","SR30N","Stephanocoenia intersepta",5,"Nov2019_SR30N_Stephanocoenia intersepta",0,0,5
+"107","May2022","May2022","CBC Central","Agaricia agaricites",65,"May2022_CBC Central_Agaricia agaricites",1,0.0153846153846154,64
+"108","May2022","May2022","CBC Central","Agaricia tenuifolia",29,"May2022_CBC Central_Agaricia tenuifolia",1,0.0344827586206897,28
+"109","May2022","May2022","CBC Central","Diploria labyrinthiformis",2,"May2022_CBC Central_Diploria labyrinthiformis",1,0.5,1
+"110","May2022","May2022","CBC Central","Montastraea cavernosa",1,"May2022_CBC Central_Montastraea cavernosa",1,1,0
+"111","May2022","May2022","CBC Central","Orbicella spp.",3,"May2022_CBC Central_Orbicella spp.",1,0.333333333333333,2
+"112","May2022","May2022","CBC Central","Porites astreoides",71,"May2022_CBC Central_Porites astreoides",0,0,71
+"113","May2022","May2022","CBC Central","Porites porites",27,"May2022_CBC Central_Porites porites",0,0,27
+"114","May2022","May2022","CBC Central","Pseudodiploria strigosa",5,"May2022_CBC Central_Pseudodiploria strigosa",1,0.2,4
+"115","May2022","May2022","CBC Central","Siderastrea radians",1,"May2022_CBC Central_Siderastrea radians",0,0,1
+"116","May2022","May2022","CBC Central","Siderastrea siderea",28,"May2022_CBC Central_Siderastrea siderea",1,0.0357142857142857,27
+"117","May2022","May2022","CBC Central","Stephanocoenia intersepta",7,"May2022_CBC Central_Stephanocoenia intersepta",0,0,7
+"118","May2022","May2022","CBC Lagoon","Agaricia agaricites",61,"May2022_CBC Lagoon_Agaricia agaricites",0,0,61
+"119","May2022","May2022","CBC Lagoon","Agaricia tenuifolia",94,"May2022_CBC Lagoon_Agaricia tenuifolia",19,0.202127659574468,75
+"120","May2022","May2022","CBC Lagoon","Dichocoenia stokesii",1,"May2022_CBC Lagoon_Dichocoenia stokesii",0,0,1
+"121","May2022","May2022","CBC Lagoon","Diploria labyrinthiformis",1,"May2022_CBC Lagoon_Diploria labyrinthiformis",1,1,0
+"122","May2022","May2022","CBC Lagoon","Eusmilia fastigiata",1,"May2022_CBC Lagoon_Eusmilia fastigiata",0,0,1
+"123","May2022","May2022","CBC Lagoon","Montastraea cavernosa",5,"May2022_CBC Lagoon_Montastraea cavernosa",2,0.4,3
+"124","May2022","May2022","CBC Lagoon","Orbicella spp.",9,"May2022_CBC Lagoon_Orbicella spp.",3,0.333333333333333,6
+"125","May2022","May2022","CBC Lagoon","Porites astreoides",68,"May2022_CBC Lagoon_Porites astreoides",0,0,68
+"126","May2022","May2022","CBC Lagoon","Porites porites",18,"May2022_CBC Lagoon_Porites porites",0,0,18
+"127","May2022","May2022","CBC Lagoon","Siderastrea radians",7,"May2022_CBC Lagoon_Siderastrea radians",0,0,7
+"128","May2022","May2022","CBC Lagoon","Siderastrea siderea",24,"May2022_CBC Lagoon_Siderastrea siderea",9,0.375,15
+"129","May2022","May2022","CBC Lagoon","Stephanocoenia intersepta",3,"May2022_CBC Lagoon_Stephanocoenia intersepta",1,0.333333333333333,2
+"130","May2022","May2022","CBC30N","Agaricia agaricites",46,"May2022_CBC30N_Agaricia agaricites",0,0,46
+"131","May2022","May2022","CBC30N","Agaricia tenuifolia",21,"May2022_CBC30N_Agaricia tenuifolia",2,0.0952380952380952,19
+"132","May2022","May2022","CBC30N","Madracis decactis",3,"May2022_CBC30N_Madracis decactis",0,0,3
+"133","May2022","May2022","CBC30N","Montastraea cavernosa",3,"May2022_CBC30N_Montastraea cavernosa",0,0,3
+"134","May2022","May2022","CBC30N","Porites astreoides",69,"May2022_CBC30N_Porites astreoides",2,0.0289855072463768,67
+"135","May2022","May2022","CBC30N","Porites porites",8,"May2022_CBC30N_Porites porites",0,0,8
+"136","May2022","May2022","CBC30N","Pseudodiploria strigosa",2,"May2022_CBC30N_Pseudodiploria strigosa",1,0.5,1
+"137","May2022","May2022","CBC30N","Siderastrea radians",3,"May2022_CBC30N_Siderastrea radians",0,0,3
+"138","May2022","May2022","CBC30N","Siderastrea siderea",26,"May2022_CBC30N_Siderastrea siderea",4,0.153846153846154,22
+"139","May2022","May2022","CBC30N","Stephanocoenia intersepta",3,"May2022_CBC30N_Stephanocoenia intersepta",0,0,3
+"140","May2022","May2022","Curlew Patch","Agaricia agaricites",27,"May2022_Curlew Patch_Agaricia agaricites",0,0,27
+"141","May2022","May2022","Curlew Patch","Agaricia tenuifolia",22,"May2022_Curlew Patch_Agaricia tenuifolia",0,0,22
+"142","May2022","May2022","Curlew Patch","Dichocoenia stokesii",1,"May2022_Curlew Patch_Dichocoenia stokesii",0,0,1
+"143","May2022","May2022","Curlew Patch","Montastraea cavernosa",12,"May2022_Curlew Patch_Montastraea cavernosa",2,0.166666666666667,10
+"144","May2022","May2022","Curlew Patch","Orbicella spp.",7,"May2022_Curlew Patch_Orbicella spp.",1,0.142857142857143,6
+"145","May2022","May2022","Curlew Patch","Porites astreoides",20,"May2022_Curlew Patch_Porites astreoides",1,0.05,19
+"146","May2022","May2022","Curlew Patch","Porites porites",13,"May2022_Curlew Patch_Porites porites",0,0,13
+"147","May2022","May2022","Curlew Patch","Siderastrea radians",4,"May2022_Curlew Patch_Siderastrea radians",0,0,4
+"148","May2022","May2022","Curlew Patch","Siderastrea siderea",25,"May2022_Curlew Patch_Siderastrea siderea",6,0.24,19
+"149","May2022","May2022","Curlew Patch","Stephanocoenia intersepta",2,"May2022_Curlew Patch_Stephanocoenia intersepta",0,0,2
+"150","May2022","May2022","House Reef","Agaricia agaricites",23,"May2022_House Reef_Agaricia agaricites",0,0,23
+"151","May2022","May2022","House Reef","Agaricia tenuifolia",7,"May2022_House Reef_Agaricia tenuifolia",0,0,7
+"152","May2022","May2022","House Reef","Diploria labyrinthiformis",2,"May2022_House Reef_Diploria labyrinthiformis",1,0.5,1
+"153","May2022","May2022","House Reef","Isophyllia sinuosa",1,"May2022_House Reef_Isophyllia sinuosa",0,0,1
+"154","May2022","May2022","House Reef","Orbicella spp.",16,"May2022_House Reef_Orbicella spp.",2,0.125,14
+"155","May2022","May2022","House Reef","Porites astreoides",5,"May2022_House Reef_Porites astreoides",0,0,5
+"156","May2022","May2022","House Reef","Porites porites",1,"May2022_House Reef_Porites porites",0,0,1
+"157","May2022","May2022","House Reef","Pseudodiploria strigosa",7,"May2022_House Reef_Pseudodiploria strigosa",3,0.428571428571429,4
+"158","May2022","May2022","House Reef","Siderastrea radians",2,"May2022_House Reef_Siderastrea radians",0,0,2
+"159","May2022","May2022","House Reef","Siderastrea siderea",8,"May2022_House Reef_Siderastrea siderea",1,0.125,7
+"160","May2022","May2022","House Reef","Stephanocoenia intersepta",7,"May2022_House Reef_Stephanocoenia intersepta",0,0,7
+"161","May2022","May2022","SR30N","Agaricia agaricites",26,"May2022_SR30N_Agaricia agaricites",0,0,26
+"162","May2022","May2022","SR30N","Agaricia tenuifolia",14,"May2022_SR30N_Agaricia tenuifolia",0,0,14
+"163","May2022","May2022","SR30N","Colpophyllia natans",1,"May2022_SR30N_Colpophyllia natans",0,0,1
+"164","May2022","May2022","SR30N","Dichocoenia stokesii",2,"May2022_SR30N_Dichocoenia stokesii",0,0,2
+"165","May2022","May2022","SR30N","Isophyllia rigida",1,"May2022_SR30N_Isophyllia rigida",0,0,1
+"166","May2022","May2022","SR30N","Montastraea cavernosa",3,"May2022_SR30N_Montastraea cavernosa",1,0.333333333333333,2
+"167","May2022","May2022","SR30N","Orbicella spp.",6,"May2022_SR30N_Orbicella spp.",0,0,6
+"168","May2022","May2022","SR30N","Porites astreoides",21,"May2022_SR30N_Porites astreoides",0,0,21
+"169","May2022","May2022","SR30N","Porites porites",10,"May2022_SR30N_Porites porites",0,0,10
+"170","May2022","May2022","SR30N","Pseudodiploria clivosa",1,"May2022_SR30N_Pseudodiploria clivosa",0,0,1
+"171","May2022","May2022","SR30N","Pseudodiploria strigosa",7,"May2022_SR30N_Pseudodiploria strigosa",1,0.142857142857143,6
+"172","May2022","May2022","SR30N","Siderastrea siderea",16,"May2022_SR30N_Siderastrea siderea",3,0.1875,13
+"173","May2022","May2022","South Reef Central","Agaricia agaricites",69,"May2022_South Reef Central_Agaricia agaricites",1,0.0144927536231884,68
+"174","May2022","May2022","South Reef Central","Agaricia tenuifolia",28,"May2022_South Reef Central_Agaricia tenuifolia",0,0,28
+"175","May2022","May2022","South Reef Central","Eusmilia fastigiata",5,"May2022_South Reef Central_Eusmilia fastigiata",4,0.8,1
+"176","May2022","May2022","South Reef Central","Madracis decactis",5,"May2022_South Reef Central_Madracis decactis",0,0,5
+"177","May2022","May2022","South Reef Central","Montastraea cavernosa",5,"May2022_South Reef Central_Montastraea cavernosa",1,0.2,4
+"178","May2022","May2022","South Reef Central","Orbicella spp.",5,"May2022_South Reef Central_Orbicella spp.",1,0.2,4
+"179","May2022","May2022","South Reef Central","Porites astreoides",56,"May2022_South Reef Central_Porites astreoides",0,0,56
+"180","May2022","May2022","South Reef Central","Porites porites",26,"May2022_South Reef Central_Porites porites",0,0,26
+"181","May2022","May2022","South Reef Central","Pseudodiploria strigosa",2,"May2022_South Reef Central_Pseudodiploria strigosa",1,0.5,1
+"182","May2022","May2022","South Reef Central","Siderastrea radians",5,"May2022_South Reef Central_Siderastrea radians",0,0,5
+"183","May2022","May2022","South Reef Central","Siderastrea siderea",32,"May2022_South Reef Central_Siderastrea siderea",6,0.1875,26
+"184","May2022","May2022","South Reef Central","Stephanocoenia intersepta",1,"May2022_South Reef Central_Stephanocoenia intersepta",0,0,1
+"185","Oct2019","Nov2019","CBC Central","Agaricia agaricites",140,"Nov2019_CBC Central_Agaricia agaricites",0,0,140
+"186","Oct2019","Nov2019","CBC Central","Agaricia spp.",2,"Nov2019_CBC Central_Agaricia spp.",0,0,2
+"187","Oct2019","Nov2019","CBC Central","Agaricia tenuifolia",34,"Nov2019_CBC Central_Agaricia tenuifolia",0,0,34
+"188","Oct2019","Nov2019","CBC Central","Dichocoenia stokesii",5,"Nov2019_CBC Central_Dichocoenia stokesii",0,0,5
+"189","Oct2019","Nov2019","CBC Central","Diploria labyrinthiformis",2,"Nov2019_CBC Central_Diploria labyrinthiformis",0,0,2
+"190","Oct2019","Nov2019","CBC Central","Eusmilia fastigiata",2,"Nov2019_CBC Central_Eusmilia fastigiata",0,0,2
+"191","Oct2019","Nov2019","CBC Central","Madracis decactis",1,"Nov2019_CBC Central_Madracis decactis",0,0,1
+"192","Oct2019","Nov2019","CBC Central","Meandrina meandrites",3,"Nov2019_CBC Central_Meandrina meandrites",0,0,3
+"193","Oct2019","Nov2019","CBC Central","Montastraea cavernosa",9,"Nov2019_CBC Central_Montastraea cavernosa",0,0,9
+"194","Oct2019","Nov2019","CBC Central","Orbicella spp.",9,"Nov2019_CBC Central_Orbicella spp.",0,0,9
+"195","Oct2019","Nov2019","CBC Central","Porites astreoides",93,"Nov2019_CBC Central_Porites astreoides",1,0.010752688172043,92
+"196","Oct2019","Nov2019","CBC Central","Porites porites",40,"Nov2019_CBC Central_Porites porites",1,0.025,39
+"197","Oct2019","Nov2019","CBC Central","Pseudodiploria strigosa",8,"Nov2019_CBC Central_Pseudodiploria strigosa",0,0,8
+"198","Oct2019","Nov2019","CBC Central","Siderastrea radians",1,"Nov2019_CBC Central_Siderastrea radians",0,0,1
+"199","Oct2019","Nov2019","CBC Central","Siderastrea siderea",117,"Nov2019_CBC Central_Siderastrea siderea",0,0,117
+"200","Oct2019","Nov2019","CBC Central","Stephanocoenia intersepta",9,"Nov2019_CBC Central_Stephanocoenia intersepta",0,0,9
+"201","Oct2019","Nov2019","CBC Lagoon","Agaricia agaricites",121,"Nov2019_CBC Lagoon_Agaricia agaricites",0,0,121
+"202","Oct2019","Nov2019","CBC Lagoon","Agaricia tenuifolia",107,"Nov2019_CBC Lagoon_Agaricia tenuifolia",0,0,107
+"203","Oct2019","Nov2019","CBC Lagoon","Dichocoenia stokesii",3,"Nov2019_CBC Lagoon_Dichocoenia stokesii",0,0,3
+"204","Oct2019","Nov2019","CBC Lagoon","Diploria labyrinthiformis",2,"Nov2019_CBC Lagoon_Diploria labyrinthiformis",0,0,2
+"205","Oct2019","Nov2019","CBC Lagoon","Eusmilia fastigiata",2,"Nov2019_CBC Lagoon_Eusmilia fastigiata",0,0,2
+"206","Oct2019","Nov2019","CBC Lagoon","Helioseris cucullata",1,"Nov2019_CBC Lagoon_Helioseris cucullata",0,0,1
+"207","Oct2019","Nov2019","CBC Lagoon","Madracis decactis",3,"Nov2019_CBC Lagoon_Madracis decactis",0,0,3
+"208","Oct2019","Nov2019","CBC Lagoon","Meandrina meandrites",1,"Nov2019_CBC Lagoon_Meandrina meandrites",0,0,1
+"209","Oct2019","Nov2019","CBC Lagoon","Montastraea cavernosa",12,"Nov2019_CBC Lagoon_Montastraea cavernosa",0,0,12
+"210","Oct2019","Nov2019","CBC Lagoon","Orbicella spp.",17,"Nov2019_CBC Lagoon_Orbicella spp.",0,0,17
+"211","Oct2019","Nov2019","CBC Lagoon","Porites astreoides",71,"Nov2019_CBC Lagoon_Porites astreoides",0,0,71
+"212","Oct2019","Nov2019","CBC Lagoon","Porites porites",26,"Nov2019_CBC Lagoon_Porites porites",0,0,26
+"213","Oct2019","Nov2019","CBC Lagoon","Pseudodiploria strigosa",5,"Nov2019_CBC Lagoon_Pseudodiploria strigosa",0,0,5
+"214","Oct2019","Nov2019","CBC Lagoon","Siderastrea radians",1,"Nov2019_CBC Lagoon_Siderastrea radians",0,0,1
+"215","Oct2019","Nov2019","CBC Lagoon","Siderastrea siderea",48,"Nov2019_CBC Lagoon_Siderastrea siderea",0,0,48
+"216","Oct2019","Nov2019","CBC Lagoon","Stephanocoenia intersepta",5,"Nov2019_CBC Lagoon_Stephanocoenia intersepta",0,0,5
+"217","Oct2019","Nov2019","Curlew Patch","Acropora cervicornis",2,"Nov2019_Curlew Patch_Acropora cervicornis",0,0,2
+"218","Oct2019","Nov2019","Curlew Patch","Agaricia agaricites",185,"Nov2019_Curlew Patch_Agaricia agaricites",1,0.00540540540540541,184
+"219","Oct2019","Nov2019","Curlew Patch","Agaricia spp.",6,"Nov2019_Curlew Patch_Agaricia spp.",0,0,6
+"220","Oct2019","Nov2019","Curlew Patch","Agaricia tenuifolia",100,"Nov2019_Curlew Patch_Agaricia tenuifolia",0,0,100
+"221","Oct2019","Nov2019","Curlew Patch","Dichocoenia stokesii",1,"Nov2019_Curlew Patch_Dichocoenia stokesii",0,0,1
+"222","Oct2019","Nov2019","Curlew Patch","Helioseris cucullata",2,"Nov2019_Curlew Patch_Helioseris cucullata",0,0,2
+"223","Oct2019","Nov2019","Curlew Patch","Montastraea cavernosa",9,"Nov2019_Curlew Patch_Montastraea cavernosa",0,0,9
+"224","Oct2019","Nov2019","Curlew Patch","Mycetophyllia aliciae",1,"Nov2019_Curlew Patch_Mycetophyllia aliciae",0,0,1
+"225","Oct2019","Nov2019","Curlew Patch","Orbicella spp.",8,"Nov2019_Curlew Patch_Orbicella spp.",0,0,8
+"226","Oct2019","Nov2019","Curlew Patch","Porites astreoides",59,"Nov2019_Curlew Patch_Porites astreoides",0,0,59
+"227","Oct2019","Nov2019","Curlew Patch","Porites porites",65,"Nov2019_Curlew Patch_Porites porites",0,0,65
+"228","Oct2019","Nov2019","Curlew Patch","Pseudodiploria strigosa",1,"Nov2019_Curlew Patch_Pseudodiploria strigosa",0,0,1
+"229","Oct2019","Nov2019","Curlew Patch","Siderastrea siderea",39,"Nov2019_Curlew Patch_Siderastrea siderea",0,0,39
+"230","Oct2019","Nov2019","Curlew Patch","Stephanocoenia intersepta",5,"Nov2019_Curlew Patch_Stephanocoenia intersepta",0,0,5
+"231","Oct2019","Nov2019","House Reef","Acropora cervicornis",2,"Nov2019_House Reef_Acropora cervicornis",0,0,2
+"232","Oct2019","Nov2019","House Reef","Agaricia agaricites",181,"Nov2019_House Reef_Agaricia agaricites",2,0.0110497237569061,179
+"233","Oct2019","Nov2019","House Reef","Agaricia tenuifolia",29,"Nov2019_House Reef_Agaricia tenuifolia",1,0.0344827586206897,28
+"234","Oct2019","Nov2019","House Reef","Dichocoenia stokesii",2,"Nov2019_House Reef_Dichocoenia stokesii",0,0,2
+"235","Oct2019","Nov2019","House Reef","Eusmilia fastigiata",3,"Nov2019_House Reef_Eusmilia fastigiata",0,0,3
+"236","Oct2019","Nov2019","House Reef","Favia fragum",1,"Nov2019_House Reef_Favia fragum",0,0,1
+"237","Oct2019","Nov2019","House Reef","Montastraea cavernosa",1,"Nov2019_House Reef_Montastraea cavernosa",0,0,1
+"238","Oct2019","Nov2019","House Reef","Orbicella spp.",77,"Nov2019_House Reef_Orbicella spp.",0,0,77
+"239","Oct2019","Nov2019","House Reef","Porites astreoides",52,"Nov2019_House Reef_Porites astreoides",0,0,52
+"240","Oct2019","Nov2019","House Reef","Porites porites",12,"Nov2019_House Reef_Porites porites",0,0,12
+"241","Oct2019","Nov2019","House Reef","Pseudodiploria strigosa",10,"Nov2019_House Reef_Pseudodiploria strigosa",0,0,10
+"242","Oct2019","Nov2019","House Reef","Siderastrea radians",56,"Nov2019_House Reef_Siderastrea radians",0,0,56
+"243","Oct2019","Nov2019","House Reef","Siderastrea siderea",21,"Nov2019_House Reef_Siderastrea siderea",0,0,21
+"244","Oct2019","Nov2019","House Reef","Stephanocoenia intersepta",3,"Nov2019_House Reef_Stephanocoenia intersepta",0,0,3
+"245","Oct2019","Nov2019","South Reef Central","Agaricia agaricites",125,"Nov2019_South Reef Central_Agaricia agaricites",0,0,125
+"246","Oct2019","Nov2019","South Reef Central","Agaricia tenuifolia",17,"Nov2019_South Reef Central_Agaricia tenuifolia",1,0.0588235294117647,16
+"247","Oct2019","Nov2019","South Reef Central","Dichocoenia stokesii",5,"Nov2019_South Reef Central_Dichocoenia stokesii",0,0,5
+"248","Oct2019","Nov2019","South Reef Central","Helioseris cucullata",3,"Nov2019_South Reef Central_Helioseris cucullata",0,0,3
+"249","Oct2019","Nov2019","South Reef Central","Madracis decactis",6,"Nov2019_South Reef Central_Madracis decactis",0,0,6
+"250","Oct2019","Nov2019","South Reef Central","Meandrina meandrites",2,"Nov2019_South Reef Central_Meandrina meandrites",0,0,2
+"251","Oct2019","Nov2019","South Reef Central","Montastraea cavernosa",8,"Nov2019_South Reef Central_Montastraea cavernosa",0,0,8
+"252","Oct2019","Nov2019","South Reef Central","Orbicella spp.",12,"Nov2019_South Reef Central_Orbicella spp.",0,0,12
+"253","Oct2019","Nov2019","South Reef Central","Porites astreoides",77,"Nov2019_South Reef Central_Porites astreoides",2,0.025974025974026,75
+"254","Oct2019","Nov2019","South Reef Central","Porites porites",25,"Nov2019_South Reef Central_Porites porites",1,0.04,24
+"255","Oct2019","Nov2019","South Reef Central","Pseudodiploria strigosa",6,"Nov2019_South Reef Central_Pseudodiploria strigosa",0,0,6
+"256","Oct2019","Nov2019","South Reef Central","Siderastrea radians",1,"Nov2019_South Reef Central_Siderastrea radians",0,0,1
+"257","Oct2019","Nov2019","South Reef Central","Siderastrea siderea",53,"Nov2019_South Reef Central_Siderastrea siderea",0,0,53
+"258","Oct2019","Nov2019","South Reef Central","Stephanocoenia intersepta",4,"Nov2019_South Reef Central_Stephanocoenia intersepta",0,0,4
