@@ -105,6 +105,10 @@ cover$TimePoint_a <- cover$TimePoint
 cover <- cover %>% unite("Event", c("TimePoint_a", "SiteName_a"), sep = "_")
 
 #calculate cover ----
+cover$Label <- recode(cover$Label, "CNAt" = "CNAT",
+                       "SMIC" = "SINT",
+                       "PSTRI" = "PSTR")
+
 cover1 <- cover %>% group_by(Event) %>% summarize(npics = (length(unique(Name)))) %>%
   mutate(npoints = npics * 40)
 
@@ -123,9 +127,6 @@ cover2 <- coverx %>%
 cover2$Label <- as.factor(cover2$Label)
 levels(cover2$Label)
 
-cover2$Label <- recode(cover2$Label, "CNAt" = "CNAT",
-                       "SMIC" = "SINT",
-                       "PSTRI" = "PSTR")
 
 #assign general cover label categories ----
 cover <- cover2 %>% mutate('Label_General' = 'x', 'Label_Suscep' = 'x')
@@ -164,7 +165,7 @@ cover <- within(cover, Label_General[Label == "CYAN"|Label == "Cyan red"] <- "Cy
 
 check <- cover %>% subset(Label == "AGAR"|Label == "ALAM")
 
-write.csv(cover, "cover_cleaned.csv")
+#write.csv(cover, "cover_cleaned.csv")
 
 levels(as.factor(cover$Label_General))
 
@@ -273,9 +274,9 @@ gentable <- as.data.frame(Anova(mod1)) %>%
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(gentable, file = "Tables/Table 3.pdf")
+#save_kable(gentable, file = "Tables/Table 3.pdf")
 
-write.csv(as.data.frame(Anova(mod1)), "Tables/Table 3.csv")
+#write.csv(as.data.frame(Anova(mod1)), "Tables/Table 3.csv")
 
 emm <- emmeans(mod1, ~ Survey*Label_General)
 simple <- pairs(emm, simple = "Survey")
@@ -298,6 +299,11 @@ for(current_Label in Labels) {
                                    threshold = 0.05)) %>%
     mutate("Label_General" = current_Label)
   
+  letters$Group <- recode(letters$Group, "Nov219" = "Nov2019",
+                          "May222" = "May2022",
+                          "Dec222" = "Dec2022")
+  
+  
   df <- df %>%
     bind_rows(letters)
 }
@@ -319,22 +325,39 @@ gen_table <- pairwise %>%
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(gen_table, file = "Tables/Table S6.pdf")
+#save_kable(gen_table, file = "Tables/Table S6.pdf")
 
-write.csv(pairwise, "Tables/Table S6.csv")
+#write.csv(pairwise, "Tables/Table S6.csv")
+
+covtable1 <- covgen %>% ungroup() %>%
+  select(-c(Survey, cov_gensq:maxCov)) %>%
+  rename("Total points" = npoints, "Points with label" = sum_gen,
+         "Percent cover" = cov_gen)
+
+cov1_wide <- covtable1 %>% pivot_wider(id_cols = c(Date, SiteName),
+            names_from = Label_General,
+            values_from = 'Percent cover') %>%
+  arrange(SiteName, Date) %>%
+  subset(!(is.na(Date))) %>% 
+  mutate(across(where(is.numeric), ~ round(as.numeric(unlist(.x)), digits = 2)))
+
+#write.csv(covtable1, "Tables/Supp Cover Table 1.csv")
+write.csv(cov1_wide, "Tables/Supp Cover Table 1_wide.csv")
+
+
 MainLetters <- df %>% unite("GroupEvent", c(Label_General,Group))
 
 
 covgenx <- covgen %>% 
   left_join(MainLetters, by = "GroupEvent") %>%
   mutate(TimePoint = case_when(
-    SiteName == "SR30N" & Survey == "November19" ~ "January20",
-    SiteName == "CBC30N" & Survey == "November19" ~ "January20",
-    SiteName == "CBC Central" & Survey == "November19" ~ "October19",
-    SiteName == "South Reef Central" & Survey == "November19" ~ "October19",
-    SiteName == "House Reef" & Survey == "November19" ~ "October19",
-    SiteName == "Curlew Patch" & Survey == "November19" ~ "October19",
-    SiteName == "CBC Lagoon" & Survey == "November19" ~ "October19",
+    SiteName == "SR30N" & Survey == "Nov2019" ~ "Jan2020",
+    SiteName == "CBC30N" & Survey == "Nov2019" ~ "Jan2020",
+    SiteName == "CBC Central" & Survey == "Nov2019" ~ "Oct2019",
+    SiteName == "South Reef Central" & Survey == "Nov2019" ~ "Oct2019",
+    SiteName == "House Reef" & Survey == "Nov2019" ~ "Oct2019",
+    SiteName == "Curlew Patch" & Survey == "Nov2019" ~ "Oct2019",
+    SiteName == "CBC Lagoon" & Survey == "Nov2019" ~ "Oct2019",
     TRUE ~ as.factor(Survey))) %>%
   mutate_at(.vars = vars("TimePoint"),
             .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
@@ -601,9 +624,9 @@ spptable <- as.data.frame(Anova(mod3)) %>%
       digits = 3,
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header"))
-save_kable(spptable, file = "Tables/Table 4.pdf")
+#save_kable(spptable, file = "Tables/Table 4.pdf")
 
-write.csv(as.data.frame(Anova(mod3)), "Tables/Table 4.csv")
+#write.csv(as.data.frame(Anova(mod3)), "Tables/Table 4.csv")
 
 emm <- emmeans(mod3, ~ Survey*Species)
 simple <- pairs(emm, simple = "Survey")
@@ -629,6 +652,10 @@ for(current_Spec in Spec) {
                                    threshold = 0.05)) %>%
     mutate("Species" = current_Spec)
   
+  letters$Group <- recode(letters$Group, "Nov219" = "Nov2019",
+                          "May222" = "May2022",
+                          "Dec222" = "Dec2022")
+  
   df <- df %>%
     bind_rows(letters)
 }
@@ -653,9 +680,9 @@ spp_emmtable <- pairwise %>%
       format = "html", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("repeat_header")) %>%
   column_spec(2, italic = TRUE)
-save_kable(spp_emmtable, file = "Tables/Table S8.pdf")
+#save_kable(spp_emmtable, file = "Tables/Table S8.pdf")
 
-write.csv(pairwise, "Tables/Table S8.csv")
+#write.csv(pairwise, "Tables/Table S8.csv")
 
 stomeans <- sto2 %>% group_by(Species, Survey) %>%
   summarize(MeanCov = mean(cover), seCov = se(cover), maxCov = max(cover)) %>%
@@ -667,17 +694,17 @@ sto3 <- sto2 %>%
   left_join(speclet, by = "Event") %>%
   left_join(stomeans, by = "Event") %>%
   mutate(TimePoint = case_when(
-    SiteName == "SR30N" & Survey == "November19" ~ "January20",
-    SiteName == "CBC30N" & Survey == "November19" ~ "January20",
-    SiteName == "CBC Central" & Survey == "November19" ~ "October19",
-    SiteName == "South Reef Central" & Survey == "November19" ~ "October19",
-    SiteName == "House Reef" & Survey == "November19" ~ "October19",
-    SiteName == "Curlew Patch" & Survey == "November19" ~ "October19",
-    SiteName == "CBC Lagoon" & Survey == "November19" ~ "October19",
+    SiteName == "SR30N" & Survey == "Nov2019" ~ "Jan2020",
+    SiteName == "CBC30N" & Survey == "Nov2019" ~ "Jan2020",
+    SiteName == "CBC Central" & Survey == "Nov2019" ~ "Oct2019",
+    SiteName == "South Reef Central" & Survey == "Nov2019" ~ "Oct2019",
+    SiteName == "House Reef" & Survey == "Nov2019" ~ "Oct2019",
+    SiteName == "Curlew Patch" & Survey == "Nov2019" ~ "Oct2019",
+    SiteName == "CBC Lagoon" & Survey == "Nov2019" ~ "Oct2019",
     TRUE ~ as.factor(Survey))) %>%
-  mutate(Letter = ifelse(Species == "AAGA" |
-                           Species == "PPOR" | 
-                           Species == "SINT",
+  mutate(Letter = ifelse(Species == "Agaricia agaricites" |
+                           Species == "Porites porites" | 
+                           Species == "Stephanocoenia intersepta",
                          "", Letter))
 
 zeros <- read.csv("add_zero_cover.csv")
@@ -702,6 +729,27 @@ zeros$Species <- recode(zeros$Species, "DSTO" = "Dichocoenia stokesii",
 sto3 <- rbind(sto3, zeros) %>% mutate_at(.vars = vars("TimePoint"),
                                        .funs = funs(factor(.,levels = TimeLevels, ordered = TRUE)))
 
+cov_wide <- sto3 %>%
+  pivot_wider(id_cols = c(Date, SiteName),
+              names_from = Species,
+              values_from = cover) %>%
+  arrange(SiteName, Date) %>%
+  subset(!(is.na(Date))) %>% 
+  mutate(across(where(is.list), ~ map_if(.x, is.null, ~ 0))) %>% 
+  mutate(across(where(is.list), ~ round(as.numeric(unlist(.x)), digits = 2)))
+
+# covtable2 <- sto3 %>% ungroup() %>%
+#   select(-c(TimePoint, Event, Label_General:maxCov)) %>%
+#   rename("Total points" = npoints, "Points with label" = n,
+#          "Percent cover" = cover)
+# 
+# fill <- covtable2 %>% subset(!(is.na(Date))) %>%
+#   group_by(SiteName, Date, `Total points`) %>%
+#   summarize(mean = mean('Percent cover'))
+
+#write.csv(fill, "Fill zeros.csv")
+
+write.csv(cov_wide, "Tables/Supp Cover Table 2.csv")
 
 library(ggh4x)
 
