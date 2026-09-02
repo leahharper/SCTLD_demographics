@@ -1,0 +1,85 @@
+"","SiteName","Habitat","Date","Total points","Label_General","Points with label","Percent cover"
+"1","CBC Central","Forereef",2019-10-10,840,"Turf Algae",253,30.1190476190476
+"2","CBC Central","Forereef",2019-10-10,840,"All Stony Coral",78,9.28571428571429
+"3","CBC Central","Forereef",2019-10-10,840,"Macroalgae",104,12.3809523809524
+"4","CBC Central","Forereef",2019-10-10,840,"Octocoral",240,28.5714285714286
+"5","CBC Central","Forereef",2022-05-23,840,"Turf Algae",380,45.2380952380952
+"6","CBC Central","Forereef",2022-05-23,840,"All Stony Coral",74,8.80952380952381
+"7","CBC Central","Forereef",2022-05-23,840,"Macroalgae",39,4.64285714285714
+"8","CBC Central","Forereef",2022-05-23,840,"Octocoral",167,19.8809523809524
+"9","CBC Central","Forereef",2022-12-01,840,"Turf Algae",472,56.1904761904762
+"10","CBC Central","Forereef",2022-12-01,840,"All Stony Coral",44,5.23809523809524
+"11","CBC Central","Forereef",2022-12-01,840,"Macroalgae",63,7.5
+"12","CBC Central","Forereef",2022-12-01,840,"Octocoral",148,17.6190476190476
+"13","CBC Lagoon","Forereef",2022-12-01,840,"Turf Algae",451,53.6904761904762
+"14","CBC Lagoon","Forereef",2022-12-01,840,"All Stony Coral",130,15.4761904761905
+"15","CBC Lagoon","Forereef",2022-12-01,840,"Macroalgae",112,13.3333333333333
+"16","CBC Lagoon","Forereef",2022-12-01,840,"Octocoral",32,3.80952380952381
+"17","CBC Lagoon","Patch Reef",2019-10-01,840,"Turf Algae",199,23.6904761904762
+"18","CBC Lagoon","Patch Reef",2019-10-01,840,"All Stony Coral",217,25.8333333333333
+"19","CBC Lagoon","Patch Reef",2019-10-01,840,"Macroalgae",82,9.76190476190476
+"20","CBC Lagoon","Patch Reef",2019-10-01,840,"Octocoral",54,6.42857142857143
+"21","CBC Lagoon","Patch Reef",2022-05-19,840,"Turf Algae",290,34.5238095238095
+"22","CBC Lagoon","Patch Reef",2022-05-19,840,"All Stony Coral",130,15.4761904761905
+"23","CBC Lagoon","Patch Reef",2022-05-19,840,"Macroalgae",92,10.952380952381
+"24","CBC Lagoon","Patch Reef",2022-05-19,840,"Octocoral",28,3.33333333333333
+"25","CBC30N","Forereef",2020-01-04,680,"Turf Algae",221,32.5
+"26","CBC30N","Forereef",2020-01-04,680,"All Stony Coral",74,10.8823529411765
+"27","CBC30N","Forereef",2020-01-04,680,"Macroalgae",23,3.38235294117647
+"28","CBC30N","Forereef",2020-01-04,680,"Octocoral",148,21.7647058823529
+"29","CBC30N","Forereef",2022-05-24,680,"Turf Algae",248,36.4705882352941
+"30","CBC30N","Forereef",2022-05-24,680,"All Stony Coral",60,8.82352941176471
+"31","CBC30N","Forereef",2022-05-24,680,"Macroalgae",75,11.0294117647059
+"32","CBC30N","Forereef",2022-05-24,680,"Octocoral",98,14.4117647058824
+"33","CBC30N","Forereef",2022-12-01,840,"Turf Algae",439,52.2619047619048
+"34","CBC30N","Forereef",2022-12-01,840,"All Stony Coral",28,3.33333333333333
+"35","CBC30N","Forereef",2022-12-01,840,"Macroalgae",48,5.71428571428571
+"36","CBC30N","Forereef",2022-12-01,840,"Octocoral",103,12.2619047619048
+"37","Curlew Patch","Patch Reef",2019-10-01,800,"Turf Algae",174,21.75
+"38","Curlew Patch","Patch Reef",2019-10-01,800,"All Stony Coral",128,16
+"39","Curlew Patch","Patch Reef",2019-10-01,800,"Macroalgae",349,43.625
+"40","Curlew Patch","Patch Reef",2019-10-01,800,"Octocoral",1,0.125
+"41","Curlew Patch","Patch Reef",2022-05-19,800,"Turf Algae",249,31.125
+"42","Curlew Patch","Patch Reef",2022-05-19,800,"All Stony Coral",70,8.75
+"43","Curlew Patch","Patch Reef",2022-05-19,800,"Macroalgae",294,36.75
+"44","Curlew Patch","Patch Reef",2022-05-19,800,"Octocoral",9,1.125
+"45","Curlew Patch","Patch Reef",2022-12-03,840,"Turf Algae",205,24.4047619047619
+"46","Curlew Patch","Patch Reef",2022-12-03,840,"All Stony Coral",100,11.9047619047619
+"47","Curlew Patch","Patch Reef",2022-12-03,840,"Macroalgae",274,32.6190476190476
+"48","Curlew Patch","Patch Reef",2022-12-03,840,"Octocoral",5,0.595238095238095
+"49","House Reef","Patch Reef",2019-10-01,840,"Turf Algae",464,55.2380952380952
+"50","House Reef","Patch Reef",2019-10-01,840,"All Stony Coral",95,11.3095238095238
+"51","House Reef","Patch Reef",2019-10-01,840,"Macroalgae",27,3.21428571428571
+"52","House Reef","Patch Reef",2019-10-01,840,"Octocoral",93,11.0714285714286
+"53","House Reef","Patch Reef",2022-05-21,840,"Turf Algae",361,42.9761904761905
+"54","House Reef","Patch Reef",2022-05-21,840,"All Stony Coral",62,7.38095238095238
+"55","House Reef","Patch Reef",2022-05-21,840,"Macroalgae",76,9.04761904761905
+"56","House Reef","Patch Reef",2022-05-21,840,"Octocoral",88,10.4761904761905
+"57","House Reef","Patch Reef",2022-12-11,840,"Turf Algae",519,61.7857142857143
+"58","House Reef","Patch Reef",2022-12-11,840,"All Stony Coral",62,7.38095238095238
+"59","House Reef","Patch Reef",2022-12-11,840,"Macroalgae",21,2.5
+"60","House Reef","Patch Reef",2022-12-11,840,"Octocoral",57,6.78571428571429
+"61","SR30N","Forereef",2020-01-05,640,"Turf Algae",316,49.375
+"62","SR30N","Forereef",2020-01-05,640,"All Stony Coral",67,10.46875
+"63","SR30N","Forereef",2020-01-05,640,"Macroalgae",56,8.75
+"64","SR30N","Forereef",2020-01-05,640,"Octocoral",115,17.96875
+"65","SR30N","Forereef",2022-05-26,680,"Turf Algae",241,35.4411764705882
+"66","SR30N","Forereef",2022-05-26,680,"All Stony Coral",83,12.2058823529412
+"67","SR30N","Forereef",2022-05-26,680,"Macroalgae",117,17.2058823529412
+"68","SR30N","Forereef",2022-05-26,680,"Octocoral",116,17.0588235294118
+"69","SR30N","Forereef",2022-12-05,840,"Turf Algae",404,48.0952380952381
+"70","SR30N","Forereef",2022-12-05,840,"All Stony Coral",40,4.76190476190476
+"71","SR30N","Forereef",2022-12-05,840,"Macroalgae",64,7.61904761904762
+"72","SR30N","Forereef",2022-12-05,840,"Octocoral",150,17.8571428571429
+"73","South Reef Central","Forereef",2019-10-06,840,"Turf Algae",293,34.8809523809524
+"74","South Reef Central","Forereef",2019-10-06,840,"All Stony Coral",71,8.45238095238095
+"75","South Reef Central","Forereef",2019-10-06,840,"Macroalgae",173,20.5952380952381
+"76","South Reef Central","Forereef",2019-10-06,840,"Octocoral",114,13.5714285714286
+"77","South Reef Central","Forereef",2022-05-21,840,"Turf Algae",334,39.7619047619048
+"78","South Reef Central","Forereef",2022-05-21,840,"All Stony Coral",49,5.83333333333333
+"79","South Reef Central","Forereef",2022-05-21,840,"Macroalgae",124,14.7619047619048
+"80","South Reef Central","Forereef",2022-05-21,840,"Octocoral",146,17.3809523809524
+"81","South Reef Central","Forereef",2022-12-04,840,"Turf Algae",388,46.1904761904762
+"82","South Reef Central","Forereef",2022-12-04,840,"All Stony Coral",62,7.38095238095238
+"83","South Reef Central","Forereef",2022-12-04,840,"Macroalgae",82,9.76190476190476
+"84","South Reef Central","Forereef",2022-12-04,840,"Octocoral",131,15.5952380952381

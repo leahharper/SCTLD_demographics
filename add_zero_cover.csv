@@ -2,7 +2,6 @@ Habitat,SiteName,Date,npoints,TimePoint,Event,Species,n,cover,Label_General,Labe
 Forereef,CBC Central,,,Dec-22,,DSTO,0,0,,,Dec-22,,0,,,0,0,0
 Forereef,CBC Central,,,May-22,,DSTO,0,0,,,May-22,,0,,,0,0,0
 Forereef,CBC Central,,,Oct-19,,DSTO,0,0,,,Nov-19,,0,,,0,0,0
-Forereef,CBC Lagoon,,,Dec-22,,DSTO,0,0,,,Dec-22,,0,,,0,0,0
 Forereef,CBC30N,,,Jan-20,,DSTO,0,0,,,Nov-19,,0,,,0,0,0
 Forereef,CBC30N,,,May-22,,DSTO,0,0,,,May-22,,0,,,0,0,0
 Forereef,CBC30N,,,Dec-22,,DSTO,0,0,,,Dec-22,,0,,,0,0,0
@@ -14,15 +13,16 @@ Forereef,South Reef Central,,,May-22,,DSTO,0,0,,,May-22,,0,,,0,0,0
 Forereef,South Reef Central,,,Oct-19,,DSTO,0,0,,,Nov-19,,0,,,0,0,0
 Patch Reef,CBC Lagoon,,,May-22,,DSTO,0,0,,,May-22,,0,,,0,0,0
 Patch Reef,CBC Lagoon,,,Oct-19,,DSTO,0,0,,,Nov-19,,0,,,0,0,0
+Patch Reef,CBC Lagoon,,,Dec-22,,DSTO,0,0,,,Dec-22,,0,,,0,0,0
 Patch Reef,Curlew Patch,,,May-22,,DSTO,0,0,,,May-22,,0,,,0,0,0
 Patch Reef,Curlew Patch,,,Oct-19,,DSTO,0,0,,,Nov-19,,0,,,0,0,0
 Patch Reef,Curlew Patch,,,Dec-22,,DSTO,0,0,,,Dec-22,,0,,,0,0,0
 Patch Reef,House Reef,,,Dec-22,,DSTO,0,0,,,Dec-22,,0,,,0,0,0
 Patch Reef,House Reef,,,May-22,,DSTO,0,0,,,May-22,,0,,,0,0,0
+Patch Reef,House Reef,,,Oct-19,,DSTO,0,0,,,Oct-19,,0,,,0,0,0
 Forereef,CBC Central,,,Dec-22,,EFAS,0,0,,,Dec-22,,0,,,0,0,0
 Forereef,CBC Central,,,May-22,,EFAS,0,0,,,May-22,,0,,,0,0,0
 Forereef,CBC Central,,,Oct-19,,EFAS,0,0,,,Nov-19,,0,,,0,0,0
-Forereef,CBC Lagoon,,,Dec-22,,EFAS,0,0,,,Dec-22,,0,,,0,0,0
 Forereef,CBC30N,,,Jan-20,,EFAS,0,0,,,Nov-19,,0,,,0,0,0
 Forereef,CBC30N,,,May-22,,EFAS,0,0,,,May-22,,0,,,0,0,0
 Forereef,CBC30N,,,Dec-22,,EFAS,0,0,,,Dec-22,,0,,,0,0,0
@@ -34,15 +34,16 @@ Forereef,South Reef Central,,,May-22,,EFAS,0,0,,,May-22,,0,,,0,0,0
 Forereef,South Reef Central,,,Oct-19,,EFAS,0,0,,,Nov-19,,0,,,0,0,0
 Patch Reef,CBC Lagoon,,,May-22,,EFAS,0,0,,,May-22,,0,,,0,0,0
 Patch Reef,CBC Lagoon,,,Oct-19,,EFAS,0,0,,,Nov-19,,0,,,0,0,0
+Patch Reef,CBC Lagoon,,,Dec-22,,EFAS,0,0,,,Dec-22,,0,,,0,0,0
 Patch Reef,Curlew Patch,,,May-22,,EFAS,0,0,,,May-22,,0,,,0,0,0
 Patch Reef,Curlew Patch,,,Oct-19,,EFAS,0,0,,,Nov-19,,0,,,0,0,0
 Patch Reef,Curlew Patch,,,Dec-22,,EFAS,0,0,,,Dec-22,,0,,,0,0,0
 Patch Reef,House Reef,,,Dec-22,,EFAS,0,0,,,Dec-22,,0,,,0,0,0
 Patch Reef,House Reef,,,May-22,,EFAS,0,0,,,May-22,,0,,,0,0,0
+Patch Reef,House Reef,,,Oct-19,,EFAS,0,0,,,Oct-19,,0,,,0,0,0
 Forereef,CBC Central,,,Dec-22,,MMEA,0,0,,,Dec-22,,0,,,0,0,0
 Forereef,CBC Central,,,May-22,,MMEA,0,0,,,May-22,,0,,,0,0,0
 Forereef,CBC Central,,,Oct-19,,MMEA,0,0,,,Nov-19,,0,,,0,0,0
-Forereef,CBC Lagoon,,,Dec-22,,MMEA,0,0,,,Dec-22,,0,,,0,0,0
 Forereef,CBC30N,,,Jan-20,,MMEA,0,0,,,Nov-19,,0,,,0,0,0
 Forereef,CBC30N,,,May-22,,MMEA,0,0,,,May-22,,0,,,0,0,0
 Forereef,CBC30N,,,Dec-22,,MMEA,0,0,,,Dec-22,,0,,,0,0,0
@@ -54,15 +55,16 @@ Forereef,South Reef Central,,,May-22,,MMEA,0,0,,,May-22,,0,,,0,0,0
 Forereef,South Reef Central,,,Oct-19,,MMEA,0,0,,,Nov-19,,0,,,0,0,0
 Patch Reef,CBC Lagoon,,,May-22,,MMEA,0,0,,,May-22,,0,,,0,0,0
 Patch Reef,CBC Lagoon,,,Oct-19,,MMEA,0,0,,,Nov-19,,0,,,0,0,0
+Patch Reef,CBC Lagoon,,,Dec-22,,MMEA,0,0,,,Dec-22,,0,,,0,0,0
 Patch Reef,Curlew Patch,,,May-22,,MMEA,0,0,,,May-22,,0,,,0,0,0
 Patch Reef,Curlew Patch,,,Oct-19,,MMEA,0,0,,,Nov-19,,0,,,0,0,0
 Patch Reef,Curlew Patch,,,Dec-22,,MMEA,0,0,,,Dec-22,,0,,,0,0,0
 Patch Reef,House Reef,,,Dec-22,,MMEA,0,0,,,Dec-22,,0,,,0,0,0
 Patch Reef,House Reef,,,May-22,,MMEA,0,0,,,May-22,,0,,,0,0,0
+Patch Reef,House Reef,,,Oct-19,,MMEA,0,0,,,Oct-19,,0,,,0,0,0
 Forereef,CBC Central,,,Dec-22,,DLAB,0,0,,,Dec-22,,0,,,0,0,0
 Forereef,CBC Central,,,May-22,,DLAB,0,0,,,May-22,,0,,,0,0,0
 Forereef,CBC Central,,,Oct-19,,DLAB,0,0,,,Nov-19,,0,,,0,0,0
-Forereef,CBC Lagoon,,,Dec-22,,DLAB,0,0,,,Dec-22,,0,,,0,0,0
 Forereef,CBC30N,,,Jan-20,,DLAB,0,0,,,Nov-19,,0,,,0,0,0
 Forereef,CBC30N,,,May-22,,DLAB,0,0,,,May-22,,0,,,0,0,0
 Forereef,CBC30N,,,Dec-22,,DLAB,0,0,,,Dec-22,,0,,,0,0,0
@@ -74,8 +76,10 @@ Forereef,South Reef Central,,,May-22,,DLAB,0,0,,,May-22,,0,,,0,0,0
 Forereef,South Reef Central,,,Oct-19,,DLAB,0,0,,,Nov-19,,0,,,0,0,0
 Patch Reef,CBC Lagoon,,,May-22,,DLAB,0,0,,,May-22,,0,,,0,0,0
 Patch Reef,CBC Lagoon,,,Oct-19,,DLAB,0,0,,,Nov-19,,0,,,0,0,0
+Patch Reef,CBC Lagoon,,,Dec-22,,DLAB,0,0,,,Dec-22,,0,,,0,0,0
 Patch Reef,Curlew Patch,,,May-22,,DLAB,0,0,,,May-22,,0,,,0,0,0
 Patch Reef,Curlew Patch,,,Oct-19,,DLAB,0,0,,,Nov-19,,0,,,0,0,0
 Patch Reef,Curlew Patch,,,Dec-22,,DLAB,0,0,,,Dec-22,,0,,,0,0,0
 Patch Reef,House Reef,,,Dec-22,,DLAB,0,0,,,Dec-22,,0,,,0,0,0
 Patch Reef,House Reef,,,May-22,,DLAB,0,0,,,May-22,,0,,,0,0,0
+Patch Reef,House Reef,,,Oct-19,,DLAB,0,0,,,Oct-19,,0,,,0,0,0
